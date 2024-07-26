@@ -1,0 +1,127 @@
+.divcol {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #000;
+    box-sizing: border-box;
+    height: 339px;
+    text-align: center;
+    color: #fff;
+    font-family: Inter;
+}
+
+.heading-1 {
+    font-size: 63px;
+    margin-bottom: 20px; /* Adjust the margin as needed */
+    line-height: 73.22px;
+    position: absolute;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.form-container {
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-field {
+    flex-grow: 1;
+    width: 100%;
+    border-radius: 5px;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.09);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    border: 2px solid transparent; /* Initial transparent border */
+
+}
+
+.form-field input {
+    width: 100%;
+    padding: 15px 20px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 5px 0 0 5px;
+    color: white;
+    font-size: 20px;
+    transition: 0.3s ease;
+
+    position: relative; /* Ensure stacking context */
+    z-index: 2; /* Ensure input stays above .input-bg */
+
+
+}
+
+.form-field label {
+    font-size: 18px;
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    color: white;
+    transition: 0.4s ease;
+    pointer-events: none;
+}
+
+.form-field input:focus + label,
+.form-field input:not(:placeholder-shown) + label {
+    top: 0px;
+    left: 10px;
+    font-size: 16px;
+    color: white;
+    padding: 0 5px;
+    border-radius: 3px;
+    transform: translateY(-100%);
+    scale: 0.9;
+}
+
+.form-field .input-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 5px;
+    z-index: 1;
+    transition: transform 0.6s ease, border-color 0.6s ease;
+    transform: scaleX(0);
+    transform-origin: left;
+    border: 2px solid transparent; /* Initial transparent border */
+}
+
+.form-field input:focus ~ .input-bg {
+    transform: scaleX(1);
+    border: 2px solid transparent; /* Keep initial transparent border */
+    border-image: linear-gradient(37deg, #DBA979, #5BBCFF); /* Gradient border */
+    border-image-slice: 1; /* Ensure full border shows gradient */
+}
+
+.search {
+    padding: 15px 20px;
+    border: none;
+    background-color: #C8A47E;
+    color: white;
+    font-size: 18px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search:hover {
+    background-color: #0088a9;
+}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Choose Barber{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/barbers-style.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"/>
+<script src="{{ url_for('static', filename='js/barbers.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="frame-parent-wrapper">
+    <div class="frame-parent">
+        <div class="heading-1">Choose Barber
+            <div class="pagination">1/1</div>
+        </div>
+
+         {% for barber in barbers %}
+        <div class="barbershop">
+            <div class="image-wrapper">
+                <div class="barbershop-img" style="background-image: url('{{ barber.image_url }}');"></div>
+                <button class="about">About</button>
+            </div>
+            <div class="info">
+                <div class="barber-name">{{ barber.name }}</div>
+                <div class="feedback">{{ barber.rating }} ⭐ / 5.0</div>
+            </div>
+            <form method="post" action="{{ url_for('views.barbers') }}">
+                <button type="submit" name="choose" value="{{ barber.name }}" class="choose">Choose</button>
+            </form>
+        </div>
+        {% endfor %}
+
+        <div class="controls">
+            <button type="button" class="show-more">Show More</button>
+            <button type="button" class="back-to-previous">Back</button>
+        </div>
+        <button type="button" class="back" onclick="window.location.href='/locations/target-haircut'">Back</button>
+    </div>
+</div>
+{% endblock %}

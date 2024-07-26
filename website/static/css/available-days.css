@@ -1,0 +1,131 @@
+body {
+    background: url('/static/images/days-bg.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.section-section {
+    width: 100%;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid #000;
+    box-sizing: border-box;
+    height: 755px;
+    text-align: center;
+    font-size: 16px;
+    color: #000;
+}
+
+.frame-parent {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid #000;
+    box-sizing: border-box;
+    width: 628px;
+    height: 450px;
+    overflow: hidden;
+    font-size: 24px;
+    color: #c8a47e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-wrapper {
+    position: absolute;
+    top: 32px;
+    left: 18px;
+    width: 118px;
+    height: 46px;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+}
+
+.back {
+    background-color: #c8a47e; /* Retain background color */
+    color: #fff; /* White text color for contrast */
+    font-family: 'Inter', sans-serif; /* Use preferred font */
+    font-size: 16px; /* Adjusted font size */
+    font-weight: 600; /* Bold text */
+    padding: 12px 20px; /* More padding for a larger, more prominent button */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Slightly rounded corners for a modern look */
+    cursor: pointer; /* Pointer cursor on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    text-transform: uppercase; /* Make all text uppercase for emphasis */
+    letter-spacing: 1px; /* Slightly increased letter spacing */
+    display: inline-flex; /* Center content vertically and horizontally */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+}
+
+ .back:hover {
+    background-color: #d9b18c; /* Slightly lighter background color on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increase shadow on hover */
+}
+
+.heading-1 {
+    font-size: 36px;
+    line-height: 73.22px;
+    display: flex;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 49px;
+    border: 2px solid white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.day {
+    background-color: rgba(0, 0, 0, 0.5); /*background-color: rgba(240, 240, 240, 0.09);*/
+    box-sizing: border-box;
+    width: 100%;
+    height: 66px;
+    overflow: hidden;
+    cursor: pointer;
+    line-height: 43.56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: 0.4px solid grey;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    transition: 0.3s ease;
+}
+
+.day:active {
+    transform: translateY(0); /* Remove lift effect on active */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Restore original shadow */
+}
+
+.day:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 3px rgba(200, 164, 126, 0.5); /* Add custom focus ring */
+}
+.day:hover{
+    scale: 1.07;
+    background-color: rgba(155, 45, 48, 0.3);
+}
+

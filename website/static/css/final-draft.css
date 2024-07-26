@@ -1,0 +1,178 @@
+/* styles.css */
+body{
+    background: url('/static/images/final.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-size: cover
+}
+.section-section {
+  width: 100%;
+  height: 750px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  color: #000;
+  font-family: Inter;
+}
+
+.wrapper {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: calc(100% - 40px); /* Adjust as needed */
+  max-width: 900px; /* Adjust as needed */
+  display: flex;
+  flex-direction: column;
+}
+
+.heading-1 {
+
+  font-size: 63px;
+  line-height: 73.22px;
+  color: #fff;
+  text-align: center;
+}
+
+/* Table Container */
+#barbershopTables {
+  display: flex;
+  justify-content: center;
+  padding-left: 20px; /* Adjust as needed */
+  padding-right: 20px; /* Adjust as needed */
+
+}
+
+/* Table Styling */
+.barbershop-table {
+  width: 100%; /* Adjust if necessary */
+  max-width: 800px; /* Sets the maximum width of the table */
+  margin: 20px 0; /* Margin top and bottom to space out tables */
+  border-collapse: collapse;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  opacity: 0.8;
+
+}
+
+.barbershop-table th, .barbershop-table td {
+  border: 1px solid white;
+  padding: 10px;
+  text-align: left;
+  opacity: 1;
+  text-align: center;
+  font-size: 22px;
+
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    margin-top: 20px;
+}
+
+.book-now {
+    background-color: #c8a47e;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px 25px; /* More padding for a larger, more prominent button */
+    border: none;
+    border-radius: 8px; /* Slightly rounded corners for a modern look */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    text-transform: uppercase; /* Make all text uppercase for emphasis */
+    letter-spacing: 1px; /* Slightly increased letter spacing */
+    display: inline-flex; /* Center content vertically and horizontally */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+}
+
+.book-now:hover {
+    background-color: #d9b18f; /* Slightly lighter background color on hover */
+    transform: translateY(-2.5px); /* Slight lift effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increase shadow on hover */
+}
+
+.book-now:active {
+    transform: translateY(0); /* Remove lift effect on active */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Restore original shadow */
+}
+
+.book-now:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 4px rgba(200, 164, 126, 0.5); /* Add custom focus ring */
+}
+
+.wrapper #barbershopTables .barbershop-table a{
+    color: lightgrey;
+    text-decoration: none;
+}
+.wrapper #barbershopTables .barbershop-table a:hover{
+    text-decoration: underline;
+}
+
+.wrapper #barbershopTables .barbershop-table a:visited{
+    color: lightgrey;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* FOR CARD STYLE
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.barbershop-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+    max-width: 1200px;
+    justify-content: center;
+}
+
+.barbershop-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.barbershop-name {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.location, .target-haircut, .barber, .available-day, .available-hour {
+    font-size: 16px;
+    margin: 4px 0;
+}
+*/

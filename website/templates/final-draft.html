@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Choose Barber{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/final-draft.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"/>
+<script src="{{ url_for('static', filename='js/final-draft.jss') }}"></script>
+{% endblock %}
+{% block content %}
+
+<!--FOR TABLE STYLE -->
+<div class="section-section">
+    <div class="wrapper">
+        <h1 class="heading-1">Final Draft</h1>
+
+        <div id="barbershopTables">
+            <table class="barbershop-table">
+                <tr>
+                    <td>Barbershop</td>
+                    <td>{{ barbershop['barbershop_name']}}</td>
+                </tr>
+                <tr>
+                    <td>Location</td>
+                    <td>{{ barbershop['location'] }},  <a id="openInGoogle" href="#">Open in Google Maps</a></td>
+                </tr>
+                <tr>
+                    <td>Haircut</td>
+                    <td>{{ haircut['haircut'] }}</td>
+                </tr>
+                <tr>
+                    <td>Barber</td>
+                    <td>{{ barber['name'] }}</td>
+                </tr>
+                <tr>
+                    <td>Barber Rating</td>
+                    <td>{{ barber['rating'] }} ⭐</td>
+                </tr>
+                <tr>
+                    <td>Day</td>
+                    <td>{{ day }}</td>
+                </tr>
+                <tr>
+                    <td>Time</td>
+                    <td>{{ time }}</td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td>{{ haircut['price'] }} UZS</td>
+                </tr>
+            </table>
+        </div>
+        <div class="controls">
+            <button class="book-now" type="button" onclick="window.location.href='/locations/target-haircut/barbers/available-days/available-hours'">Back</button>
+            <button class="book-now">Book Now</button>
+
+        </div>
+    </div>
+</div>
+
+
+<!--FOR CARD STYLE-->
+<!-- FOR CARD STYLE
+<div class="wrapper">
+    <div class="barbershop-container">
+        <div class="barbershop-card">
+            <h2 class="barbershop-name">Barbershop Name</h2>
+            <p class="location">Location: Address, City</p>
+            <p class="target-haircut">Target Haircut: Style</p>
+            <p class="barber">Barber: Barber Name</p>
+            <p class="available-day">Available Day: Day</p>
+            <p class="available-hour">Available Hour: Hour</p>
+        </div>
+
+    </div>
+</div>
+-->
+
+{% endblock %}

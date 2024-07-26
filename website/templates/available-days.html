@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Choose available day{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/available-days.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"/>
+<script src="{{ url_for('static', filename='js/barbers.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-section">
+    <div class="back-wrapper">
+        <button type="button" class="back" onclick="window.location.href='/locations/target-haircut/barbers'">Back</button>
+    </div>
+    <div class="frame-parent">
+        <b class="heading-1">Choose Available Day</b>
+        <form class="days-grid" method="post">
+            <button type="submit" name="day" value="Monday" class="day monday">Monday</button>
+            <button type="submit" name="day" value="Tuesday" class="day tuesday">Tuesday</button>
+            <button type="submit" name="day" value="Wednesday" class="day wednesday">Wednesday</button>
+            <button type="submit" name="day" value="Thursday" class="day thursday">Thursday</button>
+            <button type="submit" name="day" value="Friday" class="day friday">Friday</button>
+            <button type="submit" name="day" value="Saturday" class="day saturday">Saturday</button>
+            <button type="submit" name="day" value="Sunday" class="day sunday">Sunday</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.settings-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.settings-section {
+    margin-bottom: 30px;
+}
+
+.settings-section h2 {
+    margin-bottom: 10px;
+}
+
+.settings-section form {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-section label {
+    margin: 10px 0 5px;
+}
+
+.settings-section input,
+.settings-section select {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.settings-section button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ebaa4c;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.settings-section button:hover {
+    background-color: #d89c3f;
+}

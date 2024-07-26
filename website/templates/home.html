@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}ApeX Barbershop{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
+{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="divcol">
+    <b class="heading-1">Find Barbershop nearby</b>
+    <div class="form-container">
+        <div class="form-field">
+            <input type="text" id="animated-input" placeholder="" required>
+            <label for="animated-input">Location name...</label>
+            <div class="input-bg"></div>
+        </div>
+        <button type="button" class="search" onclick="window.location.href='/locations'">Search</button>
+    </div>
+</div>
+
+
+{% endblock %}

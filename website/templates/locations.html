@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Choose location{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/locations-style.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap"/>
+<script src="{{ url_for('static', filename='js/locations.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="frame-parent-wrapper">
+    <div class="frame-parent">
+        <div class="heading-1">Choose Barbershop
+            <div class="pagination">1/1</div>
+        </div>
+        {% for barbershop in barbershops %}
+        <div class="barbershop" style="background-image: url('{{ barbershop[4] }}');;">
+            <div class="info">
+                <div class="barbershop-name">{{ barbershop[2] }}</div>
+                <div class="location">{{ barbershop[3] }}</div>
+            </div>
+           <form method="post" action="{{ url_for('views.locations') }}">
+                <button type="submit" name="choose" value="{{ barbershop[0] }}" class="choose">Choose</button>
+            </form>
+        </div>
+        {% endfor %}
+
+        <div class="controls">
+            <button class="show-more">Show More</button>
+            <button class="back-to-previous">Back</button>
+        </div>
+        <button type="button" class="back" onclick="window.location.href='/'">Back</button>
+    </div>
+</div>
+
+{% endblock %}

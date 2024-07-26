@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}ApeX Profile{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h1>User Profile</h1>
+    <form id="profile-form" enctype="multipart/form-data" action="{{ url_for('views.profile') }}" method="post">
+        <div class="profile-info">
+            <div class="profile-picture">
+                <img id="profile-picture-preview"
+                     src="{{url_for('views.profile_picture', user_id=current_user.id)}}"
+                     alt="Profile Picture">
+            </div>
+            <div class="profile-details">
+                <h2>{{ user.first_name }} {% if user.last_name %} {{ user.last_name }} {% endif %}</h2>
+                <p>Email: {{ user.email }}</p>
+                <p>Phone number: {{ user.phone_number }}</p>
+                <p>Created date: {{ user.created_date }}</p>
+            </div>
+        </div>
+
+
+        <button type="button" id="back-button">Back</button>
+        <button type="button" id="edit-profile-button">Edit Profile</button>
+
+        <div id="edit-profile-section" class="edit-profile-section" style="display: none;">
+            <h2>Edit Profile Information</h2>
+            <label for="edit_first_name">First Name:</label>
+            <input type="text" id="edit_first_name" name="first_name" value="{{ user.first_name }}" required>
+
+            <label for="edit_last_name">Last Name:</label>
+            <input type="text" id="edit_last_name" name="last_name" value="{{ user.last_name }}" required>
+
+            <label for="edit_email">Email:</label>
+            <input type="email" id="edit_email" name="email" value="{{ user.email }}" required>
+
+            <label for="edit_phone_number">Phone number:</label>
+            <input type="text" id="edit_phone_number" name="phone_number" value="{{ user.phone_number }}" required>
+
+            <label for="profile_picture">Profile Picture:</label>
+            <div class="file-input-container">
+                <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                <button type="button" id="remove-file-button" class="remove-file-btn" style="display:none;">&#10005;
+                </button>
+            </div>
+
+            <h2>Account Settings</h2>
+            <!-- Change Password Button --><br>
+            <button type="button" id="change-password-button">Change Password</button>
+            <div id="success-change-messages" class="flash-messages"></div>
+            <br>
+            <!-- Privacy settings -->
+            <label for="privacy">Profile Privacy:</label>
+            <select id="privacy" name="privacy">
+                <option value="public" {% if user.privacy==
+                'public' %}selected{% endif %}>Public</option>
+                <option value="private" {% if user.privacy==
+                'private' %}selected{% endif %}>Private</option>
+            </select>
+
+            <br>
+            <button type="button" id="delete-account-button">Delete Account🤡😂</button>
+            <br>
+            <div id="confirmation-message" style="margin-top: 10px;"></div>
+
+            <div id="confirmation-modal" class="modal">
+                <div class="modal-content">
+                    <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                    <div class="modal-buttons-wrapper">
+                        <button id="confirm-delete">Yes</button>
+                        <button id="cancel-delete">No</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="save-changes-button" class="save-changes">Save Changes</button>
+            <button type="button" id="cancel-edit-button" class="cancel-edit-btn">Cancel Edit</button>
+        </div>
+    </form>
+
+    <!-- Move the change-password-form outside the profile-form -->
+    <div id="change-password-section" style="display: none;">
+        <h2>Change Password</h2>
+        <form id="change-password-form">
+            <label for="current_password">Current Password:</label>
+            <input type="password" id="current_password" name="current_password" required>
+
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" required>
+
+            <label for="confirm_new_password">Confirm New Password:</label>
+            <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+
+            <div id="password-change-messages" class="flash-messages"></div>
+
+            <button type="button" id="update-password-button">Update Password</button>
+            <button type="button" id="cancel-change-password-button" class="cancel-edit-btn">Cancel</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var changePasswordUrl = "{{ url_for('views.change_password') }}";
+    var EditProfileUrl = "{{ url_for('views.profile') }}";
+    var DeleteAccountUrl = "{{ url_for('auth.delete_account', user_id=current_user.id) }}";
+</script>
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

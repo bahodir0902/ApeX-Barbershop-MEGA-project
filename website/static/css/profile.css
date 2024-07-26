@@ -1,0 +1,312 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.profile-container {
+    padding: 20px;
+    padding-left: 40px;
+    max-width: 800px;
+    margin: 5% auto;
+    background-color: #edebeb;
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px 8px rgba(0,0,0,0.45);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+.profile-details {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.profile-info p {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+#edit-profile-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ebaa4c;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
+}
+
+#edit-profile-button:hover {
+    background-color: #d89c3f;
+}
+
+.edit-profile-section {
+    margin-top: 20px;
+    display: none; /* Initially hidden */
+}
+
+.edit-profile-section h2 {
+    margin-bottom: 10px;
+}
+
+.edit-profile-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.edit-profile-section input,
+.edit-profile-section select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.edit-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.save-changes,
+.cancel-edit {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-changes {
+    background-color: #ebaa4c;
+    color: #fff;
+}
+
+.save-changes:hover {
+    background-color: #d89c3f;
+}
+
+#change-password-button,
+#update-password-button {
+    padding: 10px 20px; /* Ensure padding matches other buttons */
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #ebaa4c; /* Consistent background color */
+    color: #fff; /* Consistent text color */
+}
+
+#change-password-button:hover,
+#update-password-button:hover {
+    background-color: #d89c3f;
+}
+
+#update-password-button.disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
+.cancel-edit,
+.cancel-edit-btn {
+    background-color: #f7382a; /* Red background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Inline-block display */
+    font-size: 16px; /* Font size */
+    margin: 10px 0; /* Margin */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Transition for background color */
+}
+
+.cancel-edit:hover,
+.cancel-edit-btn:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.file-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.remove-file-btn {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Styles specifically for change password form */
+#change-password-section {
+    margin-top: 20px;
+}
+
+#change-password-section h2 {
+    margin-bottom: 10px;
+}
+
+#change-password-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+#change-password-section input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#change-password-section .flash-messages {
+    margin-bottom: 10px;
+}
+
+
+#back-button {
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 10px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: flex; /* Inline-block display */
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    font-size: 16px; /* Font size */
+    margin-left: 10px;
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Transition for background color */
+}
+#back-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+#delete-account-button {
+    background-color: #1a1514; /* Red background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 15px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: flex; /* Inline-block display */
+    flex-direction: column;
+    align-items: flex-end;
+    position: relative;
+    font-size: 16px; /* Font size */
+    margin: 20px 0; /* Margin */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Transition for background color */
+}
+#delete-account-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 300px;
+}
+
+.modal-content button {
+    margin: 5px;
+}
+.modal-buttons-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#confirm-delete{
+    padding:10px 8px;
+    background-color: #db0d0d;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#cancel-delete{
+    padding:10px 40px;
+    background-color: #04cf08;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#confirm-delete:hover{
+    cursor: pointer;
+    background-color: #ff0d00;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+#cancel-delete:hover{
+    cursor: pointer;
+    background-color: #00c403;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}

@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}ApeX Profile{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h1>User Profile</h1>
+    <form id="profile-form" enctype="multipart/form-data" action="{{ url_for('views.profile') }}" method="post">
+        <div class="profile-info">
+            <div class="profile-picture">
+                <img id="profile-picture-preview"
+                     src="{{url_for('views.profile_picture', user_id=current_user.id)}}"
+                     alt="Profile Picture">
+            </div>
+            <div class="profile-details">
+                <h2>{{ user.first_name }} {% if user.last_name %} {{ user.last_name }} {% endif %}</h2>
+                <p>Email: {{ user.email }}</p>
+                <p>Phone number: {{ user.phone_number }}</p>
+                <p>Created date: {{ user.created_date }}</p>
+            </div>
+        </div>
+
+        <button type="button" id="edit-profile-button">Edit Profile</button>
+
+        <div id="edit-profile-section" class="edit-profile-section" style="display: none;">
+            <h2>Edit Profile Information</h2>
+            <label for="edit_first_name">First Name:</label>
+            <input type="text" id="edit_first_name" name="first_name" value="{{ user.first_name }}" required>
+
+            <label for="edit_last_name">Last Name:</label>
+            <input type="text" id="edit_last_name" name="last_name" value="{{ user.last_name }}" required>
+
+            <label for="edit_email">Email:</label>
+            <input type="email" id="edit_email" name="email" value="{{ user.email }}" required>
+
+            <label for="edit_phone_number">Phone number:</label>
+            <input type="text" id="edit_phone_number" name="phone_number" value="{{ user.phone_number }}" required>
+
+            <label for="profile_picture">Profile Picture:</label>
+            <div class="file-input-container">
+                <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                <button type="button" id="remove-file-button" class="remove-file-btn" style="display:none;">&#10005;</button>
+            </div>
+
+            <h2>Account Settings</h2>
+            <!-- Change Password Button -->
+            <button type="button" id="change-password-button">Change Password</button>
+            <div id="success-change-messages" class="flash-messages"></div>
+            <!-- Privacy settings -->
+            <label for="privacy">Profile Privacy:</label>
+            <select id="privacy" name="privacy">
+                <option value="public" {% if user.privacy == 'public' %}selected{% endif %}>Public</option>
+                <option value="private" {% if user.privacy == 'private' %}selected{% endif %}>Private</option>
+            </select>
+
+            <button type="submit" class="save-changes">Save Changes</button>
+            <button type="button" id="cancel-edit-button" class="cancel-edit-btn">Cancel Edit</button>
+        </div>
+    </form>
+
+    <!-- Move the change-password-form outside of the profile-form -->
+    <div id="change-password-section" style="display: none;">
+        <h2>Change Password</h2>
+        <form id="change-password-form">
+            <label for="current_password">Current Password:</label>
+            <input type="password" id="current_password" name="current_password" required>
+
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" required>
+
+            <label for="confirm_new_password">Confirm New Password:</label>
+            <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+
+            <div id="password-change-messages" class="flash-messages"></div>
+
+            <button type="button" id="update-password-button">Update Password</button>
+            <button type="button" id="cancel-change-password-button" class="cancel-edit-btn">Cancel</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var changePasswordUrl = "{{ url_for('views.change_password') }}";
+    var EditProfileUrl = "{{ url_for('views.profile') }}";
+</script>
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
+
+
+
+##############
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle Edit Profile Section
+    document.getElementById('edit-profile-button').addEventListener('click', function() {
+        var editSection = document.getElementById('edit-profile-section');
+        editSection.style.display = 'block';
+        this.style.display = 'none';
+    });
+
+    // Cancel Edit Profile
+    document.getElementById('cancel-edit-button').addEventListener('click', function() {
+        var editSection = document.getElementById('edit-profile-section');
+        editSection.style.display = 'none';
+        document.getElementById('edit-profile-button').style.display = 'block';
+        document.getElementById('profile-form').reset();
+        document.getElementById('remove-file-button').style.display = 'none';
+    });
+
+    // File Input Change
+    const fileInput = document.getElementById('profile_picture');
+    const removeFileButton = document.getElementById('remove-file-button');
+
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            removeFileButton.style.display = 'inline';
+        }
+    });
+
+    // Remove File
+    removeFileButton.addEventListener('click', function() {
+        fileInput.value = '';
+        this.style.display = 'none';
+    });
+
+    // Update Password
+    document.getElementById('update-password-button').addEventListener('click', function() {
+    var form = document.getElementById('change-password-form');
+    var formData = new FormData(form);
+
+    fetch(changePasswordUrl, {  // Use the global variable here
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        var messagesDiv = document.getElementById('password-change-messages');
+        var SuccessMessagesDiv = document.getElementById('success-change-messages');
+        var changePasswordSection = document.getElementById('change-password-section');
+
+
+        messagesDiv.innerHTML = ''; // Clear previous messages
+        SuccessMessagesDiv.innerHTML = ''; // Clear previous messages
+
+        if (data.success) {
+            form.reset();
+            SuccessMessagesDiv.innerHTML = '<p style="color: green;">' + data.message + '</p>';
+            changePasswordSection.style.display = 'none';
+        } else {
+            data.errors.forEach(error => {
+            form.reset();
+                messagesDiv.innerHTML += '<p style="color: red;">' + error + '</p>';
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+
+
+    // Show Change Password Section
+    document.getElementById('change-password-button').addEventListener('click', function() {
+        var changePasswordSection = document.getElementById('change-password-section');
+        changePasswordSection.style.display = 'block';
+    });
+
+    // Cancel Change Password
+    document.getElementById('cancel-change-password-button').addEventListener('click', function() {
+        var changePasswordSection = document.getElementById('change-password-section');
+        changePasswordSection.style.display = 'none';
+        document.getElementById('change-password-form').reset();
+    });
+
+    // Submit Profile Form
+    document.getElementById('profile-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var form = document.getElementById('profile-form');
+        var formData = new FormData(form);
+
+        fetch(EditProfileUrl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+            .then(data => {
+
+        console.log('Response Data:', data); // Debugging: Check the response data
+        if(data.message == 'No changes were made.'){
+                location.reload();
+            }
+        else if (data.success) {
+            alert(data.message);
+            location.reload(); // Reload the page on success
+        } else {
+            alert(data.errors.join('\n'));
+        }
+           })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+#############

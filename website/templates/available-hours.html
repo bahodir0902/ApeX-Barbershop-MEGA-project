@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Choose available hour{% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/available-hours.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"/>
+<script src="{{ url_for('static', filename='js/available-hours.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-section">
+    <div class="back-wrapper">
+        <button type="button" class="back" onclick="window.location.href='/locations/target-haircut/barbers/available-days'">Back</button>
+    </div>
+    <div class="frame-parent">
+        <b class="heading-1">Choose Available Hours</b>
+        <form class="hours-grid" method="post">
+            <button type="submit" name="hour" value="10:00" class="hours" >10:00</button>
+            <button type="submit" name="hour" value="10:45" class="hours">10:45</button>
+            <button type="submit" name="hour" value="12:15" class="hours">12:15</button>
+            <button type="submit" name="hour" value="13:00" class="hours">13:00</button>
+            <button type="submit" name="hour" value="14:30" class="hours">14:30</button>
+            <button type="submit" name="hour" value="15:05" class="hours">15:05</button>
+            <button type="submit" name="hour" value="16:00" class="hours">16:00</button>
+            <button type="submit" name="hour" value="16:45" class="hours">16:45</button>
+            <button type="submit" name="hour" value="18:00" class="hours">18:00</button>
+
+        </form>
+        <div class="controls">
+            <button type="button" class="back-to-previous hidden">Back</button>
+            <button type="button" class="show-more">Show More</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
