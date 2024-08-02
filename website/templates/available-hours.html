@@ -16,15 +16,9 @@
     <div class="frame-parent">
         <b class="heading-1">Choose Available Hours</b>
         <form class="hours-grid" method="post">
-            <button type="submit" name="hour" value="10:00" class="hours" >10:00</button>
-            <button type="submit" name="hour" value="10:45" class="hours">10:45</button>
-            <button type="submit" name="hour" value="12:15" class="hours">12:15</button>
-            <button type="submit" name="hour" value="13:00" class="hours">13:00</button>
-            <button type="submit" name="hour" value="14:30" class="hours">14:30</button>
-            <button type="submit" name="hour" value="15:05" class="hours">15:05</button>
-            <button type="submit" name="hour" value="16:00" class="hours">16:00</button>
-            <button type="submit" name="hour" value="16:45" class="hours">16:45</button>
-            <button type="submit" name="hour" value="18:00" class="hours">18:00</button>
+            {% for hour in available_hours %}
+            <button type="submit" name="hour" value="{{ hour }}" class="hours" >{{ hour }}</button>
+            {% endfor %}
 
         </form>
         <div class="controls">

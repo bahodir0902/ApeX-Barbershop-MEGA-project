@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}My Orders{% endblock %}
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/my-orders.css') }}">
+<script src="{{ url_for('static', filename='js/my-orders.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    <button type="button" id="back-button">Back</button>
+    <h1>My Orders</h1>
+    <div class="orders-list">
+        {% if appointments %}
+        {% for appointment in appointments %}
+        <div class="order-card">
+            <div class="order-details">
+                <h2>Appointment №{{ loop.index }}</h2>
+                <p><strong>Barbershop:</strong> {{ appointment[0] }}</p>
+                <p><strong>Barber:</strong> {{ appointment[1] }} {{ appointment[2] }}</p>
+                <p><strong>Haircut:</strong> {{ appointment[3] }}</p>
+                <p><strong>Date:</strong> {{ appointment[4] }}</p>
+                <p><strong>Time:</strong> {{ appointment[5] }}</p>
+                <p><strong>Duration:</strong> {{ appointment[6] }} minutes</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+            <p id="no-order">You have no appointments</p>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}

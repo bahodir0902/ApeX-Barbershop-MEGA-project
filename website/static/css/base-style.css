@@ -168,7 +168,9 @@ nav {
     display: block;
 }
 
-
+.dropdown-content a i {
+    margin-left: 6px;
+}
 
 @media (max-width: 1080px){
     header {

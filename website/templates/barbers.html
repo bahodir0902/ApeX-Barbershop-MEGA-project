@@ -5,7 +5,7 @@
 {% block head_links %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/barbers-style.css') }}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"/>
-<script src="{{ url_for('static', filename='js/barbers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/barbers.js') }}" ></script>
 {% endblock %}
 
 {% block content %}
@@ -18,15 +18,15 @@
          {% for barber in barbers %}
         <div class="barbershop">
             <div class="image-wrapper">
-                <div class="barbershop-img" style="background-image: url('{{ barber.image_url }}');"></div>
+                <div class="barbershop-img" style="background-image: url('{{ url_for('views.get_picture', category = 'barbers', item_id = barber[0]) }}');"></div>
                 <button class="about">About</button>
             </div>
             <div class="info">
-                <div class="barber-name">{{ barber.name }}</div>
-                <div class="feedback">{{ barber.rating }} ⭐ / 5.0</div>
+                <div class="barber-name">{{ barber[1] }}</div>
+                <div class="feedback">{{ barber[3] }} ⭐ / 5.0</div>
             </div>
             <form method="post" action="{{ url_for('views.barbers') }}">
-                <button type="submit" name="choose" value="{{ barber.name }}" class="choose">Choose</button>
+                <button type="submit" name="choose" value="{{ barber[0] }}" class="choose">Choose</button>
             </form>
         </div>
         {% endfor %}

@@ -5,7 +5,7 @@
 {% block head_links %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/final-draft.css') }}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"/>
-<script src="{{ url_for('static', filename='js/final-draft.jss') }}"></script>
+<script src="{{ url_for('static', filename='js/final-draft.js') }}"></script>
 {% endblock %}
 {% block content %}
 
@@ -18,23 +18,23 @@
             <table class="barbershop-table">
                 <tr>
                     <td>Barbershop</td>
-                    <td>{{ barbershop['barbershop_name']}}</td>
+                    <td>{{ barbershop[1] }}</td>
                 </tr>
                 <tr>
                     <td>Location</td>
-                    <td>{{ barbershop['location'] }},  <a id="openInGoogle" href="#">Open in Google Maps</a></td>
+                    <td>{{ barbershop[2]}},  <a id="openInGoogle" href="#">Open in Google Maps</a></td>
                 </tr>
                 <tr>
                     <td>Haircut</td>
-                    <td>{{ haircut['haircut'] }}</td>
+                    <td>{{ haircut[1] }}</td>
                 </tr>
                 <tr>
                     <td>Barber</td>
-                    <td>{{ barber['name'] }}</td>
+                    <td>{{ barber[1] }}</td>
                 </tr>
                 <tr>
                     <td>Barber Rating</td>
-                    <td>{{ barber['rating'] }} ⭐</td>
+                    <td>{{ barber[2] }} ⭐</td>
                 </tr>
                 <tr>
                     <td>Day</td>
@@ -46,15 +46,15 @@
                 </tr>
                 <tr>
                     <td>Price</td>
-                    <td>{{ haircut['price'] }} UZS</td>
+                    <td>{{ haircut[2] }} UZS</td>
                 </tr>
             </table>
         </div>
-        <div class="controls">
+        <form class="controls" action="{{ url_for('views.book_now')}}" method="post">
+            <input type="hidden" name="user_id" value="{{ current_user.id }}">
             <button class="book-now" type="button" onclick="window.location.href='/locations/target-haircut/barbers/available-days/available-hours'">Back</button>
-            <button class="book-now">Book Now</button>
-
-        </div>
+            <button type="submit" id="book-now" class="book-now">Book Now</button>
+        </form>
     </div>
 </div>
 

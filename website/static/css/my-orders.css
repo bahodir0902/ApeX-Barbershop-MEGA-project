@@ -1,0 +1,84 @@
+.orders-container {
+    max-width: 800px;
+    margin: 6% auto;
+    padding: 20px;
+    border: 0.4px solid lightgrey;
+    border-radius: 5px;
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.3); /* Semi-transparent white */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff; /* White color */
+    font-size: 44px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Adding shadow for better readability */
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.order-card:hover {
+    transform: scale(1.02); /* Slight zoom on hover */
+}
+
+.order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-details p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    font-family: 'Inter', sans-serif;
+}
+
+.order-details p strong {
+    font-weight: 600;
+    color: #000;
+}
+
+#no-order {
+    font-size: 1.5em;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+}
+
+#back-button {
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 10px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: flex; /* Inline-block display */
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    font-size: 16px; /* Font size */
+    margin-left: 10px;
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Transition for background color */
+}
+#back-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}

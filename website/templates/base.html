@@ -6,7 +6,7 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base-style.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     {% block head_links %}{% endblock %}
 </head>
@@ -37,6 +37,7 @@
             <li class="dropdown" role="button">
                 <a href="javascript:void(0)" class="dropbtn">{{ user.first_name }}   <i class='bx bx-user-circle'></i></a>
                 <div class="dropdown-content">
+                    <a href="{{ url_for('views.my_orders') }}">My Orders <i class='bx bx-cart'></i></a>
                     <a href="{{ url_for('views.profile') }}">Profile</a>
                     <a href="{{ url_for('views.settings') }}">Settings</a>
                     <a href="{{ url_for('auth.logout') }}">Logout</a>

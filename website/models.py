@@ -56,6 +56,11 @@ cur.execute("""CREATE TABLE IF NOT EXISTS barbers(
 	barber_rating VARCHAR(10) DEFAULT "N/A",
 	barber_email TEXT UNIQUE,
 	experienced_yeards INTEGER,
+	working_start_time TIME,
+	working_end_time TIME,
+	break_start_time TIME,
+	break_start_time TIME,
+	working_days VARCHAR(100),
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 """)
 
@@ -66,6 +71,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS haircuts(
 	description TEXT,
 	price DECIMAL(10, 2) NOT NULL,
 	haircut_picture BYTEA,
+	haircut_duration INTERVAL,
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 """)
 
@@ -85,7 +91,17 @@ cur.execute("""CREATE TABLE IF NOT EXISTS permissions(
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 """)
 
-
+cur.execute("""CREATE TABLE IF NOT EXISTS appointments(
+	appointment_id SERIAL PRIMARY KEY,
+	barbershop_id INTEGER REFERENCES barbershops(barbershop_id) ON DELETE CASCADE,
+	barber_id INTEGER REFERENCES barbers(barber_id) ON DELETE CASCADE,
+	customer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+	haircut_id INTEGER REFERENCES haircuts(haircut_id) ON DELETE CASCADE,
+	appointment_date DATE NOT NULL,
+	appointment_time TIME NOT NULL,
+	duration_minutes INTEGER DEFAULT 45,
+	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+""")
 connection.commit()
 
 
