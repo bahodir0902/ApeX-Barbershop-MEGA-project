@@ -10,7 +10,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secret'
     app.config['UPLOAD_FOLDER'] = 'static/uploads/'
-    app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png', 'gif'}
+    app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png'}
     app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql:///{DB_NAME}"
 
     db.init_app(app)
