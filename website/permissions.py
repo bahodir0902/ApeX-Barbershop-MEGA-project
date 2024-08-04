@@ -69,7 +69,7 @@ def find_barbershop():
                 # results_html += f'<div class="search-result-item" data-id="{result[0]}">{result[1]}, Location: {result[2]} <button class="btn btn-link p-0" id="toggle-search-results-btn1"><i class="fas fa-plus"></i></button></div>'
                 results_html += f'''
         <div class="search-result-item" data-id="{result[0]}">
-                    <div class="results-header d-flex justify-content-between align-items-center">
+                    <div class="results-header" style="display: flex; justify-content: space-between;">
                         {result[1]}, Location: {result[2]}
                         <button class="btn btn-link p-0 toggle-search-result-btn">
                             <i class="fas fa-plus"></i>
@@ -80,22 +80,106 @@ def find_barbershop():
                             action="/find_barbershop/edit-barbershop">
                                 <div class="form-group">
                                     <label for="barbershop-name">Barbershop name</label>
-                                    <input type="text" class="form-control" id="edit-barbershop-name" name="edit-barbershop-name" placeholder="{result[1]}">
+                                    <input type="text" class="form-control" id="edit-barbershop-name" name="edit-barbershop-name" value="{result[1]}">
                                 </div>
                                 <div class="form-group">
                                     <label for="barbershop-location">Barbershop location</label>
                                     <input type="text" class="form-control" id="edit-barbershop-location" name="edit-barbershop-location"
-                                     placeholder="{result[2]}">
+                                     value="{result[2]}">
                                 </div>
                                 <div class="form-group">
                                     <label for="barbershop-phone-number">Barbershop owner's phone number</label>
-                                     <input type="tel" class="form-control" id="edit-barbershop-phone-number" name="edit-barbershop-phone-number" placeholder="{result[3]}">
+                                     <input type="tel" class="form-control" id="edit-barbershop-phone-number" name="edit-barbershop-phone-number" value="{result[3]}">
                                 </div>
                                 <div class="form-group">
                                     <label for="barbershop-picture">Barbershop picture</label>
                                     <input type="file" class="form-control" id="edit-barbershop-picture" name="edit-barbershop-picture">
                                 </div>
                             <input type="hidden" name="barbershop_id" value="{result[0]}">
+                            
+                            <div class="edit-barbershop-settings-container">
+                                <div class="edit-settings-header">
+                                    <button type="button" class="toggle-edit-barbershop-settings-btn">
+                                        Edit Barbershop Settings <i class="fas fa-plus"></i>
+                                     </button>
+                                </div>
+                                <div class="edit-settings-content" style="display: none;">
+                                
+                                    <div class="settings-add-barbers-container">
+                                        <div class="settings-add-barbers-header">
+                                            <button type="button" class="toggle-add-barbers-btn">
+                                                Add barbers <i class="fas fa-plus"></i>
+                                            </button>    
+                                        </div>
+                                        
+                                        <div class="settings-add-barbers-content" style="display: none;">
+                                            <p>Hello</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="settings-edit-barbers-container">
+                                        <div class="settings-edit-barbers-header">
+                                            <button type="button" class="toggle-edit-barbers-btn">
+                                                Edit barbers <i class="fas fa-plus"></i>
+                                            </button>    
+                                        </div>
+                                        
+                                        <div class="settings-edit-barbers-content" style="display: none;">
+                                            <p>Hello</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="settings-delete-barbers-container">
+                                        <div class="settings-delete-barbers-header">
+                                            <button type="button" class="toggle-delete-barbers-btn">
+                                                Delete barbers <i class="fas fa-plus"></i>
+                                            </button>    
+                                        </div>
+                                        
+                                        <div class="settings-delete-barbers-content" style="display: none;">
+                                            <p>Hello</p>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="settings-add-haircuts-container">
+                                        <div class="settings-add-haircuts-header">
+                                            <button type="button" class="toggle-add-haircuts-btn">
+                                                Add haircuts  <i class="fas fa-plus"></i>
+                                            </button>    
+                                        </div>
+                                        
+                                        <div class="settings-add-haircuts-content" style="display: none;">
+                                            <p>Hello</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="settings-edit-haircuts-container">
+                                        <div class="settings-edit-haircuts-header">
+                                            <button type="button" class="toggle-edit-haircuts-btn">
+                                                Edit haircuts <i class="fas fa-plus"></i>
+                                            </button>    
+                                        </div>
+                                        
+                                        <div class="settings-edit-haircuts-content" style="display: none;">
+                                            <p>Hello</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="settings-delete-haircuts-container">
+                                        <div class="settings-delete-haircuts-header">
+                                            <button type="button" class="toggle-delete-haircuts-btn">
+                                                Delete haircuts <i class="fas fa-plus"></i>
+                                            </button>    
+                                        </div>
+                                        
+                                        <div class="settings-delete-haircuts-content" style="display: none;">
+                                            <p>Hello</p>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
                             <button type="submit" class="btn btn-primary">Confirm Changes</button>
                         </form>
                     </div>

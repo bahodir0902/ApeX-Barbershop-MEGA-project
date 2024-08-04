@@ -162,10 +162,65 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
-    cursor: pointer;
+
 
 }
 
 .search-result-item:hover {
+   /*background-color: #f0f0f0;*/
+}
+
+.results-header:hover{
     background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.search-result-content{
+
+
+}
+.search-result-content:hover .search-result-item{
+    background-color: white;
+}
+
+.toggle-edit-barbershop-settings-btn{
+    margin-top: 30px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; /* This makes the button take the full width of its container */
+    background-color: #f8f9fa; /* Light grey background */
+    color: #000; /* Black text */
+    font-size: 16px; /* Larger font size for better readability */
+}
+.toggle-edit-barbershop-settings-btn:hover{
+    cursor: pointer;
+    background-color: #e2e6ea;
+}
+
+.edit-barbershop-settings-container{
+
+}
+.edit-settings-content{
+
+}
+
+.toggle-add-barbers-btn, .toggle-edit-barbers-btn, .toggle-delete-barbers-btn, .toggle-add-haircuts-btn, .toggle-edit-haircuts-btn, .toggle-delete-haircuts-btn{
+    margin-top: 24px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90%; /* This makes the button take the full width of its container */
+    background-color: #f8f9fa; /* Light grey background */
+    color: #000; /* Black text */
+    font-size: 15px; /* Larger font size for better readability */
+}
+
+.toggle-add-barbers-btn:hover, .toggle-edit-barbers-btn:hover, .toggle-delete-barbers-btn:hover, .toggle-add-haircuts-btn:hover, .toggle-edit-haircuts-btn:hover, .toggle-delete-haircuts-btn:hover{
+    cursor: pointer;
+    background-color: #e2e6ea;
 }

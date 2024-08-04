@@ -1,19 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
     const toggleCardBtn = document.getElementById('toggle-card-btn');
     const toggleCardEditBtn = document.getElementById('toggle-card-edit-btn');
-    const toggleEditSettingsBtn = document.getElementById('toggle-edit-settings-btn');
+
     const cardContent = document.getElementById('card-content');
     const editCardContent = document.getElementById('edit-card-content');
-    const editSettingsContent = document.getElementById('edit-settings-content');
 
     // Function to toggle display and icon
     function toggleContent(button, content) {
         if (content.style.display === 'none' || content.style.display === '') {
             content.style.display = 'block';
-            button.innerHTML = '<i class="fas fa-minus"></i>';
+            button.querySelector('i').className = 'fas fa-minus';
         } else {
             content.style.display = 'none';
-            button.innerHTML = '<i class="fas fa-plus"></i>';
+            button.querySelector('i').className = 'fas fa-plus';
         }
     }
 
@@ -30,11 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (toggleEditSettingsBtn && editSettingsContent) {
-        toggleEditSettingsBtn.addEventListener('click', function () {
-            toggleContent(toggleEditSettingsBtn, editSettingsContent);
-        });
-    }
+
+//    if (toggleEditBarbershopSettingsBtn && editSettingsContent) {
+//        toggleEditBarbershopSettingsBtn.addEventListener('click', function () {
+//            toggleContent(toggleEditBarbershopSettingsBtn, editSettingsContent);
+//        });
+//    }
 
     // Form submission handling
     const form = document.getElementById('edit-barbershop-info-form');
@@ -67,6 +67,47 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.target.closest('.toggle-search-result-btn')) {
             const button = event.target.closest('.toggle-search-result-btn');
             const content = button.closest('.search-result-item').querySelector('.search-result-content');
+            toggleContent(button, content);
+        }
+         if (event.target.closest('.toggle-edit-barbershop-settings-btn')) {
+            const button = event.target.closest('.toggle-edit-barbershop-settings-btn');
+            const content = button.closest('.edit-barbershop-settings-container').querySelector('.edit-settings-content');
+            toggleContent(button, content);
+        }
+
+        if (event.target.closest('.toggle-add-barbers-btn')) {
+            const button = event.target.closest('.toggle-add-barbers-btn');
+            const content = button.closest('.settings-add-barbers-container').querySelector('.settings-add-barbers-content');
+            toggleContent(button, content);
+        }
+
+         if (event.target.closest('.toggle-edit-barbers-btn')) {
+            const button = event.target.closest('.toggle-edit-barbers-btn');
+            const content = button.closest('.settings-edit-barbers-container').querySelector('.settings-edit-barbers-content');
+            toggleContent(button, content);
+        }
+
+        if (event.target.closest('.toggle-delete-barbers-btn')) {
+            const button = event.target.closest('.toggle-delete-barbers-btn');
+            const content = button.closest('.settings-delete-barbers-container').querySelector('.settings-delete-barbers-content');
+            toggleContent(button, content);
+        }
+
+         if (event.target.closest('.toggle-add-haircuts-btn')) {
+            const button = event.target.closest('.toggle-add-haircuts-btn');
+            const content = button.closest('.settings-add-haircuts-container').querySelector('.settings-add-haircuts-content');
+            toggleContent(button, content);
+        }
+
+         if (event.target.closest('.toggle-edit-haircuts-btn')) {
+            const button = event.target.closest('.toggle-edit-haircuts-btn');
+            const content = button.closest('.settings-edit-haircuts-container').querySelector('.settings-edit-haircuts-content');
+            toggleContent(button, content);
+        }
+
+        if (event.target.closest('.toggle-delete-haircuts-btn')) {
+            const button = event.target.closest('.toggle-delete-haircuts-btn');
+            const content = button.closest('.settings-delete-haircuts-container').querySelector('.settings-delete-haircuts-content');
             toggleContent(button, content);
         }
     });
