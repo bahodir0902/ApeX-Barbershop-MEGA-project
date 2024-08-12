@@ -4,22 +4,32 @@ body {
     background-color: #f7f7f7;
 }
 
-.container {
-    max-width: 600px;
-    margin-top: 60px;
-    margin-left: 10%;
+#manage-appointments-container{
+    margin-left: 55%;
+    margin-top: -17.9%;
+}
+#manage-barbershops-container{
+    margin-top: 11%;
+}
 
+.container {
+    min-width: 600px;
+    max-width: 600px;
+
+    margin-left: 9%;
     padding: 20px;
     border: 2px solid white;
     border-radius: 10px;
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(17px);
 }
 
 .container h1 {
     margin-bottom: 30px;
     color: white;
     text-align: center;
+    text-shadow: 6px 6px 6px black; /* horizontal offset, vertical offset, blur radius, color */
 }
+
 
 .card {
     /*box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);*/
@@ -39,6 +49,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-shadow: 1px 1px 5px black;
 }
 
 .card-body {
@@ -46,7 +57,7 @@ body {
     display: none;
 }
 
-.form-group label {
+.form-group label{
     font-weight: bold;
     display: block;
     margin-top: 20px;
@@ -139,11 +150,15 @@ body {
     border-color: #ebaa4c;
 }
 
-#search-results {
+#search-results, #delete-search-results {
     margin-top: 20px;
 }
 
-#search-results .result-item {
+#delete-search-results {
+    padding: 10px;
+}
+
+#search-results .result-item .delete-search-results{
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -152,13 +167,13 @@ body {
     cursor: pointer;
 }
 
-#search-results .result-item:hover {
+#search-results .result-item:hover .delete-search-results:hover{
     background-color: #ebaa4c;
     color: white;
 }
 
-.search-result-item {
-    padding: 10px;
+.search-result-item, .delete-search-results {
+    padding: 7px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -223,4 +238,320 @@ body {
 .toggle-add-barbers-btn:hover, .toggle-edit-barbers-btn:hover, .toggle-delete-barbers-btn:hover, .toggle-add-haircuts-btn:hover, .toggle-edit-haircuts-btn:hover, .toggle-delete-haircuts-btn:hover{
     cursor: pointer;
     background-color: #e2e6ea;
+}
+
+
+.form-control-settings {
+    border-radius: 5px;
+    margin-top: 3px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+.form-group-settings label {
+    font-size: 16px;
+    font-weight: 500;
+    display: block;
+    margin-top: 20px;
+}
+
+/* Style for the custom checkbox container */
+/* Style for the custom checkbox container */
+.form-group-settings #settings-add-barber-working-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust spacing between checkboxes */
+}
+
+/* Style for individual custom checkboxes */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+/* Hide the default checkbox */
+.custom-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Custom checkbox design */
+.custom-checkbox label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1.5;
+    user-select: none;
+}
+
+/* Custom checkmark/indicator */
+.custom-checkbox label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 3px;
+}
+
+/* Checked state */
+.custom-checkbox input:checked + label::before {
+    background-color: #4caf50;
+}
+
+/* Checkmark/indicator */
+.custom-checkbox label::after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Display the checkmark/indicator when checked */
+.custom-checkbox input:checked + label::after {
+    display: block;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Style the checkbox labels */
+.custom-checkbox label {
+    margin-left: 10px;
+}
+
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group .form-control {
+    flex: 1;
+}
+
+.input-group .input-group-append {
+    display: flex;
+    align-items: center;
+}
+
+.input-group .btn {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.input-group .btn:hover {
+    background-color: #e2e6ea;
+}
+
+
+.ul-barbers {
+    list-style-type: none; /* Remove default list bullets */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.ul-barbers li {
+    background-color: #f8f9fa; /* Light gray background for list items */
+    border: 1px solid #dee2e6; /* Light gray border for list items */
+    padding: 10px; /* Add some padding */
+    margin-bottom: 5px; /* Space between list items */
+    border-radius: 5px; /* Rounded corners */
+    display: flex; /* Flexbox for better layout control */
+    align-items: center; /* Center items vertically */
+}
+
+.ul-barbers li:hover {
+    background-color: #e2e6ea; /* Slightly darker background on hover */
+}
+
+.ul-barbers li i {
+    margin-right: 10px; /* Space between icon and text */
+    color: #6c757d; /* Gray color for icons */
+}
+
+
+.confirm-delete{
+
+}
+.confirm-delete button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #de0404;
+    color: white;
+    font-weight: 420;
+    font-size: 17px;
+    padding: 10px;
+    width: 40%;
+    border-radius: 7px;
+    border: 1px solid grey;
+    margin: 15px;
+    transition: 0.45s all;
+    float: left;
+    cursor: pointer;
+}
+
+.confirm-delete button:hover{
+    background-color: #e01f1f;
+    scale: 1.04;
+}
+confirm-delete button i{
+
+}
+.appointment-card {
+    background-color: #fff3e6; /* Light warm background color */
+    border: 1px solid #ffcc99; /* Slightly darker border to match warm theme */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    margin-bottom: 20px; /* Spacing between cards */
+    overflow: hidden; /* Ensure inner elements don't overflow the card */
+    transition: transform 0.2s; /* Smooth hover effect */
+}
+
+.appointment-card:hover {
+    transform: scale(1.024); /* Slightly enlarge on hover */
+    background-color: #f0dcc7;
+}
+
+.appointment-header {
+    background-color: #ffcc99; /* Matching header background */
+    color: #5a3e2b; /* Darker text color for readability */
+    padding: 10px 15px; /* Padding for spacing */
+    font-size: 1.2em; /* Slightly larger font size */
+    font-weight: bold; /* Bold header */
+}
+
+.appointment-body {
+    padding: 15px; /* Padding for body content */
+}
+
+.appointment-body p {
+    margin: 5px 0; /* Margin between paragraphs */
+    font-size: 1em; /* Normal font size */
+    color: #5a3e2b; /* Matching text color */
+}
+
+.appointment-body p.appointment-id {
+    font-weight: bold;
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.customer-id {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.customer-first-name {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.customer-last-name {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.customer-phone-number {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.appointment-date {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.appointment-time {
+    color: #0d0c0c; /* Highlighted text color */
+}
+.appointment-body p.duration-minutes {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.barbershop-name {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.address {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.barber-first-name {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.barber-last-name {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.haircut-name {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.price {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.appointment-body p.created-date {
+    color: #0d0c0c; /* Highlighted text color */
+}
+
+.delete-appointments-container{
+    display: flex;
+    align-items: center;
+}
+
+.delete-appointment-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #de0404;
+    color: white;
+    font-weight: 420;
+    font-size: 17px;
+    padding: 10px;
+    width: 50%;
+    border-radius: 7px;
+    border: 1px solid grey;
+    margin: 15px;
+    transition: 0.45s all;
+    float: left;
+    cursor: pointer;
+}
+
+.delete-appointment-button:hover {
+    background-color: #e01f1f;
+    transform: scale(1.04);
+}
+
+
+.suggestions {
+    border: 1px solid #ddd;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background: white;
+    z-index: 1000;
+    width: 100%;
+}
+
+.suggestion-item {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
 }

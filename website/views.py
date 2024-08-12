@@ -41,7 +41,7 @@ def target_haircut():
         selected_haircut = request.form.get('choose')
         session['global_haircut'] = selected_haircut
         return redirect(url_for('views.barbers'))
-    cur.execute("""SELECT * FROM haircuts""")
+    cur.execute("""SELECT DISTINCT * FROM haircuts WHERE barbershop_id = %s""", (barbershop,))
     haircuts = cur.fetchall()
     return render_template("target-haircut.html", haircuts=haircuts, barbershop=barbershop)
 
@@ -99,7 +99,7 @@ def hours():
         else:
             return redirect(url_for("views.final"))
 
-    cur.execute("SELECT working_start_time, working_end_time, break_start_time, break_end_time FROM barbers WHERE barber_id = %s", (barber_id))
+    cur.execute("SELECT working_start_time, working_end_time, break_start_time, break_end_time FROM barbers WHERE barber_id = %s", (barber_id,))
     result = cur.fetchone()
     working_start_time = result[0]
     working_end_time = result[1]

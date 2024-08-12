@@ -53,13 +53,14 @@ cur.execute("""CREATE TABLE IF NOT EXISTS barbers(
 	barber_first_name VARCHAR(100) NOT NULL,
 	barber_last_name VARCHAR(100),
 	barber_phone_number VARCHAR(30) UNIQUE,
-	barber_rating VARCHAR(10) DEFAULT "N/A",
+	barber_rating VARCHAR(10) DEFAULT 'N/A',
+	barber_picture BYTEA,
 	barber_email TEXT UNIQUE,
-	experienced_yeards INTEGER,
+	experienced_years INTEGER,
 	working_start_time TIME,
 	working_end_time TIME,
 	break_start_time TIME,
-	break_start_time TIME,
+	break_end_time TIME,
 	working_days VARCHAR(100),
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 """)
@@ -69,7 +70,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS haircuts(
 	barbershop_id INTEGER REFERENCES barbershops(barbershop_id) ON DELETE CASCADE,
 	haircut_name TEXT NOT NULL,
 	description TEXT,
-	price DECIMAL(10, 2) NOT NULL,
+	price DECIMAL(10, 2) DEFAULT 0,
 	haircut_picture BYTEA,
 	haircut_duration INTERVAL,
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)

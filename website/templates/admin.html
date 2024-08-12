@@ -3,68 +3,185 @@
 {% block head_links %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
-
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Manage Barbershops</h1>
+<div class="container-wrapper">
+    <div class="container mt-5" id="manage-barbershops-container">
+        <h1>Manage Barbershops</h1>
 
-    <!-- Add Barbershop Section -->
-    <div class="card mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            Add Barbershop
-            <button class="btn btn-link p-0" id="toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body" id="card-content">
-            <form id="add-barbershop-form" enctype="multipart/form-data" method="POST"
-                  action="{{ url_for('permissions.add_barbershop') }}">
-                <div class="form-group">
-                    <label for="barbershop-name">Barbershop name</label>
-                    <input type="text" class="form-control" id="barbershop-name" name="barbershop-name" required>
-                </div>
-                <div class="form-group">
-                    <label for="barbershop-location">Barbershop location</label>
-                    <input type="text" class="form-control" id="barbershop-location" name="barbershop-location"
-                           placeholder="City, region, street name..." required>
-                </div>
-                <div class="form-group">
-                    <label for="barbershop-phone-number">Barbershop owner's phone number</label>
-                    <input type="tel" class="form-control" id="barbershop-phone-number" name="barbershop-phone-number"
-                           required>
-                </div>
-                <div class="form-group">
-                    <label for="barbershop-picture">Barbershop picture</label>
-                    <input type="file" class="form-control" id="barbershop-picture" name="barbershop-picture" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Add Barbershop</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            Edit Barbershop information
-            <button class="btn btn-link p-0" id="toggle-card-edit-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body" id="edit-card-content">
-            <form id="edit-barbershop-info-form" method="POST" action="{{ url_for('permissions.find_barbershop') }}">
-                <div class="form-group">
-                    <label for="barbershop-name-search">Barbershop name</label>
-                    <input type="text" class="form-control" id="barbershop-name-search" name="barbershop-name" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Find Barbershop</button>
-            </form>
-            <div id="search-results" class="mt-3" style="display: none;">
-                <button class="btn btn-link p-0" id="toggle-search-results-btn1">
+        <!-- Add Barbershop Section -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Add Barbershop
+                <button class="btn btn-link p-0" id="toggle-card-btn">
                     <i class="fas fa-plus"></i>
                 </button>
-                <!-- Search results will be populated here -->
+            </div>
+            <div class="card-body" id="card-content">
+                <form id="add-barbershop-form" enctype="multipart/form-data" method="POST"
+                      action="{{ url_for('permissions.add_barbershop') }}">
+                    <div class="form-group">
+                        <label for="barbershop-name">Barbershop name</label>
+                        <input type="text" class="form-control" id="barbershop-name" name="barbershop-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="barbershop-location">Barbershop location</label>
+                        <input type="text" class="form-control" id="barbershop-location" name="barbershop-location"
+                               placeholder="City, region, street name..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="barbershop-phone-number">Barbershop owner's phone number</label>
+                        <input type="tel" class="form-control" id="barbershop-phone-number"
+                               name="barbershop-phone-number"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label for="barbershop-picture">Barbershop picture</label>
+                        <input type="file" class="form-control" id="barbershop-picture" name="barbershop-picture"
+                               required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Barbershop</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Barbershop Section -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Edit Barbershop information
+                <button class="btn btn-link p-0" id="toggle-card-edit-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="edit-card-content">
+                <form id="edit-barbershop-info-form" method="POST"
+                      action="{{ url_for('permissions.find_barbershop') }}">
+                    <div class="form-group">
+                        <label for="barbershop-name-search">Barbershop name</label>
+                        <input type="text" class="form-control" id="barbershop-name-search" name="barbershop-name"
+                               required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Find Barbershop</button>
+                </form>
+                <div id="search-results" class="mt-3" style="display: none;">
+                    <button class="btn btn-link p-0" id="toggle-search-results-btn1">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <!-- Search results will be populated here -->
+                </div>
+            </div> <!-- Close card-body -->
+        </div> <!-- Close card -->
+
+        <!-- Delete Barbershops Section -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Delete Barbershops
+                <button class="btn btn-link p-0" id="toggle-delete-barbershop-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="delete-barbershop-content">
+                <form id="delete-barbershop-form" method="POST"
+                      action="{{ url_for('permissions.find_barbershop_to_delete') }}">
+                    <div class="form-group">
+                        <label for="delete-barbershop-name-search">Barbershop name</label>
+                        <input type="text" class="form-control" id="delete-barbershop-name-search"
+                               name="delete-barbershop-name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Find Barbershop</button>
+                </form>
+                <div id="delete-search-results" class="mt-3" style="display: none;">
+                    <button class="btn btn-link p-0" id="toggle-delete-search-results-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <!-- Search results will be populated here -->
+                </div>
+            </div> <!-- Close card-body -->
+        </div> <!-- Close card -->
+
+    </div>
+
+    <div class="container" id="manage-appointments-container">
+        <h1>Manage Appointments</h1>
+
+        <!-- Add Appointment Section -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Add Appointment
+                <button class="btn btn-link p-0" id="toggle-add-appointment-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="add-appointment-content" style="display: none;">
+                <form id="add-appointment-form" method="POST" action="{{ url_for('permissions.add_appointment') }}">
+                    <div class="form-group">
+                        <label for="add-appointment-barbershop-name">Barbershop name</label>
+                        <input type="text" class="form-control" id="add-appointment-barbershop-name" name="add-appointment-barbershop-name" required>
+
+                        <div id="barbershop-suggestions" class="suggestions"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="barber-name">Barber Name</label>
+                        <input type="text" class="form-control" id="barber-name" name="barber-name" required>
+
+                        <div id="barber-suggestions" class="suggestions"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-first-name">Customer First Name</label>
+                        <input type="text" class="form-control" id="customer-first-name" name="customer-first-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-last-name">Customer Last Name</label>
+                        <input type="text" class="form-control" id="customer-last-name" name="customer-last-name">
+                    </div>
+                     <div class="form-group">
+                        <label for="customer-phone-number">Customer Phone Number</label>
+                        <input type="tel" class="form-control" id="customer-phone-number" name="customer-phone-number">
+                    </div>
+                    <div class="form-group">
+                        <label for="haircut-select">Haircut Name</label>
+                        <select id="haircut-select">
+                            <option value="" disabled selected>Select a haircut</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-day">Appointment Date</label>
+                        <input type="date" id="appointment-day" name="appointment-day">
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-time">Appointment Time</label>
+                        <select id="appointment-time" name="appointment_time" required>
+                            <option value="">Select a time</option>
+                            <!-- Available times will be populated here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="duration-minutes">Duration (Minutes)</label>
+                        <input type="number" class="form-control" id="duration-minutes" name="duration_minutes"
+                               value="45" required>
+                    </div>
+                    <!-- Hidden fields for storing IDs and names -->
+                        <input type="hidden" id="barbershop-id-hidden" name="barbershop_id">
+                        <input type="hidden" id="barber-id-hidden" name="barber_id">
+                    <button type="submit" class="btn btn-primary">Add Appointment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- List Appointments Section -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Appointments List
+                <button class="btn btn-link p-0" id="toggle-appointments-list-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="appointments-list-content" style="display: none;">
+                <!-- Appointments will be loaded here via AJAX -->
+                <div id="appointments-list"></div>
+
             </div>
         </div>
     </div>
@@ -73,5 +190,9 @@
 {% block scripts %}
 <script>
     var findBarbershop = "{{ url_for('permissions.find_barbershop') }}";
+    var findDeleteBarbershop = "{{ url_for('permissions.find_barbershop_to_delete') }}";
+    var listAppointments = "{{ url_for('permissions.list_appointments') }}";
+    var deleteAppointments = "url_for('permissions.delete_appointment')";
+
 </script>
 {% endblock %}
