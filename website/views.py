@@ -49,12 +49,19 @@ def target_haircut():
 @views.route('/locations/target-haircut/barbers', methods=['GET', 'POST'])
 def barbers():
     barbershop = session.get('global_barbershop')
+    print(f"barbershop ID: {barbershop}")
     haircut = session.get('global_haircut')
     if request.method == 'POST':
         selected_barber = request.form.get('choose')
         session['global_barber'] = selected_barber
         return redirect(url_for("views.days"))
-    cur.execute(f"SELECT DISTINCT b.barber_id, b.barber_first_name, b.barber_last_name,  b.barber_rating, b.barber_picture FROM barbers b JOIN  barber_haircuts bh ON b.barber_id = bh.barber_id JOIN  haircuts h ON bh.haircut_id = h.haircut_id WHERE h.haircut_name = %s; ", (haircut,))
+    cur.execute(f"""SELECT DISTINCT b.barber_id, b.barber_first_name,
+        b.barber_last_name,  b.barber_rating, b.barber_picture 
+        FROM barbers b
+        JOIN  barber_haircuts bh ON b.barber_id = bh.barber_id 
+        JOIN  haircuts h ON bh.haircut_id = h.haircut_id 
+        JOIN barbershops bs ON b.barbershop_id = bs.barbershop_id
+        WHERE h.haircut_name = %s AND bs.barbershop_id = %s; """, (haircut, barbershop))
     barbers_list = cur.fetchall()
 
     return render_template("barbers.html", barbers=barbers_list)
@@ -149,7 +156,7 @@ def final():
 
     selected_barbershop = [barbershops[0], barbershops[2], barbershops[3]]
     selected_haircut = [target_cuts[0], target_cuts[2], target_cuts[4]]
-    selected_barber = [barbers_list[0], barbers_list[2], barbers_list[6]]
+    selected_barber = [barbers_list[0], barbers_list[2], barbers_list[5]]
     session['selected_barbershop'] = selected_barbershop
     session['selected_haircut'] = selected_haircut
     session['selected_barber'] = selected_barber
