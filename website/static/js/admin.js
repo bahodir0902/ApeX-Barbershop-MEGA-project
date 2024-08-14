@@ -120,9 +120,9 @@ document.addEventListener('DOMContentLoaded', function () {
         let queryValue = this.value;
 
         // Debugging: Check the values before proceeding
-        console.log("Barbershop ID:", barbershopId);
-        console.log("Barber ID:", barberId);
-        console.log("Query Value:", queryValue);
+       // console.log("Barbershop ID:", barbershopId);
+       // console.log("Barber ID:", barberId);
+      //  console.log("Query Value:", queryValue);
 
         // Proceed with the fetch if queryValue is defined
         if (queryValue) {
@@ -132,23 +132,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function fetchHaircuts() {
     const haircutSelect = document.getElementById('haircut-select');
 
     fetch('/get-all-haircuts')
     .then(response => response.json())
     .then(data => {
         // Clear any existing options
-        haircutSelect.innerHTML = '';
+        haircutSelect.innerHTML = '<option value="" disabled selected>Select a haircut</option>';
 
         // Populate the dropdown with the fetched haircuts
         data.forEach(haircut => {
             const option = document.createElement('option');
-            option.value = haircut.haircut_name;  // Set the value to the haircut name
-            option.textContent = `${haircut.haircut_name} - ${haircut.price} UZS`;  // Display both name and price
+            option.value = haircut.haircut_name;
+            option.textContent = `${haircut.haircut_name} - ${haircut.price} UZS`;
             haircutSelect.appendChild(option);
         });
     })
     .catch(error => console.error('Error fetching haircuts:', error));
+}
 
 
    function fetchSuggestions(type, query, inputFieldId, suggestionDivId) {
@@ -181,13 +183,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Correctly set barbershop ID if selecting a barbershop
                         if (type === 'barbershop') {
                             document.getElementById('barbershop-id-hidden').value = data[index].barbershop_id;
-                            console.log("Assigned barbershop_id:", item.barbershop_id); // Debugging output
+                            //console.log("Assigned barbershop_id:", item.barbershop_id); // Debugging output
                         }
 
                         // For barbers, you can store barber_id if needed
                         if (type === 'barber') {
                             form.addEventListener('submit', function (event) {
-                                console.log("Submitting form with barber_id:", document.getElementById('barber-id-hidden').value);
+                               // console.log("Submitting form with barber_id:", document.getElementById('barber-id-hidden').value);
                                 // proceed with form submission
                             });
 
@@ -200,31 +202,30 @@ document.addEventListener('DOMContentLoaded', function () {
                                 let barberId = document.getElementById('barber-id-hidden').value;
 
                                 // Debugging: Check the values before proceeding
-                                console.log("Barbershop ID:", barbershopId);
-                                console.log("Barber ID:", barberId);
-                                console.log("Constructed URL:", `/get-suggestions/barber?q=${item.barber_name}&barbershop_id=${barbershopId}&barber_id_hidden=${barberId}`);
+                               // console.log("Barbershop ID:", barbershopId);
+                                //console.log("Barber ID:", barberId);
+                                //console.log("Constructed URL:", `/get-suggestions/barber?q=${item.barber_name}&barbershop_id=${barbershopId}&barber_id_hidden=${barberId}`);
 
                                 // Send barberId to the backend using fetch
-                                fetch('/get_barber_id', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({ barber_id: barberId })
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('Success:', data);
-                                })
-                                .catch((error) => {
-                                    console.error('Error:', error);
-                                });
-                            } else {
-                                console.error('Hidden input for barber_id not found.');
+                                function updateBarberIdAndFetchHaircuts(barberId) {
+                                    // Send the barber ID to the backend to update the session
+                                    fetch('/get_barber_id', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ barber_id: barberId }),
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        //console.log('Barber ID updated:', data.received_barber_id);
+                                        fetchHaircuts();  // Fetch haircuts after updating the barber ID
+                                    })
+                                    .catch(error => console.error('Error updating barber ID:', error));
+                                }
+                                updateBarberIdAndFetchHaircuts(barberId);
                             }
                         }
-
-
 
                         suggestionDiv.innerHTML = ''; // Clear suggestions after selection
                     });
@@ -235,37 +236,54 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
-
-
-   document.getElementById('appointment-day').addEventListener('change', function() {
-    const barberId = document.getElementById('barber-id').value;
+document.getElementById('appointment-day').addEventListener('change', function() {
+    const barberId = document.getElementById('barber-id-hidden').value;
     const day = this.value;
+
+    if (barberId) {
+        fetch(`/get-available-dates`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.available_dates);  // Debugging output
+                const appointmentDayInput = document.getElementById('appointment-day');
+                if (data.available_dates.length > 0) {
+                    appointmentDayInput.min = data.available_dates[0];
+                    appointmentDayInput.max = data.available_dates[data.available_dates.length - 1];
+                }
+            })
+            .catch(error => console.error('Error fetching available dates:', error));
+    }
 
     if (barberId && day) {
         fetch(`/get-available-times?barber_id=${barberId}&day=${day}`)
             .then(response => response.json())
             .then(data => {
                 const availableTimesDropdown = document.getElementById('appointment-time');
-                availableTimesDropdown.innerHTML = '<option value="">Select a time</option>';
+                const messageContainer = document.getElementById('appointment-message');
 
-                data.available_times.forEach(time => {
-                    let option = document.createElement('option');
-                    option.value = time;
-                    option.textContent = time;
-                    availableTimesDropdown.appendChild(option);
-                });
+                // Clear previous content
+                availableTimesDropdown.innerHTML = '';
+                messageContainer.textContent = '';
+
+                if (data.available_times.length === 1 && (data.available_times[0].startsWith("NO") || data.available_times[0].startsWith("In this day"))) {
+                    messageContainer.textContent = data.available_times[0];  // Display the message as a <p> tag
+                    availableTimesDropdown.style.display = 'none';  // Hide dropdown
+                } else {
+                    availableTimesDropdown.innerHTML = '<option value="">Select a time</option>';
+                    data.available_times.forEach(time => {
+                        let option = document.createElement('option');
+                        option.value = time;
+                        option.textContent = time;
+                        availableTimesDropdown.appendChild(option);
+                    });
+                     availableTimesDropdown.style.display = 'block';
+                }
             })
             .catch(error => console.error('Error fetching available times:', error));
     }
 });
 
-document.getElementById('barber-name').addEventListener('change', function() {
-    const day = document.getElementById('appointment-day').value;
-    if (this.value && day) {
-        document.getElementById('appointment-day').dispatchEvent(new Event('change'));
-    }
-});
+
 
 
 

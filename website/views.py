@@ -73,7 +73,6 @@ def days():
     cur.execute("SELECT working_days FROM barbers WHERE barber_id = %s", (barber_id,))
     result = cur.fetchone()
     working_days = result[0].split(', ')
-
     today = datetime.today()
     next_month = today + timedelta(days=30)
     available_dates = []

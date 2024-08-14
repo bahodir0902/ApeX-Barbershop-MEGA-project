@@ -538,20 +538,91 @@ confirm-delete button i{
 
 
 .suggestions {
-    border: 1px solid #ddd;
+
+    border-radius: 5px;
     max-height: 150px;
     overflow-y: auto;
     position: absolute;
     background: white;
     z-index: 1000;
-    width: 100%;
+    width: 86.5%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .suggestion-item {
-    padding: 5px;
+    padding: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .suggestion-item:hover {
-    background-color: #f0f0f0;
+    background-color: #d67f54;
+    color: white;
 }
+
+/* Style the select element itself */
+#haircut-select.styled-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    color: #333;
+    background-color: #fff;
+
+    cursor: pointer;
+}
+
+/* Add hover and focus effects for better interaction */
+#haircut-select.styled-select:hover, #haircut-select.styled-select:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+/* Style the options within the select */
+#haircut-select.styled-select option {
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 19px;
+    padding: 10px;
+}
+
+/* Hover effect on options (works in some browsers) */
+#haircut-select.styled-select option:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+
+input[type="time"], input[type="date"], select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="time"]:focus, input[type="date"]:focus, select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Styling the #appointment-time select element */
+#appointment-time {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#appointment-time option:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+
+

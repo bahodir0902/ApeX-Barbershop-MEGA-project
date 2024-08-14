@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, redirect, request, url_for, current_app, jsonify as flask_jsonify, session, flash
+from flask import Blueprint, render_template, redirect, request, url_for, current_app, jsonify as flask_jsonify, \
+    session, flash
 from flask_login import login_user, login_required, logout_user, current_user, login_manager
 import psycopg2
 from .models import connection, User
@@ -386,7 +387,8 @@ def edit_barbershop():
                 barber_id = cur.fetchone()[0]
                 for values in skills:
                     barber_query = f"INSERT INTO haircuts(haircut_name, price, description, barbershop_id) VALUES(%s, %s, %s ,%s) RETURNING haircut_id"
-                    cur.execute(barber_query, (values['haircut_name'], values['haircut_price'], values['description'], barbershop_id))
+                    cur.execute(barber_query,
+                                (values['haircut_name'], values['haircut_price'], values['description'], barbershop_id))
                     haircut_id = cur.fetchone()
                     connection.commit()
                     insert_query = "INSERT INTO barber_haircuts(barber_id, haircut_id) VALUES(%s, %s)"
@@ -449,6 +451,7 @@ def edit_barbershop():
                 print('no changes were made')
     return render_template("admin.html")
 
+
 @permissions.route('/delete-barbershops', methods=['POST'])
 @login_required
 def find_barbershop_to_delete():
@@ -457,11 +460,10 @@ def find_barbershop_to_delete():
         with connection.cursor() as cur:
             cur.execute("SELECT * FROM barbershops WHERE barbershop_name ILIKE  %s", ('%' + barbershop_name + '%',))
             search_result = cur.fetchall()
-
-            print(f"search results: {search_result}")
             result_html = ""
             for result in search_result:
-                cur.execute("SELECT barber_first_name, barber_last_name FROM barbers WHERE barbershop_id = %s", (result[0],))
+                cur.execute("SELECT barber_first_name, barber_last_name FROM barbers WHERE barbershop_id = %s",
+                            (result[0],))
                 barbers = cur.fetchall()
                 if barbers:
                     barbers_list = ''.join(f'<li>{barber[0]} {barber[1]}</li>' for barber in barbers)
@@ -497,6 +499,7 @@ def find_barbershop_to_delete():
         return flask_jsonify({'result_html': result_html})
     return render_template("admin.html")
 
+
 @permissions.route('/delete_barbershop', methods=['POST'])
 @login_required
 def delete_barbershop():
@@ -518,17 +521,18 @@ def add_appointment():
     customer_first_name = request.form.get('customer-first-name')
     customer_last_name = request.form.get('customer-last-name')
     customer_phone_number = request.form.get('customer-phone-number')
-    haircut_name = request.form.get('add-appointment-haircut-name')
+    haircut_name = request.form.get('haircut-select')
     appointment_date = request.form.get('appointment-day')
     appointment_time = request.form.get('appointment_time')
     duration_minutes = request.form.get('duration_minutes')
-
     with connection.cursor() as cur:
         cur.execute("SELECT phone_number FROM users WHERE phone_number = %s", (customer_phone_number,))
         result = cur.fetchone()
         if not result:
-            password = generate_password_hash('1234',method='pbkdf2:sha256')
-            cur.execute("INSERT INTO users(first_name, last_name, phone_number, password) VALUES(%s, %s, %s, %s) RETURNING id", (customer_first_name, customer_last_name, customer_phone_number, password))
+            password = generate_password_hash('1234', method='pbkdf2:sha256')
+            cur.execute(
+                "INSERT INTO users(first_name, last_name, phone_number, password) VALUES(%s, %s, %s, %s) RETURNING id",
+                (customer_first_name, customer_last_name, customer_phone_number, password))
             customer_id = cur.fetchone()
             connection.commit()
         else:
@@ -552,8 +556,6 @@ def add_appointment():
         if not (barbershop_id and barber_id and haircut_id):
             flash("Invalid selection. Please select valid barbershop, barber, and haircut.")
             return redirect(url_for('views.admin'))
-
-        print(f"appointment_date: {appointment_date}")
         cur.execute("""
             INSERT INTO appointments (barbershop_id, barber_id, customer_id, haircut_id, appointment_date, appointment_time, duration_minutes)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -568,23 +570,20 @@ def get_barber_id():
     data = request.get_json()
     barber_id = data.get('barber_id')
     session['add-appointment-barber-id'] = barber_id
-    # Process the barber_id as needed
-    print(f"Received Barber ID: {barber_id}")
-
-    # Return a JSON response
     return flask_jsonify({"status": "success", "received_barber_id": barber_id})
+
 
 @permissions.route('/get-all-haircuts', methods=['GET'])
 def get_all_haircuts():
-    data = request.get_json()
-    barber_id = data.get('barber_id')
-    print(f"barber id haircut: {barber_id}")
-    cur.execute("""SELECT DISTINCT h.haircut_name, price 
-                    FROM haircuts h
-                    JOIN barber_haircuts bh ON h.haircut_id = bh.haircut_id
-                    WHERE bh.barber_id = %s""", (barber_id,))
+    barber_id = session.get('add-appointment-barber-id')
+    cur.execute("""
+        SELECT DISTINCT h.haircut_name, h.price
+        FROM haircuts h
+        JOIN barber_haircuts bs ON h.haircut_id = bs.haircut_id
+        WHERE bs.barber_id = %s
+    """, (barber_id,))
     results = cur.fetchall()
-    return flask_jsonify([{"haircut_name": result[0], "price": str(result[1])} for result in results])
+    return flask_jsonify([{"haircut_name": result[0], "price": result[1]} for result in results])
 
 
 @permissions.route('/get-suggestions/<type>', methods=['GET'])
@@ -598,6 +597,7 @@ def get_suggestions(type):
 
     elif type == 'barber':
         barbershop_id = request.args.get('barbershop_id')
+        session['send_barbershop_id'] = barbershop_id
         if barbershop_id:
             cur.execute(
                 "SELECT barber_first_name, barber_id FROM barbers WHERE barber_first_name ILIKE %s AND barbershop_id = %s",
@@ -606,12 +606,6 @@ def get_suggestions(type):
             return flask_jsonify([{"barber_name": result[0], "barber_id": result[1]} for result in results])
         else:
             return flask_jsonify([])  # No barbershop ID provided
-
-    # elif type == 'haircut':
-    #     barber_id = session.get('add-appointment-barber-id')
-    #     print(f"haircut name: {query}, barber_id: {barber_id}")
-    #     cur.execute("SELECT h.haircut_name FROM haircuts h JOIN barber_haircuts bh ON bh.barber_id = bh.haircut_id", (f'%{query}%',))
-    #     return flask_jsonify([result[0] for result in cur.fetchall()])
 
 
 @permissions.route('/list-appointments', methods=['GET'])
@@ -668,13 +662,10 @@ def delete_appointment():
             return redirect(url_for('views.admin'))
 
 
-# Get Available Days for a Barber
-
 @permissions.route('/get-available-dates', methods=['GET'])
 def get_available_dates():
-    barbershop_id = session.get('get_barbershop_id')
-    barber_id = session.get('add_barber_id')
-
+    barbershop_id = session.get('send_barbershop_id')
+    barber_id = session.get('add-appointment-barber-id')
     available_dates = days(barber_id, barbershop_id)
     return flask_jsonify({'available_dates': available_dates})
 
@@ -682,10 +673,8 @@ def get_available_dates():
 # Route to get available times for a selected barber on a specific day
 @permissions.route('/get-available-times', methods=['GET'])
 def get_available_times():
-    barbershop_id = session.get('get_barbershop_id')
-    barber_id = session.get('add_barber_id')
-    print(f"barber id: {barber_id}")
-    print(f"barbershop id: {barbershop_id}")
+    barbershop_id = session.get('send_barbershop_id')
+    barber_id = session.get('add-appointment-barber-id')
     day = request.args.get('day')
     available_times = hours(barber_id, barbershop_id, day)
     return flask_jsonify({'available_times': available_times})
@@ -693,39 +682,61 @@ def get_available_times():
 
 def days(barber_id, barbershop_id):
     with connection.cursor() as cur:
-        cur.execute("SELECT working_days FROM barbers WHERE barber_id = %s AND barbershop_id = %s", (barber_id, barbershop_id))
+        cur.execute("SELECT working_days FROM barbers WHERE barber_id = %s AND barbershop_id = %s",
+                    (barber_id, barbershop_id))
         result = cur.fetchone()
-        working_days = result[0].split(', ')
 
+        if not result:
+            return ["In this day a barber will not work"]
+
+        working_days = result[0].split(', ')
         today = datetime.today()
         next_month = today + timedelta(days=30)
         available_dates = []
 
         current_date = today
         while current_date <= next_month:
-            if current_date.strftime('%A') in working_days:
-                available_dates.append(current_date.strftime('%d-%m-%Y'))
+            current_day_name = current_date.strftime('%A')
+            if current_day_name in working_days:
+                available_dates.append(current_date.strftime('%Y-%m-%d'))
             current_date += timedelta(days=1)
-
         return available_dates
 
-def hours(barber_id, barbershop_id, day):
-    cur.execute("SELECT working_start_time, working_end_time, break_start_time, break_end_time FROM barbers WHERE barber_id = %s AND barbershop_id = %s", (barber_id, barbershop_id))
-    result = cur.fetchone()
-    working_start_time = result[0]
-    working_end_time = result[1]
-    break_start_time = result[2]
-    break_end_time = result[3]
-    cur.execute("SELECT appointment_time FROM appointments WHERE barber_id = %s AND appointment_date = %s", (barber_id, day))
-    booked_slots = [row[0] for row in cur.fetchall()]
 
+def hours(barber_id, barbershop_id, day):
+    cur.execute(
+        "SELECT working_days, working_start_time, working_end_time, break_start_time, break_end_time FROM barbers WHERE barber_id = %s AND barbershop_id = %s",
+        (barber_id, barbershop_id))
+    result = cur.fetchone()
+
+    if not result:
+        return ["In this day a barber will not work"]
+
+    working_days = result[0].split(', ')
+    working_start_time = result[1]
+    working_end_time = result[2]
+    break_start_time = result[3]
+    break_end_time = result[4]
+
+    # Convert the selected day to the day name
+    selected_day_name = datetime.strptime(day, '%Y-%m-%d').strftime('%A')
+
+    if selected_day_name not in working_days:
+        return ["In this day a barber will not work"]
+
+    cur.execute("SELECT appointment_time FROM appointments WHERE barber_id = %s AND appointment_date = %s",
+                (barber_id, day))
+    booked_slots = [row[0] for row in cur.fetchall()]
 
     available_hours = []
     current_time = working_start_time
 
     while current_time < working_end_time:
-        if not (break_start_time < current_time < break_end_time) and current_time not in booked_slots:
+        if not (break_start_time <= current_time < break_end_time) and current_time not in booked_slots:
             available_hours.append(current_time.strftime('%H:%M'))
         current_time = (datetime.combine(datetime.today(), current_time) + timedelta(minutes=45)).time()
+
+    if not available_hours:
+        return ["NO AVAILABLE TIME FOR THIS DATE, PLEASE CHOOSE ANOTHER DAY"]
 
     return available_hours

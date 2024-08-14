@@ -142,7 +142,7 @@
                     </div>
                     <div class="form-group">
                         <label for="haircut-select">Haircut Name</label>
-                        <select id="haircut-select">
+                        <select id="haircut-select" class="styled-select" name="haircut-select">
                             <option value="" disabled selected>Select a haircut</option>
                         </select>
                     </div>
@@ -156,6 +156,7 @@
                             <option value="">Select a time</option>
                             <!-- Available times will be populated here -->
                         </select>
+                        <p id="appointment-message" style="color: red;"></p> <!-- Message container -->
                     </div>
                     <div class="form-group">
                         <label for="duration-minutes">Duration (Minutes)</label>
@@ -193,6 +194,7 @@
     var findDeleteBarbershop = "{{ url_for('permissions.find_barbershop_to_delete') }}";
     var listAppointments = "{{ url_for('permissions.list_appointments') }}";
     var deleteAppointments = "url_for('permissions.delete_appointment')";
+    var getAllHaircuts = '/get-all-haircuts';
 
 </script>
 {% endblock %}
