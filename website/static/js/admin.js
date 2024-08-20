@@ -1,4 +1,124 @@
 document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('delete-barber-btn')) {
+        const barberId = event.target.getAttribute('data-barber-id');
+        deleteBarber(barberId);
+    }
+});
+
+function deleteBarber(barberId) {
+    fetch('/delete-barber', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ barber_id: barberId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Barber deleted:', data);
+        window.location.href = '/';
+        // Optionally update UI or provide feedback
+    })
+    .catch(error => console.error('Error deleting barber:', error));
+}
+
+
+
+    function initializeCustomCheckboxes() {
+    const checkboxes = document.querySelectorAll('.custom-checkbox input[type="checkbox"]');
+
+    checkboxes.forEach(checkbox => {
+        // Create a new span element for the checkmark
+        const checkmark = document.createElement('span');
+        checkmark.classList.add('checkmark');
+
+        // Insert the checkmark after the checkbox
+        checkbox.insertAdjacentElement('afterend', checkmark);
+
+        // Add click event listener to the label
+        checkbox.closest('.custom-checkbox').addEventListener('click', function(e) {
+            // Prevent the default checkbox behavior
+            e.preventDefault();
+
+            // Toggle the checked state
+            checkbox.checked = !checkbox.checked;
+
+            // Trigger the change event
+            checkbox.dispatchEvent(new Event('change'));
+        });
+
+        // Add change event listener to the checkbox
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                this.closest('.custom-checkbox').classList.add('checked');
+            } else {
+                this.closest('.custom-checkbox').classList.remove('checked');
+            }
+        });
+    });
+}
+    initializeCustomCheckboxes();
+  document.body.addEventListener('change', function(event) {
+        if (event.target.classList.contains('styled-select-barbers')) {
+            const selectedBarberId = event.target.value;
+            const barberInfoContainers = document.querySelectorAll('[id^="barber-info-container-"]');
+
+            barberInfoContainers.forEach(container => {
+                container.style.display = 'none';
+            });
+
+            const selectedBarberInfoContainer = document.getElementById(`barber-info-container-${selectedBarberId}`);
+            if (selectedBarberInfoContainer) {
+                selectedBarberInfoContainer.style.display = 'block';
+                // Call this function after dynamically adding checkboxes
+                reapplyCheckboxStyles();
+            } else {
+                console.error(`Div with ID barber-info-container-${selectedBarberId} not found.`);
+            }
+        }
+    });
+
+
+
+    document.body.addEventListener('change', function(event) {
+        if (event.target.classList.contains('styled-select-to-delete-barbers')) {
+            const selectedBarberId = event.target.value;
+            const barberDeleteContainers = document.querySelectorAll('[id^="barber-delete-container-"]');
+
+            barberDeleteContainers.forEach(container => {
+                container.style.display = 'none';
+            });
+
+            const selectedBarberDeleteContainer = document.getElementById(`barber-delete-container-${selectedBarberId}`);
+            if (selectedBarberDeleteContainer) {
+                selectedBarberDeleteContainer.style.display = 'block';
+                // Call this function after dynamically adding checkboxes
+                reapplyCheckboxStyles();
+            } else {
+                console.error(`Div with ID barber-delete-container-${selectedBarberId} not found.`);
+            }
+        }
+    });
+
+
+
+
+    function reapplyCheckboxStyles() {
+    const checkboxes = document.querySelectorAll('.custom-checkbox input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                this.nextElementSibling.style.backgroundColor = '#4caf50';
+            } else {
+                this.nextElementSibling.style.backgroundColor = '#eee';
+            }
+        });
+    });
+    }
+
+
+
     const toggleCardBtn = document.getElementById('toggle-card-btn');
     const toggleCardEditBtn = document.getElementById('toggle-card-edit-btn');
     const toggleDeleteBarbershopBtn = document.getElementById('toggle-delete-barbershop-btn');
@@ -289,29 +409,33 @@ document.getElementById('appointment-day').addEventListener('change', function()
 
     // Form submission handling
     const form = document.getElementById('edit-barbershop-info-form');
-    if (form) {
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();  // Prevent the default form submission
+if (form) {
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formData = new FormData(form);
 
-            const formData = new FormData(form);
+        fetch(findBarbershop, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            const searchResultsDiv = document.getElementById('search-results');
+            searchResultsDiv.innerHTML = data.results_html;
+            if (data.results_html.trim() !== '<div class="search-result-item">No barbershops found</div>') {
+                searchResultsDiv.style.display = 'block';
+                initializeCustomCheckboxes();
+            } else {
+                searchResultsDiv.style.display = 'block';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+}
 
-            fetch(findBarbershop, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                 const searchResultsDiv = document.getElementById('search-results');
-                 searchResultsDiv.innerHTML = data.results_html;
-                  if (data.results_html.trim() !== '<div class="search-result-item">No barbershops found</div>') {
-                  searchResultsDiv.style.display = 'block';
-                } else {
-                    searchResultsDiv.style.display = 'block';
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    }
+
+
+
 
 
 
@@ -338,6 +462,8 @@ document.getElementById('appointment-day').addEventListener('change', function()
             .catch(error => console.error('Error:', error));
         });
     }
+
+    // This function is triggered when the search is performed and results are rendered
 
 
     // Toggle search result items
@@ -416,5 +542,60 @@ document.getElementById('appointment-day').addEventListener('change', function()
         }
     }
 
-    });
+
+     if (event.target.classList.contains('add-haircut-btn')) {
+        const haircutContainer = event.target.closest('.form-group-settings').querySelector('[id^="haircut-container-"]');
+        const newInput = document.createElement('div');
+        newInput.classList.add('input-group', 'mb-3');
+        newInput.innerHTML = `
+            <input type="text" class="form-control-settings" name="edit-barber-haircut_name[]" placeholder="Haircut">
+            <input type="number" class="form-control-settings" name="edit-barber-haircut_price[]" placeholder="Price" style="width: 70%;">
+            <input type="text" class="form-control-settings" name="edit-barber-haircut_description[]" placeholder="Description">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary remove-haircut-btn" type="button">-</button>
+            </div>`;
+        haircutContainer.insertBefore(newInput, event.target.closest('.input-group'));
+
+        // Hide the '+' button on the previous input group
+        const prevInputGroup = newInput.previousElementSibling;
+        if (prevInputGroup) {
+            prevInputGroup.querySelector('.add-haircut-btn').style.display = 'none';
+        }
+    }
+
+    if (event.target.classList.contains('remove-haircut-btn')) {
+        const inputGroup = event.target.closest('.input-group');
+        if (inputGroup) {
+            const haircutContainer = inputGroup.closest('[id^="haircut-container-"]');
+            inputGroup.remove();
+
+            // Show the '+' button on the last input group
+            const inputGroups = haircutContainer.querySelectorAll('.input-group');
+            const lastInputGroup = inputGroups[inputGroups.length - 1];
+            if (lastInputGroup) {
+                const addButton = lastInputGroup.querySelector('.add-haircut-btn');
+                if (addButton) {
+                    addButton.style.display = 'inline-block';
+                }
+            }
+        }
+    }
+
+
+
+
+});
+
+   document.addEventListener('change', function(event) {
+    if (event.target.matches('.custom-checkbox input[type="checkbox"]')) {
+        const label = event.target.nextElementSibling;
+        if (event.target.checked) {
+            label.style.backgroundColor = '#4caf50';
+        } else {
+            label.style.backgroundColor = '#eee';
+        }
+    }
+});
+
+
 });

@@ -101,7 +101,9 @@ cur.execute("""CREATE TABLE IF NOT EXISTS appointments(
 	appointment_date DATE NOT NULL,
 	appointment_time TIME NOT NULL,
 	duration_minutes INTEGER DEFAULT 45,
-	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	is_active boolean DEFAULT True,
+	is_finished boolean DEFAULT False)
 """)
 connection.commit()
 

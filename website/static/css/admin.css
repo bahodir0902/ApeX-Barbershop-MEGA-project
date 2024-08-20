@@ -264,27 +264,30 @@ body {
     flex-wrap: wrap;
     gap: 20px; /* Adjust spacing between checkboxes */
 }
+.form-group-settings #settings-edit-barber-working-days{
+    display: flex;
+    flex-wrap: wrap; /* Allow checkboxes to wrap if there's not enough space */
+    gap: 20px;
+}
 
-/* Style for individual custom checkboxes */
 .custom-checkbox {
     display: flex;
     align-items: center;
     position: relative;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
-/* Hide the default checkbox */
 .custom-checkbox input[type="checkbox"] {
     position: absolute;
     opacity: 0;
     cursor: pointer;
+    height: 0;
+    width: 0;
 }
 
-/* Custom checkbox design */
 .custom-checkbox label {
-    display: flex;
-    align-items: center;
-    position: relative;
+    margin-top: -2px;
     padding-left: 35px;
     cursor: pointer;
     font-size: 16px;
@@ -292,47 +295,42 @@ body {
     user-select: none;
 }
 
-/* Custom checkmark/indicator */
-.custom-checkbox label::before {
-    content: "";
+.checkmark {
     position: absolute;
-    left: 0;
     top: 0;
-    height: 20px;
-    width: 20px;
-    background-color: #eee;
-    border-radius: 3px;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    border-radius: 4px;
 }
 
-/* Checked state */
-.custom-checkbox input:checked + label::before {
-    background-color: #4caf50;
+.custom-checkbox:hover input ~ .checkmark {
+    background-color: #2821eb;
 }
 
-/* Checkmark/indicator */
-.custom-checkbox label::after {
+.custom-checkbox.checked .checkmark {
+    background-color: #0d05fa;
+    border-color: #0d05fa;
+}
+
+.checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
-/* Display the checkmark/indicator when checked */
-.custom-checkbox input:checked + label::after {
+.custom-checkbox.checked .checkmark:after {
     display: block;
-    left: 7px;
-    top: 3px;
-    width: 6px;
-    height: 12px;
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
-
-/* Style the checkbox labels */
-.custom-checkbox label {
-    margin-left: 10px;
-}
-
 
 .input-group {
     display: flex;
@@ -591,13 +589,69 @@ confirm-delete button i{
     color: white;
 }
 
+#settings-edit-barber.styled-select-barbers{
+    width: 80%;
+    padding: 10px;
+    font-size: 15px;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#settings-edit-barber.styled-select-barbers:hover, #settings-edit-barber.styled-select-barbers:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+#settings-edit-barber.styled-select-barbers option {
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    padding: 10px;
+}
+
+/* Hover effect on options (works in some browsers) */
+#settings-edit-barber.styled-select-barbers option:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+
+
+#settings-delete-barber.styled-select-to-delete-barbers{
+    width: 80%;
+    padding: 10px;
+    font-size: 15px;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#settings-delete-barber.styled-select-to-delete-barbers:hover, #settings-delete-barber.styled-select-to-delete-barbers:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+#settings-delete-barber.styled-select-to-delete-barbers option {
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    padding: 10px;
+}
+
+/* Hover effect on options (works in some browsers) */
+#settings-delete-barber.styled-select-to-delete-barbers option:hover {
+    background-color: #007bff;
+    color: white;
+}
+
 
 input[type="time"], input[type="date"], select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 15px;
     box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -623,6 +677,78 @@ input[type="time"]:focus, input[type="date"]:focus, select:focus {
     background-color: #007bff;
     color: white;
 }
+/*
+.delete-barber-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #de0404;
+    color: white;
+    font-weight: 420;
+    font-size: 17px;
+    padding: 10px;
+    width: 30%;
+    border-radius: 7px;
+    border: 1px solid grey;
+    margin: 15px;
+    transition: 0.45s all;
+    float: left;
+    cursor: pointer;
+    text-align: center;
+}
+.delete-barber-btn:hover {
+    background-color: #e01f1f;
+    transform: scale(1.04);
+}
+*/
+/* CSS */
 
+.delete-barber-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
+.delete-barber-container p {
+    margin-left: 10px;
+    margin-top: 10px;
+}
 
+.delete-barber-btn {
+    align-items: center;
+    background-image: linear-gradient(144deg, #f23333, #e6202d 50%, #e00732);
+    /*background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB); ORIGINAL*/
+    border: 0;
+    border-radius: 8px;
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    display: flex;
+    font-family: Phantomsans, sans-serif;
+    font-size: 18px;
+    justify-content: center;
+    line-height: 1em;
+    max-width: 80%;
+    min-width: 120px;
+    padding: 12px; /* Adjusted padding */
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.45s all;
+    float: left;
+    text-align: center; /* Center text inside the button */
+}
+
+.delete-barber-btn:active,
+.delete-barber-btn:hover {
+    outline: 0;
+    transform: scale(1.04);
+}
+
+.delete-barber-btn:hover {
+    background-color: rgb(214, 6, 47); /* Adjusted hover effect */
+    transition: 300ms;
+}
