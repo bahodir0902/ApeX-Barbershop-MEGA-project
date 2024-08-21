@@ -41,7 +41,7 @@ def target_haircut():
         selected_haircut = request.form.get('choose')
         session['global_haircut'] = selected_haircut
         return redirect(url_for('views.barbers'))
-    cur.execute("""SELECT DISTINCT * FROM haircuts WHERE barbershop_id = %s""", (barbershop,))
+    cur.execute("""SELECT DISTINCT * FROM haircuts WHERE barbershop_id = %s AND TRIM(haircut_name) <> ''  ORDER BY haircut_name, price """, (barbershop,))
     haircuts = cur.fetchall()
     return render_template("target-haircut.html", haircuts=haircuts, barbershop=barbershop)
 
