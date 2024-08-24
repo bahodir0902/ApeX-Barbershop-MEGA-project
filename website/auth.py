@@ -44,6 +44,24 @@ def login():
                         return redirect(url_for('views.admin'))
                     else:
                         flash('Incorrect email, phone number or password, try again', category='error')
+
+                if email:
+                    # Check if the email corresponds to an owner
+                    cur.execute("SELECT * FROM users WHERE email = %s AND is_barber = true", (email,))
+                else:
+                    # Check if the phone number corresponds to an owner
+                    cur.execute("SELECT * FROM users WHERE phone_number = %s AND is_barber = true", (phone_number,))
+
+                barber = cur.fetchone()
+                if barber:
+                    barber_user = User(*barber)
+                    if check_password_hash(barber_user.password, password):
+
+                        login_user(barber_user, remember=remember_status)
+                        return redirect(url_for('views.barber_page_get'))
+                    else:
+                        flash('Incorrect email, phone number or password, try again', category='error')
+
                 if email:
                     cur.execute("SELECT * FROM users WHERE email = %s", (email,))
                 else:

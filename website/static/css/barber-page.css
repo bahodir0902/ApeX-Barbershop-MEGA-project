@@ -1,0 +1,235 @@
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+/* Container */
+#manage-haircuts-container {
+    max-width: 600px;
+    margin-left: 10%;
+    margin-top: 10%;
+    padding: 1.5rem;
+    background-color: rgba(0,0,0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(10, 0, 0, 0.05);
+    backdrop-filter: blur(5px);
+}
+
+/* Header */
+h1 {
+    font-size: 2.5rem;
+    color: #007bff;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: linear-gradient(to right, #007bff, #00d4ff);
+    -webkit-background-clip: text;
+    color: #C8A47E;
+    margin-top: -10px;
+    text-shadow: 0.5px 0.5px 0.5px white;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: 10px;
+    background-color: #f1f3f5;
+}
+
+.card-header {
+    background-color: #C8A47E;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+#add-haircut-card-content {
+    background-color: #ffffff;
+    border-radius: 0 0 10px 10px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border: 2px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Button Styles */
+.add-haircut-button {
+    background-color: #28a745;
+    border: none;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.add-haircut-button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Toggle Button */
+#add-haircut-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#add-haircut-toggle-card-btn {
+    color: #ffffff;
+}
+
+#add-haircut-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+#edit-haircut-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#edit-haircut-toggle-card-btn {
+    color: #ffffff;
+}
+
+#edit-haircut-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+#delete-haircut-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#delete-haircut-toggle-card-btn {
+    color: #ffffff;
+}
+
+#delete-haircut-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+/* Shadow Effects */
+.card,
+.form-control,
+.add-haircut-button {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+    #manage-haircuts-container {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .card-header {
+        font-size: 1rem;
+    }
+
+    .add-haircut-button {
+        font-size: 1rem;
+    }
+}
+
+.delete-haircut-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: -50px;
+}
+
+.delete-haircut-container p {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.delete-haircut-btn {
+    align-items: center;
+    background-color: linear-gradient(144deg, #f23333, #e6202d 50%, #e00732);
+    /*background-image: linear-gradient(144deg, #f23333, #e6202d 50%, #e00732); */
+    /*background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB); ORIGINAL*/
+    border: 0;
+    border-radius: 8px;
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    display: flex;
+    font-family: Phantomsans, sans-serif;
+    font-size: 18px;
+    justify-content: center;
+    line-height: 1em;
+    max-width: 80%;
+    min-width: 140px;
+    padding: 12px; /* Adjusted padding */
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.45s all;
+    float: left;
+    text-align: center; /* Center text inside the button */
+}
+
+.delete-haircut-btn:active,
+.delete-haircut-btn:hover {
+    outline: 0;
+    transform: scale(1.04);
+}
+
+.delete-haircut-btn:hover {
+    background-color: rgb(214, 6, 47); /* Adjusted hover effect */
+    transition: 300ms;
+}
+
+

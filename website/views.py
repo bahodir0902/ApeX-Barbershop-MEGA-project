@@ -388,3 +388,14 @@ def my_orders():
 @login_required
 def admin():
     return render_template("admin.html")
+
+
+@views.route('/barber', methods=['POST'])
+@login_required
+def barber_page():
+    return redirect(url_for('barber_page.get_haircuts'))
+
+@views.route('/barber-get', methods=['GET'])
+@login_required
+def barber_page_get():
+    return redirect(url_for('barber_page.get_haircuts'))

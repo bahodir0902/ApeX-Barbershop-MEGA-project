@@ -453,8 +453,12 @@ def edit_barbershop():
                     fields_to_add['barber_last_name'] = settings_add_barber_last_name
                 if settings_add_barber_phone_number:
                     fields_to_add['barber_phone_number'] = settings_add_barber_phone_number
+                else:
+                    fields_to_add['barber_phone_number'] = ""
                 if settings_add_barber_email:
                     fields_to_add['barber_email'] = settings_add_barber_email
+                else:
+                    fields_to_add['barber_phone_number'] = ""
                 if settings_add_barber_experienced_years:
                     fields_to_add['experienced_years'] = settings_add_barber_experienced_years
                 if settings_add_barber_working_start_time:
@@ -487,26 +491,29 @@ def edit_barbershop():
                     except Exception as e:
                         print(f"An error has occurred while storing a file")
 
+                password = generate_password_hash('1234', method='pbkdf2:sha256')
                 column = ', '.join(fields_to_add.keys())
                 placeholders = ', '.join(['%s'] * len(fields_to_add))
-                add_query = f"INSERT INTO barbers ({column}, barbershop_id) VALUES ({placeholders}, %s)"
+                add_query = f"INSERT INTO barbers ({column}, barbershop_id, password) VALUES ({placeholders}, %s, %s)"
                 add_values = list(fields_to_add.values())
                 add_values.append(barbershop_id)
+                add_values.append(password)
                 cur.execute(add_query, add_values)
-                connection.commit()
                 cur.execute("SELECT barber_id FROM barbers ORDER BY created_date DESC")
                 barber_id = cur.fetchone()[0]
+                cur.execute("""INSERT INTO users(first_name, last_name, email, phone_number, password, profile_picture, is_barber, barber_id) 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", (fields_to_add['barber_first_name'], fields_to_add['barber_last_name'],
+                    fields_to_add['barber_email'], fields_to_add['barber_phone_number'], password, fields_to_add['barber_picture'], 'true', barber_id
+                )) # GO BACK HERE
                 for values in skills:
                     barber_query = f"INSERT INTO haircuts(haircut_name, price, description, barbershop_id) VALUES(%s, %s, %s ,%s) RETURNING haircut_id"
                     cur.execute(barber_query,
                                 (values['haircut_name'], values['haircut_price'], values['description'], barbershop_id))
                     haircut_id = cur.fetchone()
-                    connection.commit()
                     insert_query = "INSERT INTO barber_haircuts(barber_id, haircut_id) VALUES(%s, %s)"
                     cur.execute(insert_query, (barber_id, haircut_id))
                     print(f"barber added successfully")
                     connection.commit()
-
 
         with connection.cursor() as cur:
             settings_edit_barber_first_name = request.form.get('settings-edit-barber-first-name')

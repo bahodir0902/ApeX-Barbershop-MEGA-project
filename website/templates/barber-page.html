@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %} {{ user.first_name }}  {{ user.last_name }} {% endblock %}
+
+{% block head_links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/barber-page.css') }}">
+<script src="{{ url_for('static', filename='js/barber-page.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5" id="manage-haircuts-container">
+    <h1 class="text-center mb-4">Manage My Haircuts</h1>
+
+    <!-- Add Haircut Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header"
+             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+            <h5 class="mb-0">Add New Haircut</h5>
+            <button class="btn btn-link text-white p-0" id="add-haircut-toggle-card-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="card-body collapse" id="add-haircut-card-content" style="display: none;">
+            <form id="add-haircut-form" enctype="multipart/form-data" method="POST"
+                  action="{{ url_for('barber_page.add_haircut') }}">
+                <div class="form-group mb-3">
+                    <label for="haircut-name" class="form-label">Haircut Name</label>
+                    <input type="text" class="form-control" id="haircut-name" name="haircut-name"
+                           placeholder="Enter haircut name" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="haircut-price" class="form-label">Haircut Price (sum)</label>
+                    <input type="number" class="form-control" id="haircut-price" name="haircut-price"
+                           placeholder="Enter price" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="haircut-description" class="form-label">Haircut Description</label>
+                    <textarea class="form-control" id="haircut-description" name="haircut-description" rows="3"
+                              placeholder="Enter description" required></textarea>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="haircut-picture" class="form-label">Upload Haircut Picture</label>
+                    <input type="file" class="form-control" id="haircut-picture" name="haircut-picture" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100 add-haircut-button">Add Haircut</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit haircut section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header"
+             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white; margin-top: 30px;">
+            <h5 class="mb-0">Edit my haircuts</h5>
+            <button class="btn btn-link text-white p-0" id="edit-haircut-toggle-card-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="card-body collapse" id="edit-haircut-card-content" style="display: none;">
+
+            <form id="edit-haircut-form" enctype="multipart/form-data" method="POST"
+                  action="{{ url_for('barber_page.edit_haircut') }}">
+                <div class="form-group mb-3">
+                    <label for="select-haircut" class="form-label">Select Haircut to Edit</label>
+                    <select class="form-control" id="select-haircut" name="selected_haircut">
+                        <option value="" disabled selected>Select a haircut</option>
+                        {% for haircut in haircuts %}
+                        <option value="{{ haircut[0] }}"
+                                data-name="{{ haircut[1] }}"
+                                data-price="{{ haircut[3] }}"
+                                data-description="{{ haircut[2] }}">
+                            {{ haircut[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="form-group mb-3">
+                    <label for="haircut-name" class="form-label">Haircut Name</label>
+                    <input type="text" class="form-control" id="edit-name" name="haircut-name"
+                           placeholder="Enter haircut name">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="haircut-price" class="form-label">Haircut Price (sum)</label>
+                    <input type="number" class="form-control" id="edit-haircut-price" name="haircut-price"
+                           placeholder="Enter price">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="haircut-description" class="form-label">Haircut Description</label>
+                    <textarea class="form-control" id="edit-haircut-description" name="haircut-description" rows="3"
+                              placeholder="Enter description"></textarea>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="haircut-picture" class="form-label">Upload Haircut Picture</label>
+                    <input type="file" class="form-control" id="edit-haircut-picture" name="haircut-picture">
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 add-haircut-button">Confirm changes</button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Delete haircut section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header"
+             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white; margin-top: 30px;">
+            <h5 class="mb-0">Delete my haircuts</h5>
+            <button class="btn btn-link text-white p-0" id="delete-haircut-toggle-card-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="card-body collapse" id="delete-haircut-card-content" style="display: none;">
+
+            <form id="delete-haircut-form" method="POST"
+                  action="{{ url_for('barber_page.delete_haircut') }}">
+                <div class="form-group mb-3">
+                    <label for="select-haircut" class="form-label">Select Haircut to Edit</label>
+                    <select class="form-control" id="select-haircut-to-delete" name="selected_haircut">
+                        <option value="" disabled selected>Select a haircut</option>
+                        {% for haircut in haircuts %}
+                        <option value="{{ haircut[0] }}"
+                                data-name="{{ haircut[1] }}"
+                                data-price="{{ haircut[3] }}"
+                                data-description="{{ haircut[2] }}">
+                            {{ haircut[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="delete-haircut-container">
+                    <p style="margin-top: 50px;">Note that after deleting this haircut all its data in the system will be
+                        <strong>deleted permanently.</strong></p>
+                    <button type="submit" id="delete-haircut-btn" class="delete-haircut-btn"
+                            style="margin-top: 25px; margin-left: 10px; background-color: grey; cursor: not-allowed;" disabled>Delete haircut
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Custom scripts here
+</script>
+{% endblock %}

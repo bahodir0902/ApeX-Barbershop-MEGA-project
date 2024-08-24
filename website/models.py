@@ -25,12 +25,13 @@ cur.execute("""
         last_name TEXT,
         email TEXT UNIQUE,
         phone_number VARCHAR(30) UNIQUE,
-        password TEXT NOT NULL,
+        password TEXT NOT NULL DEFAULT '1234',
         created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         privacy privacy DEFAULT 'private',
         profile_picture BYTEA,
-        is_owner BOOLEAN DEFAULT FALSE
-    )
+        is_owner BOOLEAN DEFAULT FALSE,
+        is_barber BOOLEAN NOT NULL DEFAULT False,
+        barber_id INTEGER REFERENCES barbers(barber_id) ON DELETE SET NULL)
 """)
 cur.execute("""
     UPDATE users SET created_date = date_trunc('second', created_date)
@@ -62,7 +63,8 @@ cur.execute("""CREATE TABLE IF NOT EXISTS barbers(
 	break_start_time TIME,
 	break_end_time TIME,
 	working_days VARCHAR(100),
-	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	password text NOT NULL DEFAULT '1234')
 """)
 
 cur.execute("""CREATE TABLE IF NOT EXISTS haircuts(
@@ -70,7 +72,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS haircuts(
 	barbershop_id INTEGER REFERENCES barbershops(barbershop_id) ON DELETE CASCADE,
 	haircut_name TEXT NOT NULL,
 	description TEXT,
-	price DECIMAL(10, 2) DEFAULT 0,
+	price DECIMAL(14, 2) DEFAULT 0,
 	haircut_picture BYTEA,
 	haircut_duration INTERVAL,
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
@@ -110,7 +112,7 @@ connection.commit()
 
 
 class User(UserMixin):
-    def __init__(self, id, first_name, last_name, email, phone_number, password, created_date, privacy, profile_picture, is_owner):
+    def __init__(self, id, first_name, last_name, email, phone_number, password, created_date, privacy, profile_picture, is_owner, is_barber, barber_id):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
@@ -121,6 +123,8 @@ class User(UserMixin):
         self.profile_picture = profile_picture
         self.privacy = privacy
         self.is_owner = is_owner
+        self.is_barber = is_barber
+        self.barber_id = barber_id
 
     @staticmethod
     def get(user_id):
