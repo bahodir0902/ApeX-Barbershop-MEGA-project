@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const FinishedAppCardContent = document.getElementById('finished-haircuts-content');
     const CanceledAppToggleBtn = document.getElementById('canceled-appointments-toggle-card-btn');
     const CanceledAppCardContent = document.getElementById('canceled-appointments-content');
+    const ManageScheduleToggleBtn = document.getElementById('schedule-toggle-card-btn');
+    const ManageScheduleCardContent = document.getElementById('schedule-content');
 
     function toggleContent(button, content) {
             if (content.style.display === 'none' || content.style.display === '') {
@@ -59,6 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+    if (ManageScheduleToggleBtn && ManageScheduleCardContent) {
+            ManageScheduleToggleBtn.addEventListener('click', function () {
+                toggleContent(ManageScheduleToggleBtn, ManageScheduleCardContent);
+            });
+        }
     const selectHaircut = document.getElementById('select-haircut');
     const editNameInput = document.getElementById('edit-name');
     const editPriceInput = document.getElementById('edit-haircut-price');

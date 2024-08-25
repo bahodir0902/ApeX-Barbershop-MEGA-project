@@ -4,7 +4,7 @@ from .models import connection, User
 from flask_login import login_required, current_user
 import os
 from werkzeug.utils import secure_filename
-
+from datetime import datetime
 
 barber_page = Blueprint('barber_page', __name__)
 cur = connection.cursor()
@@ -56,9 +56,15 @@ def get_haircuts():
                             WHERE a.barber_id = %s AND is_active = false
                             ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
         canceled_appointments = cur.fetchall()
-    print(f"appointments: {appointments}")
+
+        cur.execute("""SELECT working_start_time, working_end_time,
+            break_start_time, break_end_time, working_days
+            FROM barbers WHERE barber_id = %s""", (barber_id,))
+        schedules = cur.fetchall()
+        print(schedules)
     return render_template("barber-page.html", haircuts=haircuts, appointments=appointments,
-                           finished_appointments=finished_appointments, canceled_appointments=canceled_appointments)
+                           finished_appointments=finished_appointments, canceled_appointments=canceled_appointments,
+                           schedules=schedules)
 
 
 @barber_page.route('/add-haircut', methods=['POST'])
@@ -197,3 +203,50 @@ def cancel_appointment():
             cur.execute("UPDATE appointments SET is_active = false WHERE appointment_id = %s", (appointment_id,))
             connection.commit()
             return redirect(url_for('views.barber_page_get'))
+
+
+@barber_page.route('/update-schedule', methods=['POST'])
+@login_required
+def update_schedule():
+    barber_id = current_user.barber_id
+    working_start_time = request.form.get('working-start-time')
+    working_end_time = request.form.get('working-end-time')
+    break_start_time = request.form.get('break-start-time')
+    break_end_time = request.form.get('break-end-time')
+    working_days = request.form.getlist('working-days')
+
+    fields_to_update = {}
+
+    with connection.cursor() as cur:
+        # Fetch the current schedule from the database
+        cur.execute("""
+            SELECT working_start_time, working_end_time,
+                   break_start_time, break_end_time, working_days
+            FROM barbers 
+            WHERE barber_id = %s
+        """, (barber_id,))
+        result = cur.fetchone()  # fetchone is better if you expect a single result
+
+        # Compare and update fields only if they differ
+        if working_start_time and working_start_time != result[0].strftime('%H:%M:%S'):
+            fields_to_update['working_start_time'] = working_start_time
+        if working_end_time and working_end_time != result[1].strftime('%H:%M:%S'):
+            fields_to_update['working_end_time'] = working_end_time
+        if break_start_time and break_start_time != result[2].strftime('%H:%M:%S'):
+            fields_to_update['break_start_time'] = break_start_time
+        if break_end_time and break_end_time != result[3].strftime('%H:%M:%S'):
+            fields_to_update['break_end_time'] = break_end_time
+        if working_days:
+            formatted_working_days = ', '.join(working_days)
+            if formatted_working_days != result[4]:
+                fields_to_update['working_days'] = formatted_working_days
+
+        # Construct the update query only if there are changes
+        if fields_to_update:
+            clause = ', '.join(f"{field} = %s" for field in fields_to_update)
+            query = f"UPDATE barbers SET {clause} WHERE barber_id = %s"
+            values = list(fields_to_update.values()) + [barber_id]
+            cur.execute(query, values)
+            connection.commit()
+
+    return redirect(url_for('views.barber_page_get'))

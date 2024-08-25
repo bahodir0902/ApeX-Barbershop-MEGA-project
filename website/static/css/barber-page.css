@@ -6,7 +6,7 @@ body {
 }
 
 /* Container */
-#manage-haircuts-container, #manage-appointments-container {
+#manage-haircuts-container, #manage-appointments-container, #manage-barber-schedule-container {
     max-width: 550px;
     margin-left: 8%;
     margin-top: 10%;
@@ -22,9 +22,15 @@ body {
     margin-top: -345px;
 }
 
+#manage-barber-schedule-container{
+    margin-top: 80px;
+}
 /* Header */
+#manage-appointments-container h1{
+    font-size: 2.036rem;
+}
 h1 {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
     color: #007bff;
     font-weight: 700;
     margin-bottom: 1.5rem;
@@ -37,7 +43,9 @@ h1 {
     margin-top: -10px;
     text-shadow: 0.5px 0.5px 0.5px white;
 }
-
+#manage-schedule-text{
+    font-size: 2.27rem;
+}
 /* Card Styles */
 .card {
     border: none;
@@ -206,6 +214,22 @@ h1 {
 }
 
 #canceled-appointments-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+#schedule-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#schedule-toggle-card-btn {
+    color: #ffffff;
+}
+
+#schedule-toggle-card-btn:hover {
     transform: rotate(90deg);
     color: #ffffff;
 }
@@ -412,4 +436,112 @@ h1 {
         width: 100%;
         margin-bottom: 10px;
     }
+}
+
+
+/* Button styling */
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* Toggle button styling */
+.btn-link {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .form-control {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .btn-success {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+
+.weekdays-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.weekdays-container input[type="checkbox"] {
+    display: none;
+}
+
+.custom-checkbox {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    transition: color 0.2s ease;
+}
+
+/* Checkbox background and border */
+.custom-checkbox:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Checkbox checkmark */
+input[type="checkbox"]:checked + .custom-checkbox:before {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox:after {
+    content: '\2713';
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    font-size: 16px;
+    color: #fff;
+}
+
+/* Hover effects */
+.custom-checkbox:hover {
+    color: #007bff;
+}
+
+.custom-checkbox:before {
+    /* Scale effect on hover */
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.custom-checkbox:hover:before {
+    transform: scale(1.1); /* Slightly enlarge the checkbox */
+    background-color: #f0f8ff; /* Light blue background */
+    border-color: #0056b3; /* Darker blue border */
+}
+
+/* Focus effect for accessibility */
+input[type="checkbox"]:focus + .custom-checkbox:before {
+    outline: 2px solid #80bdff; /* Highlight border */
+    outline-offset: 2px;
 }
