@@ -14,13 +14,51 @@ cur = connection.cursor()
 @login_required
 def get_haircuts():
     barber_id = current_user.barber_id
+    print(f"barber id: {barber_id}")
     with connection.cursor() as cur:
         cur.execute("""SELECT h.haircut_id, h.haircut_name, h.description, h.price 
                        FROM haircuts h 
                        JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
                        WHERE bh.barber_id = %s""", (barber_id,))
         haircuts = cur.fetchall()
-    return render_template("barber-page.html", haircuts=haircuts)
+        cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
+            u.first_name, u.last_name, u.phone_number, u.email,
+            h.haircut_name, h.price, a.duration_minutes, a.created_date
+            FROM appointments a
+            JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+            JOIN barbers b ON a.barber_id = b.barber_id
+            JOIN haircuts h ON a.haircut_id = h.haircut_id
+            JOIN users u ON u.id = a.customer_id
+            WHERE a.barber_id = %s AND is_active = true AND is_finished = false
+            ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
+        appointments = cur.fetchall()
+
+        cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
+                    u.first_name, u.last_name, u.phone_number, u.email,
+                    h.haircut_name, h.price, a.duration_minutes, a.created_date
+                    FROM appointments a
+                    JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+                    JOIN barbers b ON a.barber_id = b.barber_id
+                    JOIN haircuts h ON a.haircut_id = h.haircut_id
+                    JOIN users u ON u.id = a.customer_id
+                    WHERE a.barber_id = %s AND is_active = true AND is_finished = true
+                    ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
+        finished_appointments = cur.fetchall()
+
+        cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
+                            u.first_name, u.last_name, u.phone_number, u.email,
+                            h.haircut_name, h.price, a.duration_minutes, a.created_date
+                            FROM appointments a
+                            JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+                            JOIN barbers b ON a.barber_id = b.barber_id
+                            JOIN haircuts h ON a.haircut_id = h.haircut_id
+                            JOIN users u ON u.id = a.customer_id
+                            WHERE a.barber_id = %s AND is_active = false
+                            ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
+        canceled_appointments = cur.fetchall()
+    print(f"appointments: {appointments}")
+    return render_template("barber-page.html", haircuts=haircuts, appointments=appointments,
+                           finished_appointments=finished_appointments, canceled_appointments=canceled_appointments)
 
 
 @barber_page.route('/add-haircut', methods=['POST'])
@@ -137,3 +175,25 @@ def delete_haircut():
             connection.commit()
 
     return redirect(url_for("views.barber_page_get", haircuts=haircuts))
+
+
+@barber_page.route('/finish-appointment', methods=['POST'])
+@login_required
+def finish_appointment():
+    appointment_id = request.form.get('appointment_id')
+    with connection.cursor() as cur:
+        cur.execute("UPDATE appointments SET is_finished = true WHERE appointment_id = %s", (appointment_id,))
+        connection.commit()
+    return redirect(url_for("views.barber_page_get"))
+
+
+@barber_page.route('/cancel-appointment', methods=['POST'])
+@login_required
+def cancel_appointment():
+    if request.method == 'POST':
+        appointment_id = request.form.get('appointment_id')
+        with connection.cursor() as cur:
+            print(f"appointment_id: {appointment_id}")
+            cur.execute("UPDATE appointments SET is_active = false WHERE appointment_id = %s", (appointment_id,))
+            connection.commit()
+            return redirect(url_for('views.barber_page_get'))

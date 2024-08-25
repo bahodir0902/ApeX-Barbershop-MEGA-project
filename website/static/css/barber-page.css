@@ -6,15 +6,20 @@ body {
 }
 
 /* Container */
-#manage-haircuts-container {
-    max-width: 600px;
-    margin-left: 10%;
+#manage-haircuts-container, #manage-appointments-container {
+    max-width: 550px;
+    margin-left: 8%;
     margin-top: 10%;
     padding: 1.5rem;
     background-color: rgba(0,0,0, 0.7);
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(10, 0, 0, 0.05);
     backdrop-filter: blur(5px);
+}
+
+#manage-appointments-container{
+    margin-left: 55%;
+    margin-top: -345px;
 }
 
 /* Header */
@@ -154,6 +159,57 @@ h1 {
     transform: rotate(90deg);
     color: #ffffff;
 }
+
+#upcoming-appointments-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#upcoming-appointments-toggle-card-btn {
+    color: #ffffff;
+}
+
+#upcoming-appointments-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+
+#finished-haircuts-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#finished-haircuts-toggle-card-btn {
+    color: #ffffff;
+}
+
+#finished-haircuts-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+
+#canceled-appointments-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#canceled-appointments-toggle-card-btn {
+    color: #ffffff;
+}
+
+#canceled-appointments-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
 /* Shadow Effects */
 .card,
 .form-control,
@@ -233,3 +289,127 @@ h1 {
 }
 
 
+/* Card container styling */
+.card-body {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Overall appointment body styling */
+.appointment-body {
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.appointment-body:hover {
+    border-color: #007bff;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+    transform: scale(1.03);
+}
+
+/* Appointment details styling */
+.appointment-body p {
+    margin: 8px 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Highlight key details */
+.appointment-id, .appointment-time, .appointment-date,
+.customer-first-name, .customer-last-name, .price {
+    font-weight: 500;
+    color: #007bff;
+}
+
+/* Specific text color */
+.price {
+    color: #28a745;
+}
+
+.duration-minutes {
+    color: #dc3545;
+}
+
+.created-date {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* Button containers */
+.finish-appointments-container, .delete-appointments-container {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.delete-appointments-container p {
+    margin: 0;
+    margin-left: 15px;
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+/* Buttons shared styling */
+.appointment-body button {
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 5px 5px;
+    border-radius: 8px;
+    border: none;
+    transition: 0.4s ease;
+    cursor: pointer;
+}
+
+/* Finish appointment button */
+.finish-appointments-button {
+    background-color: #0ac900;
+    color: #fff;
+    margin-right: 15px;
+}
+
+.finish-appointments-button:hover {
+    background-color:#1ae310;;
+    transform: scale(1.05);
+}
+
+/* Cancel appointment button */
+.delete-appointment-button {
+    min-width: 33%;
+    margin-top: -30px;
+    background-color: #de0404;
+    color: #fff;
+    float: left;
+}
+
+.delete-appointment-button:hover {
+    background-color: #e01f1f;
+    transform: scale(1.05);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .appointment-body {
+        padding: 20px;
+    }
+
+    .appointment-body p {
+        font-size: 14px;
+    }
+
+    .appointment-body button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

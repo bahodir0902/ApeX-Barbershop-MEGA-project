@@ -131,10 +131,12 @@
                 </div>
 
                 <div class="delete-haircut-container">
-                    <p style="margin-top: 50px;">Note that after deleting this haircut all its data in the system will be
+                    <p style="margin-top: 50px;">Note that after deleting this haircut all its data in the system will
+                        be
                         <strong>deleted permanently.</strong></p>
                     <button type="submit" id="delete-haircut-btn" class="delete-haircut-btn"
-                            style="margin-top: 25px; margin-left: 10px; background-color: grey; cursor: not-allowed;" disabled>Delete haircut
+                            style="margin-top: 25px; margin-left: 10px; background-color: grey; cursor: not-allowed;"
+                            disabled>Delete haircut
                     </button>
                 </div>
 
@@ -144,10 +146,112 @@
     </div>
 
 </div>
+
+
+<div class="container mt-5" id="manage-appointments-container">
+    <h1 class="text-center">Manage my appointments</h1>
+
+    <!--Upcoming appointments section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header"
+             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+            <h5 class="mb-0">Upcoming appointments</h5>
+            <button class="btn btn-link text-white p-0" id="upcoming-appointments-toggle-card-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="card-body collapse" id="upcoming-appointments-content" style="display: none;">
+            {% for appointment in appointments %}
+            <div class="appointment-body">
+
+                <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
+                <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
+                <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
+                <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
+                <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
+                <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
+                <p class="customer-email">Customer email: {{ appointment[6] }}</p>
+                <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
+                <p class="price">price: {{ appointment[8] }} sum</p>
+                <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
+                <p class="created-date">Created date: {{ appointment[10] }}</p>
+                <form class="finish-appointments-container" method="POST" action="/finish-appointment">
+                    <input type="hidden" name="appointment_id" value="{{ appointment[0] }}">
+                    <button type="submit" class="finish-appointments-button">Set as finished</button>
+                </form>
+                <form class="delete-appointments-container" method="POST" action="/cancel-appointment">
+                    <input type="hidden" name="appointment_id" value="{{ appointment[0] }}">
+                    <button type="submit" class="delete-appointment-button">Cancel appointment</button>
+                    <p>Important: Please ensure you contact the customer prior to deleting this appointment. Note that
+                        deleting an appointment will automatically result in its cancellation.</p>
+                </form>
+            </div>
+
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Finished appointments section-->
+    <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+        <div class="card-header"
+             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+            <h5 class="mb-0">Finished Appointments</h5>
+            <button class="btn btn-link text-white p-0" id="finished-haircuts-toggle-card-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="card-body collapse" id="finished-haircuts-content" style="display: none;">
+            {% for appointment in finished_appointments %}
+            <div class="appointment-body">
+                <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
+                <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
+                <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
+                <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
+                <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
+                <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
+                <p class="customer-email">Customer email: {{ appointment[6] }}</p>
+                <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
+                <p class="price">price: {{ appointment[8] }} sum</p>
+                <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
+                <p class="created-date">Created date: {{ appointment[10] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!--Canceled appointments section -->
+    <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+        <div class="card-header"
+             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+            <h5 class="mb-0">Canceled Appointments</h5>
+            <button class="btn btn-link text-white p-0" id="canceled-appointments-toggle-card-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="card-body collapse" id="canceled-appointments-content" style="display: none;">
+            {% for appointment in canceled_appointments %}
+            <div class="appointment-body">
+                <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
+                <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
+                <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
+                <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
+                <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
+                <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
+                <p class="customer-email">Customer email: {{ appointment[6] }}</p>
+                <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
+                <p class="price">price: {{ appointment[8] }} sum</p>
+                <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
+                <p class="created-date">Created date: {{ appointment[10] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-<script>
-    // Custom scripts here
-</script>
+
 {% endblock %}

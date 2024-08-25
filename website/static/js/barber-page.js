@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggleEditCardBtn = document.getElementById('edit-haircut-toggle-card-btn');
     const deleteCardContent = document.getElementById('delete-haircut-card-content');
     const toggleDeleteCardBtn = document.getElementById('delete-haircut-toggle-card-btn');
+    const UpcomingAppToggleBtn = document.getElementById('upcoming-appointments-toggle-card-btn');
+    const UpcomingAppCardContent = document.getElementById('upcoming-appointments-content');
+    const FinishedAppToggleBtn = document.getElementById('finished-haircuts-toggle-card-btn');
+    const FinishedAppCardContent = document.getElementById('finished-haircuts-content');
+    const CanceledAppToggleBtn = document.getElementById('canceled-appointments-toggle-card-btn');
+    const CanceledAppCardContent = document.getElementById('canceled-appointments-content');
 
     function toggleContent(button, content) {
             if (content.style.display === 'none' || content.style.display === '') {
@@ -32,6 +38,24 @@ document.addEventListener('DOMContentLoaded', function () {
     if (toggleDeleteCardBtn && deleteCardContent) {
             toggleDeleteCardBtn.addEventListener('click', function () {
                 toggleContent(toggleDeleteCardBtn, deleteCardContent);
+            });
+        }
+
+    if (UpcomingAppToggleBtn && UpcomingAppCardContent) {
+            UpcomingAppToggleBtn.addEventListener('click', function () {
+                toggleContent(UpcomingAppToggleBtn, UpcomingAppCardContent);
+            });
+        }
+
+    if (FinishedAppToggleBtn && FinishedAppCardContent) {
+            FinishedAppToggleBtn.addEventListener('click', function () {
+                toggleContent(FinishedAppToggleBtn, FinishedAppCardContent);
+            });
+        }
+
+    if (CanceledAppToggleBtn && CanceledAppCardContent) {
+            CanceledAppToggleBtn.addEventListener('click', function () {
+                toggleContent(CanceledAppToggleBtn, CanceledAppCardContent);
             });
         }
 

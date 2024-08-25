@@ -149,7 +149,7 @@ nav {
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    padding: 10px 0; /* Add padding inside the dropdown */
+    padding: 0px 0; /* Add padding inside the dropdown */
 }
 
 .dropdown-content a {
@@ -158,7 +158,7 @@ nav {
     text-decoration: none;
     display: block;
     border-radius: 5px; /* Add border-radius for rounded corners */
-    margin: 5px 0; /* Add margin between links */
+    margin: 3px 0; /* Add margin between links */
 }
 
 .dropdown-content a:hover {

@@ -395,6 +395,7 @@ def admin():
 def barber_page():
     return redirect(url_for('barber_page.get_haircuts'))
 
+
 @views.route('/barber-get', methods=['GET'])
 @login_required
 def barber_page_get():
