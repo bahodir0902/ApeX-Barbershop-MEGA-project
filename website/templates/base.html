@@ -37,7 +37,11 @@
             <li class="dropdown" role="button">
                 <a href="javascript:void(0)" class="dropbtn">{{ user.first_name }}   <i class='bx bx-user-circle'></i></a>
                 <div class="dropdown-content">
+                    {% if not user.is_barber %}
                     <a href="{{ url_for('views.my_orders') }}">My Orders <i class='bx bx-cart'></i></a>
+                    {% else %}
+                    <a href="{{ url_for('views.barber_page_get') }}">Cabinet</a>
+                    {% endif %}
                     <a href="{{ url_for('views.profile') }}">Profile</a>
                     <a href="{{ url_for('views.settings') }}">Settings</a>
                     <a href="{{ url_for('auth.logout') }}">Logout</a>

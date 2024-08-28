@@ -6,10 +6,10 @@ body {
 }
 
 /* Container */
-#manage-haircuts-container, #manage-appointments-container, #manage-barber-schedule-container {
+#manage-haircuts-container, #manage-appointments-container, #manage-barber-schedule-container, #my-statistics-container {
     max-width: 550px;
     margin-left: 8%;
-    margin-top: 10%;
+    margin-top: 0%;
     padding: 1.5rem;
     background-color: rgba(0,0,0, 0.7);
     border-radius: 10px;
@@ -17,14 +17,36 @@ body {
     backdrop-filter: blur(5px);
 }
 
-#manage-appointments-container{
-    margin-left: 55%;
-    margin-top: -345px;
+.container-grid {
+
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 40px; /* Adjust as necessary */
+    max-width: 100%;
+    margin: 10% auto;
+    padding: 20px;
 }
 
-#manage-barber-schedule-container{
-    margin-top: 80px;
+#manage-haircuts-container {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
 }
+
+#manage-appointments-container {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+#manage-barber-schedule-container {
+    grid-column: 1 / 2;
+    grid-row: 2 / 2;
+}
+
+#my-statistics-container {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
 /* Header */
 #manage-appointments-container h1{
     font-size: 2.036rem;
@@ -230,6 +252,55 @@ h1 {
 }
 
 #schedule-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+#my-statistics-revenue-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#my-statistics-revenue-toggle-card-btn {
+    color: #ffffff;
+}
+
+#my-statistics-revenue-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+
+#my-statistics-total-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#my-statistics-total-toggle-card-btn {
+    color: #ffffff;
+}
+
+#my-statistics-total-toggle-card-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+#my-statistics-feedback-toggle-card-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#my-statistics-feedback-toggle-card-btn {
+    color: #ffffff;
+}
+
+#my-statistics-feedback-toggle-card-btn:hover {
     transform: rotate(90deg);
     color: #ffffff;
 }
@@ -544,4 +615,69 @@ input[type="checkbox"]:checked + .custom-checkbox:after {
 input[type="checkbox"]:focus + .custom-checkbox:before {
     outline: 2px solid #80bdff; /* Highlight border */
     outline-offset: 2px;
+}
+
+ .statistics-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.statistic-item {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.statistic-item h6 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #495057;
+    letter-spacing: 1px;
+}
+
+.statistic-item p {
+    font-size: 20px;
+    margin: 0;
+    font-weight: bold;
+    color: #212529;
+}
+
+.statistic-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.statistic-item:hover h6 {
+    color: #007bff;
+}
+
+.statistic-item:hover p {
+    color: #007bff;
+}
+
+.statistic-item::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 4px;
+    background-color: #007bff;
+    margin: 10px auto 0;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.statistic-item:hover::after {
+    width: 70px;
+}
+
+.statistics-container {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

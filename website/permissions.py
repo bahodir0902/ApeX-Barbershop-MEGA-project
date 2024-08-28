@@ -565,13 +565,11 @@ def edit_barbershop():
                 if settings_edit_barber_phone_number and settings_edit_barber_phone_number != result[4]:
                     fields_to_edit['barber_phone_number'] = settings_edit_barber_phone_number
                 if settings_edit_barber_email and settings_edit_barber_email != result[7]:
-                    #print(f"WRONG THING HAPPENED ON EMAIL")
                     fields_to_edit['barber_email'] = settings_edit_barber_email
                 if settings_edit_barber_experienced_years and settings_edit_barber_experienced_years != result[8]:
                     fields_to_edit['experienced_years'] = settings_edit_barber_experienced_years
                 if settings_edit_barber_working_start_time and settings_edit_barber_working_start_time != result[9]:
                     fields_to_edit['working_start_time'] = settings_edit_barber_working_start_time
-                    #print(f"WRONG THING HAPPENED ON WST")
                 if settings_edit_barber_working_end_time and settings_edit_barber_working_end_time != result[10]:
                     fields_to_edit['working_end_time'] = settings_edit_barber_working_end_time
                 if settings_edit_barber_break_start_time and settings_edit_barber_break_start_time != result[11]:

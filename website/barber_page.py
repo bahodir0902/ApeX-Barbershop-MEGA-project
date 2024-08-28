@@ -61,10 +61,37 @@ def get_haircuts():
             break_start_time, break_end_time, working_days
             FROM barbers WHERE barber_id = %s""", (barber_id,))
         schedules = cur.fetchall()
-        print(schedules)
+
+        cur.execute("""SELECT 
+            SUM(CASE WHEN a.appointment_date = CURRENT_DATE THEN h.price ELSE 0 END) AS daily_total,
+            SUM(CASE WHEN date_trunc('week', a.appointment_date) = date_trunc('week', CURRENT_DATE) THEN h.price ELSE 0 END) AS weekly_total,
+            SUM(CASE WHEN date_trunc('month', a.appointment_date) = date_trunc('month', CURRENT_DATE) THEN h.price ELSE 0 END) AS monthly_total,
+            SUM(h.price) AS absolute_total
+            FROM haircuts h 
+            JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
+            JOIN appointments a ON a.barber_id = bh.barber_id
+            WHERE bh.barber_id = %s AND a.is_finished = TRUE;
+        """, (barber_id,))
+        revenues = cur.fetchone()
+        print(f"revenue: {revenues}")
+        cur.execute("""SELECT 
+            COUNT(CASE WHEN appointment_date = CURRENT_DATE THEN 1 END) AS daily_count,
+            COUNT(CASE WHEN date_trunc('week', appointment_date) = date_trunc('week', CURRENT_DATE) THEN 1 END) AS weekly_count,
+            COUNT(CASE WHEN date_trunc('month', appointment_date) = date_trunc('month', CURRENT_DATE) THEN 1 END) AS monthly_count,
+            COUNT(appointment_id) AS total_count
+            FROM appointments 
+            WHERE barber_id = %s AND is_finished = TRUE;
+        """, (barber_id,))
+        total_appointments = cur.fetchone()
+
+        cur.execute("""SELECT barber_rating FROM barbers
+            WHERE barber_id = %s""", (barber_id,))
+        barber_feedback = cur.fetchone()
+
     return render_template("barber-page.html", haircuts=haircuts, appointments=appointments,
                            finished_appointments=finished_appointments, canceled_appointments=canceled_appointments,
-                           schedules=schedules)
+                           schedules=schedules, revenues=revenues, total_appointments=total_appointments,
+                           barber_feedback=barber_feedback)
 
 
 @barber_page.route('/add-haircut', methods=['POST'])

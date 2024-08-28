@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const CanceledAppCardContent = document.getElementById('canceled-appointments-content');
     const ManageScheduleToggleBtn = document.getElementById('schedule-toggle-card-btn');
     const ManageScheduleCardContent = document.getElementById('schedule-content');
+    const StatisticsRevenueToggleBtn = document.getElementById('my-statistics-revenue-toggle-card-btn');
+    const StatisticsRevenueCardContent = document.getElementById('my-statistics-revenue-content');
+    const StatisticsTotalToggleBtn = document.getElementById('my-statistics-total-toggle-card-btn');
+    const StatisticsTotalCardContent = document.getElementById('my-statistics-total-content');
+    const StatisticsFeedbackToggleBtn = document.getElementById('my-statistics-feedback-toggle-card-btn');
+    const StatisticsFeedbackCardContent = document.getElementById('my-statistics-feedback-content');
 
     function toggleContent(button, content) {
             if (content.style.display === 'none' || content.style.display === '') {
@@ -66,6 +72,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 toggleContent(ManageScheduleToggleBtn, ManageScheduleCardContent);
             });
         }
+
+    if (StatisticsRevenueToggleBtn && StatisticsRevenueCardContent) {
+            StatisticsRevenueToggleBtn.addEventListener('click', function () {
+                toggleContent(StatisticsRevenueToggleBtn, StatisticsRevenueCardContent);
+            });
+        }
+
+    if (StatisticsTotalToggleBtn && StatisticsTotalCardContent) {
+            StatisticsTotalToggleBtn.addEventListener('click', function () {
+                toggleContent(StatisticsTotalToggleBtn, StatisticsTotalCardContent);
+            });
+        }
+
+    if (StatisticsFeedbackToggleBtn && StatisticsFeedbackCardContent) {
+            StatisticsFeedbackToggleBtn.addEventListener('click', function () {
+                toggleContent(StatisticsFeedbackToggleBtn, StatisticsFeedbackCardContent);
+            });
+        }
+
+
     const selectHaircut = document.getElementById('select-haircut');
     const editNameInput = document.getElementById('edit-name');
     const editPriceInput = document.getElementById('edit-haircut-price');

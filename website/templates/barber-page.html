@@ -7,303 +7,400 @@
 {% endblock %}
 
 {% block content %}
+<div class="container-grid">
+    <div class="container mt-5" id="manage-haircuts-container">
+        <h1 class="text-center mb-4">Manage My Haircuts</h1>
 
-<div class="container mt-5" id="manage-haircuts-container">
-    <h1 class="text-center mb-4">Manage My Haircuts</h1>
-
-    <!-- Add Haircut Section -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header"
-             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
-            <h5 class="mb-0">Add New Haircut</h5>
-            <button class="btn btn-link text-white p-0" id="add-haircut-toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body collapse" id="add-haircut-card-content" style="display: none;">
-            <form id="add-haircut-form" enctype="multipart/form-data" method="POST"
-                  action="{{ url_for('barber_page.add_haircut') }}">
-                <div class="form-group mb-3">
-                    <label for="haircut-name" class="form-label">Haircut Name</label>
-                    <input type="text" class="form-control" id="haircut-name" name="haircut-name"
-                           placeholder="Enter haircut name" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="haircut-price" class="form-label">Haircut Price (sum)</label>
-                    <input type="number" class="form-control" id="haircut-price" name="haircut-price"
-                           placeholder="Enter price" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="haircut-description" class="form-label">Haircut Description</label>
-                    <textarea class="form-control" id="haircut-description" name="haircut-description" rows="3"
-                              placeholder="Enter description" required></textarea>
-                </div>
-                <div class="form-group mb-4">
-                    <label for="haircut-picture" class="form-label">Upload Haircut Picture</label>
-                    <input type="file" class="form-control" id="haircut-picture" name="haircut-picture" required>
-                </div>
-                <button type="submit" class="btn btn-success w-100 add-haircut-button">Add Haircut</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit haircut section -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header"
-             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white; margin-top: 30px;">
-            <h5 class="mb-0">Edit my haircuts</h5>
-            <button class="btn btn-link text-white p-0" id="edit-haircut-toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body collapse" id="edit-haircut-card-content" style="display: none;">
-
-            <form id="edit-haircut-form" enctype="multipart/form-data" method="POST"
-                  action="{{ url_for('barber_page.edit_haircut') }}">
-                <div class="form-group mb-3">
-                    <label for="select-haircut" class="form-label">Select Haircut to Edit</label>
-                    <select class="form-control" id="select-haircut" name="selected_haircut">
-                        <option value="" disabled selected>Select a haircut</option>
-                        {% for haircut in haircuts %}
-                        <option value="{{ haircut[0] }}"
-                                data-name="{{ haircut[1] }}"
-                                data-price="{{ haircut[3] }}"
-                                data-description="{{ haircut[2] }}">
-                            {{ haircut[1] }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-
-                <div class="form-group mb-3">
-                    <label for="haircut-name" class="form-label">Haircut Name</label>
-                    <input type="text" class="form-control" id="edit-name" name="haircut-name"
-                           placeholder="Enter haircut name">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="haircut-price" class="form-label">Haircut Price (sum)</label>
-                    <input type="number" class="form-control" id="edit-haircut-price" name="haircut-price"
-                           placeholder="Enter price">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="haircut-description" class="form-label">Haircut Description</label>
-                    <textarea class="form-control" id="edit-haircut-description" name="haircut-description" rows="3"
-                              placeholder="Enter description"></textarea>
-                </div>
-                <div class="form-group mb-4">
-                    <label for="haircut-picture" class="form-label">Upload Haircut Picture</label>
-                    <input type="file" class="form-control" id="edit-haircut-picture" name="haircut-picture">
-                </div>
-
-                <button type="submit" class="btn btn-success w-100 add-haircut-button">Confirm changes</button>
-            </form>
-
-        </div>
-    </div>
-
-    <!-- Delete haircut section -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header"
-             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white; margin-top: 30px;">
-            <h5 class="mb-0">Delete my haircuts</h5>
-            <button class="btn btn-link text-white p-0" id="delete-haircut-toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body collapse" id="delete-haircut-card-content" style="display: none;">
-
-            <form id="delete-haircut-form" method="POST"
-                  action="{{ url_for('barber_page.delete_haircut') }}">
-                <div class="form-group mb-3">
-                    <label for="select-haircut" class="form-label">Select Haircut to Edit</label>
-                    <select class="form-control" id="select-haircut-to-delete" name="selected_haircut">
-                        <option value="" disabled selected>Select a haircut</option>
-                        {% for haircut in haircuts %}
-                        <option value="{{ haircut[0] }}"
-                                data-name="{{ haircut[1] }}"
-                                data-price="{{ haircut[3] }}"
-                                data-description="{{ haircut[2] }}">
-                            {{ haircut[1] }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="delete-haircut-container">
-                    <p style="margin-top: 50px;">Note that after deleting this haircut all its data in the system will
-                        be
-                        <strong>deleted permanently.</strong></p>
-                    <button type="submit" id="delete-haircut-btn" class="delete-haircut-btn"
-                            style="margin-top: 25px; margin-left: 10px; background-color: grey; cursor: not-allowed;"
-                            disabled>Delete haircut
-                    </button>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
-
-</div>
-
-
-<div class="container mt-5" id="manage-appointments-container">
-    <h1 class="text-center">Manage my appointments</h1>
-
-    <!--Upcoming appointments section -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header"
-             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
-            <h5 class="mb-0">Upcoming appointments</h5>
-            <button class="btn btn-link text-white p-0" id="upcoming-appointments-toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body collapse" id="upcoming-appointments-content" style="display: none;">
-            {% if appointments %}
-            {% for appointment in appointments %}
-            <div class="appointment-body">
-
-                <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
-                <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
-                <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
-                <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
-                <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
-                <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
-                <p class="customer-email">Customer email: {{ appointment[6] }}</p>
-                <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
-                <p class="price">price: {{ appointment[8] }} sum</p>
-                <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
-                <p class="created-date">Created date: {{ appointment[10] }}</p>
-                <form class="finish-appointments-container" method="POST" action="/finish-appointment">
-                    <input type="hidden" name="appointment_id" value="{{ appointment[0] }}">
-                    <button type="submit" class="finish-appointments-button">Set as finished</button>
-                </form>
-                <form class="delete-appointments-container" method="POST" action="/cancel-appointment">
-                    <input type="hidden" name="appointment_id" value="{{ appointment[0] }}">
-                    <button type="submit" class="delete-appointment-button">Cancel appointment</button>
-                    <p>Important: Please ensure you contact the customer prior to deleting this appointment. Note that
-                        deleting an appointment will automatically result in its cancellation.</p>
+        <!-- Add Haircut Section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">Add New Haircut</h5>
+                <button class="btn btn-link text-white p-0" id="add-haircut-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="add-haircut-card-content" style="display: none;">
+                <form id="add-haircut-form" enctype="multipart/form-data" method="POST"
+                      action="{{ url_for('barber_page.add_haircut') }}">
+                    <div class="form-group mb-3">
+                        <label for="haircut-name" class="form-label">Haircut Name</label>
+                        <input type="text" class="form-control" id="haircut-name" name="haircut-name"
+                               placeholder="Enter haircut name" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="haircut-price" class="form-label">Haircut Price (sum)</label>
+                        <input type="number" class="form-control" id="haircut-price" name="haircut-price"
+                               placeholder="Enter price" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="haircut-description" class="form-label">Haircut Description</label>
+                        <textarea class="form-control" id="haircut-description" name="haircut-description" rows="3"
+                                  placeholder="Enter description" required></textarea>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="haircut-picture" class="form-label">Upload Haircut Picture</label>
+                        <input type="file" class="form-control" id="haircut-picture" name="haircut-picture" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 add-haircut-button">Add Haircut</button>
                 </form>
             </div>
-
-            {% endfor %}
-            {% else %}
-            <p>You have no upcoming appointments now</p>
-            {% endif %}
         </div>
-    </div>
 
-    <!-- Finished appointments section-->
-    <div class="card shadow-sm mb-4" style="margin-top: 20px;">
-        <div class="card-header"
-             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
-            <h5 class="mb-0">Finished Appointments</h5>
-            <button class="btn btn-link text-white p-0" id="finished-haircuts-toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body collapse" id="finished-haircuts-content" style="display: none;">
-            {% for appointment in finished_appointments %}
-            <div class="appointment-body">
-                <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
-                <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
-                <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
-                <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
-                <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
-                <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
-                <p class="customer-email">Customer email: {{ appointment[6] }}</p>
-                <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
-                <p class="price">price: {{ appointment[8] }} sum</p>
-                <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
-                <p class="created-date">Created date: {{ appointment[10] }}</p>
+        <!-- Edit haircut section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white; margin-top: 30px;">
+                <h5 class="mb-0">Edit my haircuts</h5>
+                <button class="btn btn-link text-white p-0" id="edit-haircut-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
-            {% endfor %}
-        </div>
-    </div>
+            <div class="card-body collapse" id="edit-haircut-card-content" style="display: none;">
 
-    <!--Canceled appointments section -->
-    <div class="card shadow-sm mb-4" style="margin-top: 20px;">
-        <div class="card-header"
-             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
-            <h5 class="mb-0">Canceled Appointments</h5>
-            <button class="btn btn-link text-white p-0" id="canceled-appointments-toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card-body collapse" id="canceled-appointments-content" style="display: none;">
-            {% for appointment in canceled_appointments %}
-            <div class="appointment-body">
-                <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
-                <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
-                <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
-                <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
-                <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
-                <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
-                <p class="customer-email">Customer email: {{ appointment[6] }}</p>
-                <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
-                <p class="price">price: {{ appointment[8] }} sum</p>
-                <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
-                <p class="created-date">Created date: {{ appointment[10] }}</p>
+                <form id="edit-haircut-form" enctype="multipart/form-data" method="POST"
+                      action="{{ url_for('barber_page.edit_haircut') }}">
+                    <div class="form-group mb-3">
+                        <label for="select-haircut" class="form-label">Select Haircut to Edit</label>
+                        <select class="form-control" id="select-haircut" name="selected_haircut">
+                            <option value="" disabled selected>Select a haircut</option>
+                            {% for haircut in haircuts %}
+                            <option value="{{ haircut[0] }}"
+                                    data-name="{{ haircut[1] }}"
+                                    data-price="{{ haircut[3] }}"
+                                    data-description="{{ haircut[2] }}">
+                                {{ haircut[1] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label for="haircut-name" class="form-label">Haircut Name</label>
+                        <input type="text" class="form-control" id="edit-name" name="haircut-name"
+                               placeholder="Enter haircut name">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="haircut-price" class="form-label">Haircut Price (sum)</label>
+                        <input type="number" class="form-control" id="edit-haircut-price" name="haircut-price"
+                               placeholder="Enter price">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="haircut-description" class="form-label">Haircut Description</label>
+                        <textarea class="form-control" id="edit-haircut-description" name="haircut-description" rows="3"
+                                  placeholder="Enter description"></textarea>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="haircut-picture" class="form-label">Upload Haircut Picture</label>
+                        <input type="file" class="form-control" id="edit-haircut-picture" name="haircut-picture">
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 add-haircut-button">Confirm changes</button>
+                </form>
+
             </div>
-            {% endfor %}
         </div>
+
+        <!-- Delete haircut section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white; margin-top: 30px;">
+                <h5 class="mb-0">Delete my haircuts</h5>
+                <button class="btn btn-link text-white p-0" id="delete-haircut-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="delete-haircut-card-content" style="display: none;">
+
+                <form id="delete-haircut-form" method="POST"
+                      action="{{ url_for('barber_page.delete_haircut') }}">
+                    <div class="form-group mb-3">
+                        <label for="select-haircut" class="form-label">Select Haircut to Edit</label>
+                        <select class="form-control" id="select-haircut-to-delete" name="selected_haircut">
+                            <option value="" disabled selected>Select a haircut</option>
+                            {% for haircut in haircuts %}
+                            <option value="{{ haircut[0] }}"
+                                    data-name="{{ haircut[1] }}"
+                                    data-price="{{ haircut[3] }}"
+                                    data-description="{{ haircut[2] }}">
+                                {{ haircut[1] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="delete-haircut-container">
+                        <p style="margin-top: 50px;">Note that after deleting this haircut all its data in the system
+                            will
+                            be
+                            <strong>deleted permanently.</strong></p>
+                        <button type="submit" id="delete-haircut-btn" class="delete-haircut-btn"
+                                style="margin-top: 25px; margin-left: 10px; background-color: grey; cursor: not-allowed;"
+                                disabled>Delete haircut
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
     </div>
 
-</div>
 
+    <div class="container mt-5" id="manage-appointments-container">
+        <h1 class="text-center">Manage my appointments</h1>
 
-<div class="container mt-5" id="manage-barber-schedule-container">
-    <h1 class="text-center" id="manage-schedule-text">Manage my schedule</h1>
+        <!--Upcoming appointments section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">Upcoming appointments</h5>
+                <button class="btn btn-link text-white p-0" id="upcoming-appointments-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="upcoming-appointments-content" style="display: none;">
+                {% if appointments %}
+                {% for appointment in appointments %}
+                <div class="appointment-body">
 
-    <div class="card shadow-sm mb-4" style="margin-top: 20px;">
-        <div class="card-header"
-             style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
-            <h5 class="mb-0">Manage my schedule</h5>
-            <button class="btn btn-link text-white p-0" id="schedule-toggle-card-btn">
-                <i class="fas fa-plus"></i>
-            </button>
+                    <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
+                    <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
+                    <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
+                    <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
+                    <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
+                    <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
+                    <p class="customer-email">Customer email: {{ appointment[6] }}</p>
+                    <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
+                    <p class="price">price: {{ appointment[8] }} sum</p>
+                    <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
+                    <p class="created-date">Created date: {{ appointment[10] }}</p>
+                    <form class="finish-appointments-container" method="POST" action="/finish-appointment">
+                        <input type="hidden" name="appointment_id" value="{{ appointment[0] }}">
+                        <button type="submit" class="finish-appointments-button">Set as finished</button>
+                    </form>
+                    <form class="delete-appointments-container" method="POST" action="/cancel-appointment">
+                        <input type="hidden" name="appointment_id" value="{{ appointment[0] }}">
+                        <button type="submit" class="delete-appointment-button">Cancel appointment</button>
+                        <p>Important: Please ensure you contact the customer prior to deleting this appointment. Note
+                            that
+                            deleting an appointment will automatically result in its cancellation.</p>
+                    </form>
+                </div>
+
+                {% endfor %}
+                {% else %}
+                <p>You have no upcoming appointments now</p>
+                {% endif %}
+            </div>
         </div>
-        <div class="card-body collapse" id="schedule-content" style="display: none;">
-            {% for schedule in schedules %}
-            <form action="/update-schedule" method="post">
-                <div class="form-group">
-                    <label for="work-start">Work Start Time:</label>
-                    <input type="time" class="form-control" id="work-start" name="working-start-time" value="{{ schedule[0] }}">
+
+        <!-- Finished appointments section-->
+        <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">Finished Appointments</h5>
+                <button class="btn btn-link text-white p-0" id="finished-haircuts-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="finished-haircuts-content" style="display: none;">
+                {% for appointment in finished_appointments %}
+                <div class="appointment-body">
+                    <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
+                    <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
+                    <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
+                    <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
+                    <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
+                    <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
+                    <p class="customer-email">Customer email: {{ appointment[6] }}</p>
+                    <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
+                    <p class="price">price: {{ appointment[8] }} sum</p>
+                    <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
+                    <p class="created-date">Created date: {{ appointment[10] }}</p>
                 </div>
-                <div class="form-group">
-                    <label for="work-end">Work End Time:</label>
-                    <input type="time" class="form-control" id="work-end" name="working-end-time" value="{{ schedule[1] }}">
+                {% endfor %}
+            </div>
+        </div>
+
+        <!--Canceled appointments section -->
+        <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">Canceled Appointments</h5>
+                <button class="btn btn-link text-white p-0" id="canceled-appointments-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="canceled-appointments-content" style="display: none;">
+                {% for appointment in canceled_appointments %}
+                <div class="appointment-body">
+                    <p class="appointment-id">Appointment ID: {{ appointment[0] }}</p>
+                    <p class="appointment-time">Appointment Time: {{ appointment[1] }}</p>
+                    <p class="appointment-date">Appointment Date: {{ appointment[2] }}</p>
+                    <p class="customer-first-name">Customer First Name: {{ appointment[3] }}</p>
+                    <p class="customer-last-name">Customer Last Name: {{ appointment[4] }}</p>
+                    <p class="customer-phone-number">Customer Phone Number: {{ appointment[5] }}</p>
+                    <p class="customer-email">Customer email: {{ appointment[6] }}</p>
+                    <p class="haircut-name">Haircut Name: {{ appointment[7] }}</p>
+                    <p class="price">price: {{ appointment[8] }} sum</p>
+                    <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
+                    <p class="created-date">Created date: {{ appointment[10] }}</p>
                 </div>
-                <div class="form-group">
-                    <label for="break-start">Break Start Time:</label>
-                    <input type="time" class="form-control" id="break-start" name="break-start-time"
-                           value="{{ schedule[2] }}">
-                </div>
-                <div class="form-group">
-                    <label for="break-end">Break End Time:</label>
-                    <input type="time" class="form-control" id="break-end" name="break-end-time" value="{{ schedule[3] }}">
-                </div>
-                <div class="form-group">
-                    <label>Working Days:</label>
-                    <div class="weekdays-container">
-                        {% set working_days = schedules[0][4].split(', ') %}
-                        {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
-                        <input type="checkbox" id="{{ day }}" name="working-days" value="{{ day }}"
-                               {% if day in working_days %}checked{% endif %}>
-                        <label for="{{ day }}" class="custom-checkbox">{{ day }}</label>
-                        {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="container mt-5" id="manage-barber-schedule-container">
+        <h1 class="text-center" id="manage-schedule-text">Manage my schedule</h1>
+
+        <!-- Manage schedule time -->
+        <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">Manage my schedule</h5>
+                <button class="btn btn-link text-white p-0" id="schedule-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="schedule-content" style="display: none;">
+                {% for schedule in schedules %}
+                <form action="/update-schedule" method="post">
+                    <div class="form-group">
+                        <label for="work-start">Work Start Time:</label>
+                        <input type="time" class="form-control" id="work-start" name="working-start-time"
+                               value="{{ schedule[0] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="work-end">Work End Time:</label>
+                        <input type="time" class="form-control" id="work-end" name="working-end-time"
+                               value="{{ schedule[1] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="break-start">Break Start Time:</label>
+                        <input type="time" class="form-control" id="break-start" name="break-start-time"
+                               value="{{ schedule[2] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="break-end">Break End Time:</label>
+                        <input type="time" class="form-control" id="break-end" name="break-end-time"
+                               value="{{ schedule[3] }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Working Days:</label>
+                        <div class="weekdays-container">
+                            {% set working_days = schedules[0][4].split(', ') %}
+                            {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                            %}
+                            <input type="checkbox" id="{{ day }}" name="working-days" value="{{ day }}"
+                                   {% if day in working_days %}checked{% endif %}>
+                            <label for="{{ day }}" class="custom-checkbox">{{ day }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Update Schedule</button>
+                </form>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container mt-5" id="my-statistics-container">
+        <h1 class="text-center">My statistics</h1>
+
+        <!--Mt statistics section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">My revenue</h5>
+                <button class="btn btn-link text-white p-0" id="my-statistics-revenue-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="my-statistics-revenue-content" style="display: none;">
+                <div class="statistics-container">
+                    <div class="statistic-item">
+                        <h6>Daily Revenue</h6>
+                        <p>{% if revenues[0] %} {{ revenues[0] }} Sum {% else %} 0 sum {% endif %}</p>
+                    </div>
+                    <div class="statistic-item">
+                        <h6>Weekly Revenue</h6>
+                        <p>{% if revenues[0] %} {{ revenues[1] }} Sum {% else %} 0 sum {% endif %}</p>
+                    </div>
+                    <div class="statistic-item">
+                        <h6>Monthly Revenue</h6>
+                        <p>{% if revenues[0] %} {{ revenues[2] }} Sum {% else %} 0 sum {% endif %}</p>
+                    </div>
+                    <div class="statistic-item">
+                        <h6>Total Revenue</h6>
+                        <p>{% if revenues[0] %} {{ revenues[3] }} Sum {% else %} 0 sum {% endif %}</p>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Update Schedule</button>
-            </form>
-            {% endfor %}
+            </div>
         </div>
+
+        <!-- Total appointments section -->
+         <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">Appointments number</h5>
+                <button class="btn btn-link text-white p-0" id="my-statistics-total-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="my-statistics-total-content" style="display: none;">
+                <div class="statistics-container">
+                    <div class="statistic-item">
+                        <h6>Daily Appointments</h6>
+                        <p>{{ total_appointments[0] }}</p>
+                    </div>
+                    <div class="statistic-item">
+                        <h6>Weekly Appointments</h6>
+                        <p>{{ total_appointments[1] }}</p>
+                    </div>
+                    <div class="statistic-item">
+                        <h6>Monthly Appointments</h6>
+                        <p>{{ total_appointments[2] }}</p>
+                    </div>
+                    <div class="statistic-item">
+                        <h6>Total Appointments</h6>
+                        <p>{{ total_appointments[3] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- My Feedback section -->
+         <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+            <div class="card-header"
+                 style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
+                <h5 class="mb-0">My feedback</h5>
+                <button class="btn btn-link text-white p-0" id="my-statistics-feedback-toggle-card-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body collapse" id="my-statistics-feedback-content" style="display: none;">
+                <div class="statistics-container">
+                    <div class="statistic-item">
+                        <h6>Barber Rating</h6>
+                        <p>{{ barber_feedback[0] }} ⭐</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-
 </div>
+
+
 
 {% endblock %}
 
