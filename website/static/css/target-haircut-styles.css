@@ -82,6 +82,91 @@ body {
     opacity: 1;
 }
 
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.about-info {
+    display: none;
+    position: absolute;
+    top: 100%; /* Position below the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ebaf8a;
+    border-radius: 8px;
+    padding: 15px;
+    width: 250px; /* Adjust the width */
+    max-height: 200px; /* Set a max height */
+    overflow-y: auto; /* Add scroll for long text */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 100; /* Ensure it appears above other elements */
+    text-align: left;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.about-info p {
+    margin: 0;
+}
+
+.about:hover + .about-info {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.about-info::-webkit-scrollbar {
+    width: 8px;
+}
+
+.about-info::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 8px;
+}
+
+.about-info::-webkit-scrollbar-thumb:hover {
+    background-color: #bbb;
+}
+
+.about {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.about:hover {
+    background-color: #0056b3;
+}
+
+.barbershop-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #ccc;
+    margin-bottom: 10px;
+}
+
 
 
 

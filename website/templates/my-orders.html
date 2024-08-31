@@ -11,24 +11,70 @@
     <h1>My Orders</h1>
     <div class="orders-list">
         {% if appointments %}
-        {% for appointment in appointments %}
-        <div class="order-card">
-            <div class="order-details">
-                <h2>Appointment №{{ loop.index }}</h2>
-                <p><strong>Barbershop:</strong> {{ appointment[0] }}</p>
-                <p><strong>Barber:</strong> {{ appointment[1] }} {{ appointment[2] }}</p>
-                <p><strong>Haircut:</strong> {{ appointment[3] }}</p>
-                <p><strong>Date:</strong> {{ appointment[4] }}</p>
-                <p><strong>Time:</strong> {{ appointment[5] }}</p>
-                <p><strong>Duration:</strong> {{ appointment[6] }} minutes</p>
+            {% for appointment in appointments %}
+            <div class="order-card">
+                <div class="order-details">
+                    <h2>Appointment №{{ loop.index }}</h2>
+                    <p><strong>Barbershop:</strong> {{ appointment[0] }}</p>
+                    <p><strong>Barber:</strong> {{ appointment[1] }} {{ appointment[2] }}</p>
+                    <p><strong>Haircut:</strong> {{ appointment[3] }}</p>
+                    <p><strong>Date:</strong> {{ appointment[4] }}</p>
+                    <p><strong>Time:</strong> {{ appointment[5] }}</p>
+                    <p><strong>Duration:</strong> {{ appointment[6] }} minutes</p>
+                    <p><strong>My comment:</strong> {{ appointment[9] }}</p>
+                    <div class="status">
+                        {% if appointment[7] and not appointment[8] %}
+                            <div class="status pending">pending</div>
+                        {% elif appointment[8] %}
+                            <div class="status finished">finished</div>
+                            {% if not appointment[11] %}
+                                <!-- Editable feedback form (no feedback yet) -->
+                                <form class="feedback-form" action="/leave-feedback" method="post">
+                                    <div class="rating">
+                                        <input type="radio" id="star5-{{ loop.index }}" name="rating" value="5"/>
+                                        <label for="star5-{{ loop.index }}"></label>
+                                        <input type="radio" id="star4-{{ loop.index }}" name="rating" value="4"/>
+                                        <label for="star4-{{ loop.index }}"></label>
+                                        <input type="radio" id="star3-{{ loop.index }}" name="rating" value="3"/>
+                                        <label for="star3-{{ loop.index }}"></label>
+                                        <input type="radio" id="star2-{{ loop.index }}" name="rating" value="2"/>
+                                        <label for="star2-{{ loop.index }}"></label>
+                                        <input type="radio" id="star1-{{ loop.index }}" name="rating" value="1"/>
+                                        <label for="star1-{{ loop.index }}"></label>
+                                    </div>
+                                    <input type="hidden" id="selected_rating-{{ loop.index }}" name="rating" value="">
+                                    <input type="hidden" name="barber_id" value="{{ appointment[10] }}">
+                                    <input type="hidden" name="appointment_id" value="{{ appointment[13] }}">
+                                    <textarea name="feedback" placeholder="Leave feedback about your appointment"></textarea>
+                                    <button type="submit" class="feedback-button">Submit</button>
+                                </form>
+                            {% else %}
+                                <!-- Non-editable feedback form (feedback already exists) -->
+                                <form class="feedback-form" action="/delete-feedback" method="post">
+                                    <div class="rating">
+                                        {% for i in range(5, 0, -1) %}
+                                            <input type="radio" id="star{{ i }}-{{ loop.index }}" name="rating" value="{{ i }}" disabled {% if appointment[11] == i %}checked{% endif %}/>
+                                            <label for="star{{ i }}-{{ loop.index }}"></label>
+                                        {% endfor %}
+                                    </div>
+                                    <input type="hidden" name="barber_id" value="{{ appointment[10] }}">
+                                    <input type="hidden" name="appointment_id" value="{{ appointment[13] }}">
+                                    <textarea name="feedback" disabled>{{ appointment[12] }}</textarea>
+                                    <button type="submit" class="delete-button">Delete</button>
+                                </form>
+                            {% endif %}
+                        {% elif not appointment[7] %}
+                            <div class="status canceled">canceled</div>
+                        {% else %}
+                            <div class="status error">error has occurred</div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
         {% else %}
             <p id="no-order">You have no appointments</p>
         {% endif %}
     </div>
 </div>
-
-
 {% endblock %}

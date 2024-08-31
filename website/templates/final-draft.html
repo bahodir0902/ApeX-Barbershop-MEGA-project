@@ -13,47 +13,56 @@
 <div class="section-section">
     <div class="wrapper">
         <h1 class="heading-1">Final Draft</h1>
+        <form action="{{ url_for('views.book_now')}}" method="post">
+            <div id="barbershopTables">
+                <table class="barbershop-table">
+                    <tr>
+                        <td>Barbershop</td>
+                        <td>{{ barbershop[1] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td>{{ barbershop[2]}}, <a id="openInGoogle" href="#">Open in Google Maps</a></td>
+                    </tr>
+                    <tr>
+                        <td>Haircut</td>
+                        <td>{{ haircut[1] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Barber</td>
+                        <td>{{ barber[1] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Barber Rating</td>
+                        <td>{{ barber[2] }} ⭐</td>
+                    </tr>
+                    <tr>
+                        <td>Day</td>
+                        <td>{{ day }}</td>
+                    </tr>
+                    <tr>
+                        <td>Time</td>
+                        <td>{{ time }}</td>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <td>{{ haircut[2] }} UZS</td>
+                    </tr>
+                    <tr>
+                        <td>Comment</td>
+                        <td><textarea placeholder="Special instructions, comment..." name="comment"></textarea></td>
+                    </tr>
+                </table>
+            </div>
 
-        <div id="barbershopTables">
-            <table class="barbershop-table">
-                <tr>
-                    <td>Barbershop</td>
-                    <td>{{ barbershop[1] }}</td>
-                </tr>
-                <tr>
-                    <td>Location</td>
-                    <td>{{ barbershop[2]}},  <a id="openInGoogle" href="#">Open in Google Maps</a></td>
-                </tr>
-                <tr>
-                    <td>Haircut</td>
-                    <td>{{ haircut[1] }}</td>
-                </tr>
-                <tr>
-                    <td>Barber</td>
-                    <td>{{ barber[1] }}</td>
-                </tr>
-                <tr>
-                    <td>Barber Rating</td>
-                    <td>{{ barber[2] }} ⭐</td>
-                </tr>
-                <tr>
-                    <td>Day</td>
-                    <td>{{ day }}</td>
-                </tr>
-                <tr>
-                    <td>Time</td>
-                    <td>{{ time }}</td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td>{{ haircut[2] }} UZS</td>
-                </tr>
-            </table>
-        </div>
-        <form class="controls" action="{{ url_for('views.book_now')}}" method="post">
-            <input type="hidden" name="user_id" value="{{ current_user.id }}">
-            <button class="book-now" type="button" onclick="window.location.href='/locations/target-haircut/barbers/available-days/available-hours'">Back</button>
-            <button type="submit" id="book-now" class="book-now">Book Now</button>
+            <div class="controls">
+                <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                <button class="book-now" type="button"
+                        onclick="window.location.href='/locations/target-haircut/barbers/available-days/available-hours'">
+                    Back
+                </button>
+                <button type="submit" id="book-now" class="book-now">Book Now</button>
+            </div>
         </form>
     </div>
 </div>

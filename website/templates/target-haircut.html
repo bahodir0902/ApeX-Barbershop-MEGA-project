@@ -19,6 +19,9 @@
             <div class="image-wrapper">
                 <div class="barbershop-img" style="background-image: url('{{ url_for('views.get_picture', category = 'haircuts', item_id = cut[0]) }}');"></div>
                 <button class="about">About</button>
+                <div class="about-info">
+                    <p>{{ cut[3] }}</p>
+                </div>
             </div>
             <div class="info">
                 <div class="haircut-name">{{ cut[2] }}</div>

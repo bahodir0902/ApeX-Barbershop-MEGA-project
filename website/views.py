@@ -111,9 +111,10 @@ def hours():
     working_end_time = result[1]
     break_start_time = result[2]
     break_end_time = result[3]
-    cur.execute("SELECT appointment_time FROM appointments WHERE barber_id = %s AND appointment_date = %s", (barber_id, day))
+    cur.execute("""SELECT appointment_time FROM appointments WHERE barber_id = %s AND appointment_date = %s 
+    AND is_finished = false AND is_active = true""", (barber_id, day))
     booked_slots = [row[0] for row in cur.fetchall()]
-
+    print(f"booked slots: {booked_slots}")
 
     available_hours = []
     current_time = working_start_time
@@ -168,18 +169,19 @@ def final():
 @login_required
 def book_now():
     user_id = request.form.get('user_id')
-    if user_id != current_user.id:
+    if int(user_id) == current_user.id:
         selected_barbershop = session.get('selected_barbershop')
         selected_haircut = session.get('selected_haircut')
         selected_barber = session.get('selected_barber')
         day = session.get('day')
         time = session.get('time')
+        comment = request.form.get('comment')
         duration = 45
         print(f"barbershop: {selected_barbershop[0]}, barber: {selected_barber[0]}, haircut: {selected_haircut[0]}, day: {day}, time: {time}")
-        cur.execute("SELECT COUNT(*) FROM appointments WHERE customer_id = %s AND appointment_date = %s AND appointment_time = %s", (current_user.id, day, time))
+        cur.execute("SELECT COUNT(*) FROM appointments WHERE customer_id = %s AND appointment_date = %s AND appointment_time = %s AND is_finished = false AND is_active = true", (current_user.id, day, time))
         result = cur.fetchone()[0]
         if result == 0:
-            cur.execute("INSERT INTO appointments(barbershop_id, barber_id, customer_id, haircut_id, appointment_date, appointment_time, duration_minutes) VALUES(%s, %s, %s, %s, %s, %s ,%s)", (selected_barbershop[0], selected_barber[0], current_user.id, selected_haircut[0], day, time, duration))
+            cur.execute("INSERT INTO appointments(barbershop_id, barber_id, customer_id, haircut_id, appointment_date, appointment_time, duration_minutes, user_comment) VALUES(%s, %s, %s, %s, %s, %s, %s ,%s)", (selected_barbershop[0], selected_barber[0], current_user.id, selected_haircut[0], day, time, duration, comment))
             connection.commit()
         else:
             return 'You already have booked this order', 403
@@ -192,82 +194,142 @@ def book_now():
 @login_required
 def profile():
     if request.method == 'POST':
-        print('profile')
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
-        email = request.form.get('email')
-        phone_number = request.form.get('phone_number')
-        privacy = request.form.get('privacy')
+        if not current_user.is_barber:
+            first_name = request.form.get('first_name')
+            last_name = request.form.get('last_name')
+            email = request.form.get('email')
+            phone_number = request.form.get('phone_number')
+            privacy = request.form.get('privacy')
 
-        current_password = session.get('current_password')
-        print(current_password)
-        new_password = session.get('new_password')
-        print(new_password)
+            current_password = session.get('current_password')
+            print(current_password)
+            new_password = session.get('new_password')
+            print(new_password)
 
-
-        # Save other form data to the database
-        fields_to_update = {}
-        if first_name != current_user.first_name:
-            fields_to_update['first_name'] = first_name
-        if last_name != current_user.last_name:
-            fields_to_update['last_name'] = last_name
-        if email != current_user.email:
-            fields_to_update['email'] = email
-        if phone_number != current_user.phone_number:
-            fields_to_update['phone_number'] = phone_number
-        if privacy != current_user.privacy:
-            fields_to_update['privacy'] = privacy
-        if new_password:
-            fields_to_update['password'] = generate_password_hash(new_password, method='pbkdf2:sha256')
-            print('success')
-        else:
-            return flask_jsonify(success=False, errors=["Error while changing the password."])
-        if 'profile_picture' in request.files:
-            file = request.files['profile_picture']
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                current_app.config['UPLOAD_FOLDER'] = os.path.join(current_app.root_path, 'static', 'uploads')
-                upload_folder = current_app.config['UPLOAD_FOLDER']
-                file_path = os.path.join(upload_folder, filename)
-
-                # Ensure the upload directory exists
-                if not os.path.exists(upload_folder):
-                    os.makedirs(upload_folder)
-                    print(f"Created upload directory: {upload_folder}")
-
-                try:
-                    file.save(file_path)
-                    print(f"File saved to: {file_path}")
-
+            fields_to_update = {}
+            if first_name != current_user.first_name:
+                fields_to_update['first_name'] = first_name
+            if last_name != current_user.last_name:
+                fields_to_update['last_name'] = last_name
+            if email != current_user.email:
+                fields_to_update['email'] = email
+            if phone_number != current_user.phone_number:
+                fields_to_update['phone_number'] = phone_number
+            if privacy != current_user.privacy:
+                fields_to_update['privacy'] = privacy
+            if new_password:
+                fields_to_update['password'] = generate_password_hash(new_password, method='pbkdf2:sha256')
+                print('success')
+            if 'profile_picture' in request.files:
+                file = request.files['profile_picture']
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    current_app.config['UPLOAD_FOLDER'] = os.path.join(current_app.root_path, 'static', 'uploads')
+                    upload_folder = current_app.config['UPLOAD_FOLDER']
+                    file_path = os.path.join(upload_folder, filename)
+                    if not os.path.exists(upload_folder):
+                        os.makedirs(upload_folder)
                     try:
-                        with open(file_path, 'rb') as f:
-                            binary_data = f.read()
-                        print(f"Binary data size: {len(binary_data)} bytes")
-                        fields_to_update['profile_picture'] = psycopg2.Binary(binary_data)
+                        file.save(file_path)
+                        print(f"File saved to: {file_path}")
+                        try:
+                            with open(file_path, 'rb') as f:
+                                binary_data = f.read()
+                            fields_to_update['profile_picture'] = psycopg2.Binary(binary_data)
+                        except Exception as e:
+                            print(f"Error reading file: {e}")
                     except Exception as e:
-                        print(f"Error reading file: {e}")
-
+                        print(f"File saving or reading error: {e}")
+                        return flask_jsonify(success=False, errors=["Error saving or reading the file."])
+            print(fields_to_update)
+            if fields_to_update:
+                try:
+                    with connection.cursor() as cur:
+                        set_clause = ', '.join(f"{field} = %s " for field in fields_to_update)
+                        query = f'UPDATE users SET {set_clause} WHERE id = %s'
+                        values = list(fields_to_update.values()) + [current_user.id]
+                        cur.execute(query, values)
+                        connection.commit()
+                    return flask_jsonify(success=True, message="Profile updated successfully.")
                 except Exception as e:
-                    print(f"File saving or reading error: {e}")
-                    return flask_jsonify(success=False, errors=["Error saving or reading the file."])
-        print(fields_to_update)
-        if fields_to_update:
-            try:
-                with connection.cursor() as cur:
-                    set_clause = ', '.join(f"{field} = %s " for field in fields_to_update)
-                    query = f'UPDATE users SET {set_clause} WHERE id = %s'
-                    values = list(fields_to_update.values()) + [current_user.id]
-                    cur.execute(query, values)
-                    connection.commit()
+                    print(f"An error has occurred: {e}")
+                    return flask_jsonify(success=False, errors=["An error occurred while updating the profile."])
+            return flask_jsonify(success=True, message="No changes were made.")
+        else:
+            first_name = request.form.get('first_name')
+            last_name = request.form.get('last_name')
+            email = request.form.get('email')
+            phone_number = request.form.get('phone_number')
+            privacy = request.form.get('privacy')
+            current_password = session.get('current_password')
+            print(current_password)
+            new_password = session.get('new_password')
+            print(new_password)
+            with connection.cursor() as cur:
+                cur.execute("SELECT barber_id FROM users WHERE id = %s", (current_user.id,))
+                barber_id = cur.fetchone()
+                cur.execute("SELECT * FROM barbers WHERE barber_id = %s", (barber_id,))
+                result = cur.fetchone()
+                print(f"result: {result}")
+            fields_for_user = {}
+            fields_for_barber = {}
+            if first_name != result[2]:
+                fields_for_user['first_name'] = first_name
+                fields_for_barber['barber_first_name'] = first_name
+            if last_name != result[3]:
+                fields_for_user['last_name'] = last_name
+                fields_for_barber['barber_last_name'] = last_name
+            if email != result[7]:
+                fields_for_user['email'] = email
+                fields_for_barber['barber_email'] = email
+            if phone_number != result[4]:
+                fields_for_user['phone_number'] = phone_number
+                fields_for_barber['barber_phone_number'] = phone_number
+            if new_password:
+                fields_for_user['password'] = generate_password_hash(new_password, method='pbkdf2:sha256')
+                fields_for_barber['password'] = generate_password_hash(new_password, method='pbkdf2:sha256')
+            else:
+                return flask_jsonify(success=False, errors=["Error while changing the password."])
+            if 'profile_picture' in request.files:
+                file = request.files['profile_picture']
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    current_app.config['UPLOAD_FOLDER'] = os.path.join(current_app.root_path, 'static', 'uploads')
+                    upload_folder = current_app.config['UPLOAD_FOLDER']
+                    file_path = os.path.join(upload_folder, filename)
+                    if not os.path.exists(upload_folder):
+                        os.makedirs(upload_folder)
+                    try:
+                        file.save(file_path)
+                        print(f"File saved to: {file_path}")
+                        try:
+                            with open(file_path, 'rb') as f:
+                                binary_data = f.read()
+                            fields_for_user['profile_picture'] = psycopg2.Binary(binary_data)
+                            fields_for_barber['barber_picture'] = psycopg2.Binary(binary_data)
+                        except Exception as e:
+                            print(f"Error reading file: {e}")
+                    except Exception as e:
+                        print(f"File saving or reading error: {e}")
+                        return flask_jsonify(success=False, errors=["Error saving or reading the file."])
+            if fields_for_barber or fields_for_user:
+                try:
+                    with connection.cursor() as cur:
+                        set_clause_user = ', '.join(f"{field} = %s " for field in fields_for_user)
+                        query = f'UPDATE users SET {set_clause_user} WHERE id = %s'
+                        values_user = list(fields_for_user.values()) + [current_user.id]
+                        cur.execute(query, values_user)
 
-                # Return a JSON response indicating success
-                return flask_jsonify(success=True, message="Profile updated successfully.")
-            except Exception as e:
-                print(f"An error has occurred: {e}")
-                return flask_jsonify(success=False, errors=["An error occurred while updating the profile."])
-
-        return flask_jsonify(success=True, message="No changes were made.")
-
+                        set_clause_barber = ', '.join(f"{field} = %s " for field in fields_for_barber)
+                        query = f'UPDATE barbers SET {set_clause_barber} WHERE barber_id = %s'
+                        values_barber = list(fields_for_barber.values()) + [result[0]]
+                        cur.execute(query, values_barber)
+                        connection.commit()
+                    return flask_jsonify(success=True, message="Profile updated successfully.")
+                except Exception as e:
+                    print(f"An error has occurred: {e}")
+                    return flask_jsonify(success=False, errors=["An error occurred while updating the profile."])
+            return flask_jsonify(success=True, message="No changes were made.")
     return render_template('profile.html', user=current_user)
 
 
@@ -365,23 +427,77 @@ def change_password():
     return flask_jsonify(success=False, errors=errors)
 
 
-@views.route('/my-orders')
+@views.route('/my-orders-get', methods=['GET'])
+@login_required
+def my_orders_get():
+    return redirect(url_for('views.my_orders'))
+
+@views.route('/my-orders', methods=['GET', 'POST'])
 @login_required
 def my_orders():
-    cur.execute("""SELECT bs.barbershop_name, b.barber_first_name, b.barber_last_name,
-        h.haircut_name, a.appointment_date, 
-        a.appointment_time, a.duration_minutes
-        FROM appointments a
-        JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
-        JOIN barbers b ON a.barber_id = b.barber_id
-        JOIN haircuts h ON a.haircut_id = h.haircut_id
-        WHERE customer_id = %s
-        ORDER BY a.appointment_date, a.appointment_time
-        """, (current_user.id,))
+    if request.method == 'GET':
+        with connection.cursor() as cur:
+            cur.execute("""SELECT bs.barbershop_name, b.barber_first_name, b.barber_last_name,
+                                h.haircut_name, a.appointment_date, 
+                                a.appointment_time, a.duration_minutes, a.is_active, 
+                                a.is_finished, a.user_comment, a.barber_id, 
+                                f.feedback_star, f.feedback_comment, a.appointment_id
+                                FROM appointments a
+                                JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+                                JOIN barbers b ON a.barber_id = b.barber_id
+                                JOIN haircuts h ON a.haircut_id = h.haircut_id
+                                LEFT JOIN feedbacks f ON a.barber_id = f.barber_id 
+                                AND a.customer_id = f.customer_id AND a.appointment_id = f.appointment_id
+                                WHERE a.customer_id = %s
+                                ORDER BY a.is_finished ASC, a.is_active DESC, a.appointment_date, a.appointment_time
+                           """, (current_user.id,))
+            appointments = cur.fetchall()
+            print(f"appointments: {appointments}")
+        return render_template("my-orders.html", appointments=appointments)
 
-    appointments = cur.fetchall()
-    print(f"appointments: {appointments}")
-    return render_template("my-orders.html", appointments=appointments)
+@views.route('/leave-feedback', methods=['POST'])
+def leave_feedback():
+    if request.method == 'POST':
+        with connection.cursor() as cur:
+            star = request.form.get('rating')
+            text = request.form.get('feedback')
+            barber_id = request.form.get('barber_id')
+            appointment_id = request.form.get('appointment_id')
+            print(f"stars: {star}, text: {text}")
+
+            cur.execute("""INSERT INTO feedbacks(appointment_id, barber_id, customer_id, feedback_star, feedback_comment)
+                        VALUES(%s, %s, %s, %s, %s)""", (appointment_id, barber_id, current_user.id, star, text))
+            cur.execute("""SELECT bs.barbershop_name, b.barber_first_name, b.barber_last_name,
+                    h.haircut_name, a.appointment_date, 
+                    a.appointment_time, a.duration_minutes, a.is_active, 
+                    a.is_finished, a.user_comment, a.barber_id, 
+                    f.feedback_star, f.feedback_comment, a.appointment_id
+                    FROM appointments a
+                    JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+                    JOIN barbers b ON a.barber_id = b.barber_id
+                    JOIN haircuts h ON a.haircut_id = h.haircut_id
+                    LEFT JOIN feedbacks f ON a.barber_id = f.barber_id 
+                    AND a.customer_id = f.customer_id AND a.appointment_id = f.appointment_id
+                    WHERE a.customer_id = %s
+                    ORDER BY a.is_finished ASC, a.is_active DESC, a.appointment_date, a.appointment_time
+               """, (current_user.id,))
+            connection.commit()
+            appointments = cur.fetchall()
+            print(f"appointments POST: {appointments}")
+        return redirect(url_for('views.my_orders_get', appointments=appointments))
+
+
+@views.route('/delete-feedback', methods=['POST'])
+@login_required
+def delete_feedback():
+    if request.method == 'POST':
+        appointment_id = request.form.get('appointment_id')
+        barber_id = request.form.get('barber_id')
+        with connection.cursor() as cur:
+            cur.execute("""DELETE FROM feedbacks WHERE appointment_id = %s AND barber_id = %s AND customer_id = %s""",
+                        (appointment_id, barber_id, current_user.id))
+            connection.commit()
+        return redirect(url_for('views.my_orders_get'))
 
 
 @views.route('/administration')

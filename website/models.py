@@ -105,7 +105,18 @@ cur.execute("""CREATE TABLE IF NOT EXISTS appointments(
 	duration_minutes INTEGER DEFAULT 45,
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	is_active boolean DEFAULT True,
-	is_finished boolean DEFAULT False)
+	is_finished boolean DEFAULT False,
+	user_comment TEXT)
+""")
+
+cur.execute("""CREATE TABLE IF NOT EXISTS feedbacks(
+	feedback_id SERIAL PRIMARY KEY,
+	appointment_id INTEGER REFERENCES appointments(appointment_id) ON DELETE CASCADE,
+	barber_id INTEGER REFERENCES barbers(barber_id) ON DELETE CASCADE,
+	customer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+	feedback_star DECIMAL(3,1) NOT NULL,
+	feedback_comment TEXT,
+	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 """)
 connection.commit()
 

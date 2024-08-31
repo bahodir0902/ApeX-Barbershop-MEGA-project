@@ -28,14 +28,10 @@ def login():
             remember_status = False
         try:
             with connection.cursor() as cur:
-
                 if email:
-                    # Check if the email corresponds to an owner
                     cur.execute("SELECT * FROM users WHERE email = %s AND is_owner = true", (email,))
                 else:
-                    # Check if the phone number corresponds to an owner
                     cur.execute("SELECT * FROM users WHERE phone_number = %s AND is_owner = true", (phone_number,))
-
                 admin = cur.fetchone()
                 if admin:
                     admin_user = User(*admin)
@@ -46,10 +42,8 @@ def login():
                         flash('Incorrect email, phone number or password, try again', category='error')
 
                 if email:
-                    # Check if the email corresponds to an owner
                     cur.execute("SELECT * FROM users WHERE email = %s AND is_barber = true", (email,))
                 else:
-                    # Check if the phone number corresponds to an owner
                     cur.execute("SELECT * FROM users WHERE phone_number = %s AND is_barber = true", (phone_number,))
 
                 barber = cur.fetchone()

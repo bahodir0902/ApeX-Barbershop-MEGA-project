@@ -21,9 +21,9 @@ def get_haircuts():
                        JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
                        WHERE bh.barber_id = %s""", (barber_id,))
         haircuts = cur.fetchall()
-        cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
+        cur.execute("""SELECT a.appointment_id, a.appointment_time, a.appointment_date,
             u.first_name, u.last_name, u.phone_number, u.email,
-            h.haircut_name, h.price, a.duration_minutes, a.created_date
+            h.haircut_name, h.price, a.duration_minutes, a.created_date, a.user_comment
             FROM appointments a
             JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
             JOIN barbers b ON a.barber_id = b.barber_id

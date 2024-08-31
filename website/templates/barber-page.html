@@ -177,6 +177,7 @@
                     <p class="price">price: {{ appointment[8] }} sum</p>
                     <p class="duration-minutes">Duration: {{ appointment[9] }} minutes</p>
                     <p class="created-date">Created date: {{ appointment[10] }}</p>
+                    <p class="created-date">Comment: {{ appointment[11] }}</p>
                     <form class="finish-appointments-container" method="POST" action="/finish-appointment">
                         <input type="hidden" name="appointment_id" value="{{ appointment[0] }}">
                         <button type="submit" class="finish-appointments-button">Set as finished</button>
@@ -189,7 +190,6 @@
                             deleting an appointment will automatically result in its cancellation.</p>
                     </form>
                 </div>
-
                 {% endfor %}
                 {% else %}
                 <p>You have no upcoming appointments now</p>
