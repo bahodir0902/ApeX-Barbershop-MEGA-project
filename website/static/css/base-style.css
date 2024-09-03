@@ -19,6 +19,8 @@ header {
     background-color: rgba(0,0,0, 0.5);
     backdrop-filter: blur(4px);
     padding: 15px 6%;
+    position: relative;
+    z-index: 1090; /* High z-index to ensure it's above other content */
 }
 
 nav {
@@ -107,6 +109,11 @@ nav {
 
 .login-button:hover, .signup-button:hover {
     background-color: rgba(0,136,169,0.75);
+}
+
+.dropdown-wrapper {
+    position: relative;
+    z-index: 1091; /* Higher than the header */
 }
 
 .dropdown {

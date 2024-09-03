@@ -5,7 +5,7 @@
 {% block head_links %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/barbers-style.css') }}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"/>
-<script src="{{ url_for('static', filename='js/barbers.js') }}" ></script>
+<script src="{{ url_for('static', filename='js/barbers.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -15,15 +15,34 @@
             <div class="pagination">1/1</div>
         </div>
 
-         {% for barber in barbers %}
+        {% for barber in barbers %}
         <div class="barbershop">
             <div class="image-wrapper">
-                <div class="barbershop-img" style="background-image: url('{{ url_for('views.get_picture', category = 'barbers', item_id = barber[0]) }}');"></div>
-                <button class="about">About</button>
+                <div class="barbershop-img"
+                     style="background-image: url('{{ url_for('views.get_picture', category = 'barbers', item_id = barber[0]) }}');"></div>
             </div>
+            <div class="about-container">
+                <button class="about">About</button>
+                <div class="about-info">
+                    {% if feedback_comments %}
+                    {% for comment in feedback_comments %}
+                    <p>{{ loop.index }}. {{ comment }}</p><br>
+                    {% endfor %}
+                    {% else %}
+                    <p>No feedback available.</p>
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="info">
                 <div class="barber-name">{{ barber[1] }}</div>
-                <div class="feedback">{{ barber[3] }} ⭐ / 5.0</div>
+                <div class="feedback">
+                    {% if not barber[5] == 0 %}
+                    {{ barber[5] }} ⭐ / 5.0
+                    {% else %}
+                    N/A ⭐
+                    {% endif %}
+                </div>
             </div>
             <form method="post" action="{{ url_for('views.barbers') }}">
                 <button type="submit" name="choose" value="{{ barber[0] }}" class="choose">Choose</button>

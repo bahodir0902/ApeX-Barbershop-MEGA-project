@@ -48,13 +48,12 @@ def target_haircut():
 
 @views.route('/locations/target-haircut/barbers', methods=['GET', 'POST'])
 def barbers():
-    barbershop = session.get('global_barbershop')
-    print(f"barbershop ID: {barbershop}")
-    haircut = session.get('global_haircut')
     if request.method == 'POST':
         selected_barber = request.form.get('choose')
         session['global_barber'] = selected_barber
         return redirect(url_for("views.days"))
+    barbershop = session.get('global_barbershop')
+    haircut = session.get('global_haircut')
     cur.execute(f"""SELECT DISTINCT b.barber_id, b.barber_first_name,
         b.barber_last_name,  b.barber_rating, b.barber_picture 
         FROM barbers b
@@ -62,9 +61,27 @@ def barbers():
         JOIN  haircuts h ON bh.haircut_id = h.haircut_id 
         JOIN barbershops bs ON b.barbershop_id = bs.barbershop_id
         WHERE h.haircut_name = %s AND bs.barbershop_id = %s; """, (haircut, barbershop))
-    barbers_list = cur.fetchall()
+    barbers = cur.fetchall()
+    barbers_list = []
+    feedback_comments = []
+    for barber in barbers:
+        cur.execute("""SELECT AVG(feedback_star) 
+                   FROM feedbacks
+                   WHERE barber_id = %s
+               """, (barber[0],))
+        rating = cur.fetchone()[0]
+        if rating:
+            average_rating = round(rating, 1)
+        else:
+            average_rating = 0
+        barber_with_rating = barber + (average_rating,)
+        barbers_list.append(barber_with_rating)
 
-    return render_template("barbers.html", barbers=barbers_list)
+        cur.execute("SELECT feedback_comment FROM feedbacks WHERE barber_id = %s", (barber[0],))
+        feedback_comments_raw = cur.fetchall()
+        feedback_comments = [comment[0] for comment in feedback_comments_raw]
+        print(feedback_comments)
+    return render_template("barbers.html", barbers=barbers_list, feedback_comments=feedback_comments)
 
 
 @views.route('/locations/target-haircut/barbers/available-days/', methods=['GET', 'POST'])
@@ -503,16 +520,36 @@ def delete_feedback():
 @views.route('/administration')
 @login_required
 def admin():
-    return render_template("admin.html")
+    with connection.cursor() as cur:
+        cur.execute("""SELECT is_owner FROM users WHERE id = %s""", (current_user.id,))
+        result = cur.fetchone()
+    if result[0]:
+        return render_template("admin.html")
+    else:
+        return redirect(url_for('views.home'))
+
 
 
 @views.route('/barber', methods=['POST'])
 @login_required
 def barber_page():
-    return redirect(url_for('barber_page.get_haircuts'))
+    with connection.cursor() as cur:
+        cur.execute("""SELECT is_barber FROM users WHERE id = %s""", (current_user.id,))
+        result = cur.fetchone()
+    if result[0]:
+        return redirect(url_for('barber_page.get_haircuts'))
+    else:
+        return redirect(url_for('views.home'))
+
 
 
 @views.route('/barber-get', methods=['GET'])
 @login_required
 def barber_page_get():
-    return redirect(url_for('barber_page.get_haircuts'))
+    with connection.cursor() as cur:
+        cur.execute("""SELECT is_barber FROM users WHERE id = %s""", (current_user.id,))
+        result = cur.fetchone()
+    if result[0]:
+        return redirect(url_for('barber_page.get_haircuts'))
+    else:
+        return redirect(url_for('views.home'))

@@ -114,7 +114,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS feedbacks(
 	appointment_id INTEGER REFERENCES appointments(appointment_id) ON DELETE CASCADE,
 	barber_id INTEGER REFERENCES barbers(barber_id) ON DELETE CASCADE,
 	customer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-	feedback_star DECIMAL(3,1) NOT NULL,
+	feedback_star DECIMAL(3,1) NOT NULL DEFAULT 0,
 	feedback_comment TEXT,
 	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
 """)

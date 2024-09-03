@@ -314,7 +314,7 @@
     <div class="container mt-5" id="my-statistics-container">
         <h1 class="text-center">My statistics</h1>
 
-        <!--Mt statistics section -->
+        <!--My statistics section -->
         <div class="card shadow-sm mb-4">
             <div class="card-header"
                  style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
@@ -331,22 +331,22 @@
                     </div>
                     <div class="statistic-item">
                         <h6>Weekly Revenue</h6>
-                        <p>{% if revenues[0] %} {{ revenues[1] }} Sum {% else %} 0 sum {% endif %}</p>
+                        <p>{% if revenues[1] %} {{ revenues[1] }} Sum {% else %} 0 sum {% endif %}</p>
                     </div>
                     <div class="statistic-item">
                         <h6>Monthly Revenue</h6>
-                        <p>{% if revenues[0] %} {{ revenues[2] }} Sum {% else %} 0 sum {% endif %}</p>
+                        <p>{% if revenues[2] %} {{ revenues[2] }} Sum {% else %} 0 sum {% endif %}</p>
                     </div>
                     <div class="statistic-item">
                         <h6>Total Revenue</h6>
-                        <p>{% if revenues[0] %} {{ revenues[3] }} Sum {% else %} 0 sum {% endif %}</p>
+                        <p>{% if revenues[3] %} {{ revenues[3] }} Sum {% else %} 0 sum {% endif %}</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Total appointments section -->
-         <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+        <div class="card shadow-sm mb-4" style="margin-top: 20px;">
             <div class="card-header"
                  style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
                 <h5 class="mb-0">Appointments number</h5>
@@ -372,13 +372,17 @@
                         <h6>Total Appointments</h6>
                         <p>{{ total_appointments[3] }}</p>
                     </div>
+                    <div class="statistic-item">
+                        <h6>Canceled Appointments</h6>
+                        <p>{{ total_canceled_appointments[0] }}</p>
+                    </div>
                 </div>
             </div>
         </div>
 
 
         <!-- My Feedback section -->
-         <div class="card shadow-sm mb-4" style="margin-top: 20px;">
+        <div class="card shadow-sm mb-4" style="margin-top: 20px;">
             <div class="card-header"
                  style="display: flex; justify-content: space-between; align-items: center; bg-primary: text-white;">
                 <h5 class="mb-0">My feedback</h5>
@@ -387,10 +391,24 @@
                 </button>
             </div>
             <div class="card-body collapse" id="my-statistics-feedback-content" style="display: none;">
-                <div class="statistics-container">
+                <div class="statistics-container" id="feedbacks-container">
                     <div class="statistic-item">
-                        <h6>Barber Rating</h6>
-                        <p>{{ barber_feedback[0] }} ⭐</p>
+                        <h6>My Average Rating</h6>
+                        <p>{{ average_rating }} ⭐</p>
+                    </div>
+                    <div class="statistic-item">
+                        <h6>Feedbacks about me</h6>
+                        {% if feedback_comments %}
+                        {% for comment in feedback_comments %}
+                        <div class="statistic-item feedback-comment">
+                            <p>{{ comment }}</p>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="statistic-item feedback-comment">
+                            <p>You have no feedbacks yet.</p>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -399,7 +417,6 @@
     </div>
 
 </div>
-
 
 
 {% endblock %}

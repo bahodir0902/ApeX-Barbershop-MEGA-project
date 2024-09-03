@@ -13,85 +13,106 @@ cur = connection.cursor()
 @barber_page.route('/get-haircuts', methods=['GET'])
 @login_required
 def get_haircuts():
-    barber_id = current_user.barber_id
-    print(f"barber id: {barber_id}")
     with connection.cursor() as cur:
-        cur.execute("""SELECT h.haircut_id, h.haircut_name, h.description, h.price 
-                       FROM haircuts h 
-                       JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
-                       WHERE bh.barber_id = %s""", (barber_id,))
-        haircuts = cur.fetchall()
-        cur.execute("""SELECT a.appointment_id, a.appointment_time, a.appointment_date,
-            u.first_name, u.last_name, u.phone_number, u.email,
-            h.haircut_name, h.price, a.duration_minutes, a.created_date, a.user_comment
-            FROM appointments a
-            JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
-            JOIN barbers b ON a.barber_id = b.barber_id
-            JOIN haircuts h ON a.haircut_id = h.haircut_id
-            JOIN users u ON u.id = a.customer_id
-            WHERE a.barber_id = %s AND is_active = true AND is_finished = false
-            ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
-        appointments = cur.fetchall()
+        cur.execute("""SELECT is_barber FROM users WHERE id = %s""", (current_user.id,))
+        result = cur.fetchone()
+    if not result[0]:
+        return redirect(url_for('views.home'))
+    else:
+        barber_id = current_user.barber_id
+        print(f"barber id: {barber_id}")
+        with connection.cursor() as cur:
+            cur.execute("""SELECT h.haircut_id, h.haircut_name, h.description, h.price 
+                           FROM haircuts h 
+                           JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
+                           WHERE bh.barber_id = %s""", (barber_id,))
+            haircuts = cur.fetchall()
+            cur.execute("""SELECT a.appointment_id, a.appointment_time, a.appointment_date,
+                u.first_name, u.last_name, u.phone_number, u.email,
+                h.haircut_name, h.price, a.duration_minutes, a.created_date, a.user_comment
+                FROM appointments a
+                JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+                JOIN barbers b ON a.barber_id = b.barber_id
+                JOIN haircuts h ON a.haircut_id = h.haircut_id
+                JOIN users u ON u.id = a.customer_id
+                WHERE a.barber_id = %s AND is_active = true AND is_finished = false
+                ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
+            appointments = cur.fetchall()
 
-        cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
-                    u.first_name, u.last_name, u.phone_number, u.email,
-                    h.haircut_name, h.price, a.duration_minutes, a.created_date
-                    FROM appointments a
-                    JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
-                    JOIN barbers b ON a.barber_id = b.barber_id
-                    JOIN haircuts h ON a.haircut_id = h.haircut_id
-                    JOIN users u ON u.id = a.customer_id
-                    WHERE a.barber_id = %s AND is_active = true AND is_finished = true
-                    ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
-        finished_appointments = cur.fetchall()
+            cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
+                        u.first_name, u.last_name, u.phone_number, u.email,
+                        h.haircut_name, h.price, a.duration_minutes, a.created_date
+                        FROM appointments a
+                        JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+                        JOIN barbers b ON a.barber_id = b.barber_id
+                        JOIN haircuts h ON a.haircut_id = h.haircut_id
+                        JOIN users u ON u.id = a.customer_id
+                        WHERE a.barber_id = %s AND is_active = true AND is_finished = true
+                        ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
+            finished_appointments = cur.fetchall()
 
-        cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
-                            u.first_name, u.last_name, u.phone_number, u.email,
-                            h.haircut_name, h.price, a.duration_minutes, a.created_date
-                            FROM appointments a
-                            JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
-                            JOIN barbers b ON a.barber_id = b.barber_id
-                            JOIN haircuts h ON a.haircut_id = h.haircut_id
-                            JOIN users u ON u.id = a.customer_id
-                            WHERE a.barber_id = %s AND is_active = false
-                            ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
-        canceled_appointments = cur.fetchall()
+            cur.execute("""SELECT a.appointment_id,  a.appointment_time, a.appointment_date,
+                                u.first_name, u.last_name, u.phone_number, u.email,
+                                h.haircut_name, h.price, a.duration_minutes, a.created_date
+                                FROM appointments a
+                                JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
+                                JOIN barbers b ON a.barber_id = b.barber_id
+                                JOIN haircuts h ON a.haircut_id = h.haircut_id
+                                JOIN users u ON u.id = a.customer_id
+                                WHERE a.barber_id = %s AND is_active = false
+                                ORDER BY a.appointment_date, a.appointment_time""", (barber_id,))
+            canceled_appointments = cur.fetchall()
 
-        cur.execute("""SELECT working_start_time, working_end_time,
-            break_start_time, break_end_time, working_days
-            FROM barbers WHERE barber_id = %s""", (barber_id,))
-        schedules = cur.fetchall()
+            cur.execute("""SELECT working_start_time, working_end_time,
+                break_start_time, break_end_time, working_days
+                FROM barbers WHERE barber_id = %s""", (barber_id,))
+            schedules = cur.fetchall()
 
-        cur.execute("""SELECT 
-            SUM(CASE WHEN a.appointment_date = CURRENT_DATE THEN h.price ELSE 0 END) AS daily_total,
-            SUM(CASE WHEN date_trunc('week', a.appointment_date) = date_trunc('week', CURRENT_DATE) THEN h.price ELSE 0 END) AS weekly_total,
-            SUM(CASE WHEN date_trunc('month', a.appointment_date) = date_trunc('month', CURRENT_DATE) THEN h.price ELSE 0 END) AS monthly_total,
-            SUM(h.price) AS absolute_total
-            FROM haircuts h 
-            JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
-            JOIN appointments a ON a.barber_id = bh.barber_id
-            WHERE bh.barber_id = %s AND a.is_finished = TRUE;
-        """, (barber_id,))
-        revenues = cur.fetchone()
-        print(f"revenue: {revenues}")
-        cur.execute("""SELECT 
-            COUNT(CASE WHEN appointment_date = CURRENT_DATE THEN 1 END) AS daily_count,
-            COUNT(CASE WHEN date_trunc('week', appointment_date) = date_trunc('week', CURRENT_DATE) THEN 1 END) AS weekly_count,
-            COUNT(CASE WHEN date_trunc('month', appointment_date) = date_trunc('month', CURRENT_DATE) THEN 1 END) AS monthly_count,
-            COUNT(appointment_id) AS total_count
-            FROM appointments 
-            WHERE barber_id = %s AND is_finished = TRUE;
-        """, (barber_id,))
-        total_appointments = cur.fetchone()
+            cur.execute("""SELECT 
+                SUM(CASE WHEN a.appointment_date = CURRENT_DATE THEN h.price ELSE 0 END) AS daily_total,
+                SUM(CASE WHEN date_trunc('week', a.appointment_date) = date_trunc('week', CURRENT_DATE) THEN h.price ELSE 0 END) AS weekly_total,
+                SUM(CASE WHEN date_trunc('month', a.appointment_date) = date_trunc('month', CURRENT_DATE) THEN h.price ELSE 0 END) AS monthly_total,
+                SUM(h.price) AS absolute_total
+                FROM haircuts h 
+                JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
+                JOIN appointments a ON a.barber_id = bh.barber_id
+                WHERE bh.barber_id = %s AND a.is_finished = TRUE;
+            """, (barber_id,))
+            revenues = cur.fetchone()
+            print(f"revenue: {revenues}")
+            cur.execute("""SELECT 
+                COUNT(CASE WHEN appointment_date = CURRENT_DATE THEN 1 END) AS daily_count,
+                COUNT(CASE WHEN date_trunc('week', appointment_date) = date_trunc('week', CURRENT_DATE) THEN 1 END) AS weekly_count,
+                COUNT(CASE WHEN date_trunc('month', appointment_date) = date_trunc('month', CURRENT_DATE) THEN 1 END) AS monthly_count,
+                COUNT(appointment_id) AS total_count
+                FROM appointments 
+                WHERE barber_id = %s AND is_finished = TRUE;
+            """, (barber_id,))
+            total_appointments = cur.fetchone()
+            cur.execute("""SELECT 
+                COUNT(CASE WHEN is_active = FALSE AND is_finished = FALSE THEN 1 END) AS total_canceled_count
+                FROM appointments 
+                WHERE barber_id = %s""", (barber_id,))
+            total_canceled_appointments = cur.fetchone()
+            cur.execute("""SELECT AVG(feedback_star) 
+                FROM feedbacks
+                WHERE barber_id = %s
+            """, (barber_id,))
+            average_rating = cur.fetchone()[0]
+            if average_rating:
+                average_rating = round(average_rating, 1)
+            else:
+                average_rating = 'N/A'
 
-        cur.execute("""SELECT barber_rating FROM barbers
-            WHERE barber_id = %s""", (barber_id,))
-        barber_feedback = cur.fetchone()
+            cur.execute("SELECT feedback_comment FROM feedbacks WHERE barber_id = %s", (barber_id,))
+            feedback_comments_raw = cur.fetchall()
+            feedback_comments = [comment[0] for comment in feedback_comments_raw]
 
-    return render_template("barber-page.html", haircuts=haircuts, appointments=appointments,
-                           finished_appointments=finished_appointments, canceled_appointments=canceled_appointments,
-                           schedules=schedules, revenues=revenues, total_appointments=total_appointments,
-                           barber_feedback=barber_feedback)
+            print(f'feedback comments: {feedback_comments}')
+        return render_template("barber-page.html", haircuts=haircuts, appointments=appointments,
+            finished_appointments=finished_appointments, canceled_appointments=canceled_appointments, schedules=schedules,
+            revenues=revenues, total_appointments=total_appointments, total_canceled_appointments=total_canceled_appointments,
+            average_rating=average_rating, feedback_comments=feedback_comments)
 
 
 @barber_page.route('/add-haircut', methods=['POST'])
