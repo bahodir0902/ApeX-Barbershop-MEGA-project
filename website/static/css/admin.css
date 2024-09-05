@@ -752,3 +752,19 @@ input[type="time"]:focus, input[type="date"]:focus, select:focus {
     background-color: rgb(214, 6, 47); /* Adjusted hover effect */
     transition: 300ms;
 }
+
+#toggle-card-btn, #toggle-card-edit-btn, #toggle-delete-barbershop-btn, #toggle-add-appointment-btn, #toggle-appointments-list-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+#toggle-card-btn, #toggle-card-edit-btn, #toggle-delete-barbershop-btn, #toggle-add-appointment-btn, #toggle-appointments-list-btn {
+    color: #ffffff;
+}
+
+#toggle-card-btn:hover, #toggle-card-edit-btn:hover, #toggle-delete-barbershop-btn:hover, #toggle-add-appointment-btn:hover, #toggle-appointments-list-btn:hover {
+    transform: rotate(90deg);
+    color: #ffffff;
+}

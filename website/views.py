@@ -28,7 +28,7 @@ def locations():
         selected_barbershop = request.form.get('choose')
         session['global_barbershop'] = selected_barbershop
         return redirect(url_for("views.target_haircut"))
-    cur.execute("""SELECT * FROM barbershops""")
+    cur.execute("""SELECT * FROM barbershops ORDER BY barbershop_name""")
     barbershops = cur.fetchall()
 
     return render_template("locations.html", barbershops=barbershops)

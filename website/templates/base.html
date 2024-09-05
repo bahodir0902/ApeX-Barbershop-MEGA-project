@@ -20,22 +20,32 @@
             <li><a href="#">Shop</a></li>
         </ul>
         <ul class="nav-links-logo">
-            <li><a href="/"><img class="logo" alt="Logo" src="{{ url_for('static', filename='images/logo.png') }}"></a></li>
+            <li><a href="/"><img class="logo" alt="Logo" src="{{ url_for('static', filename='images/logo.png') }}"></a>
+            </li>
         </ul>
         <ul class="nav-links-right">
-            <li><a href="https://www.instagram.com"><img class="social-icon" alt="Instagram" src="{{ url_for('static', filename='images/insta.png') }}"></a></li>
-            <li><a href="https://www.facebook.com"><img class="social-icon" alt="Facebook" src="{{ url_for('static', filename='images/facebook.png') }}"></a></li>
-            <li><a href="https://www.twitter.com"><img class="social-icon" alt="X" src="{{ url_for('static', filename='images/x.png') }}"></a></li>
+            <li><a href="https://www.instagram.com"><img class="social-icon" alt="Instagram"
+                                                         src="{{ url_for('static', filename='images/insta.png') }}"></a>
+            </li>
+            <li><a href="https://www.facebook.com"><img class="social-icon" alt="Facebook"
+                                                        src="{{ url_for('static', filename='images/facebook.png') }}"></a>
+            </li>
+            <li><a href="https://www.twitter.com"><img class="social-icon" alt="X"
+                                                       src="{{ url_for('static', filename='images/x.png') }}"></a></li>
         </ul>
         {% if not user.is_authenticated %}
         <ul class="buttons">
-            <li><button type="button" class="login-button" onclick="window.location.href='/login'">Login</button></li>
-            <li><button type="button" class="signup-button" onclick="window.location.href='/register'">Sign Up</button></li>
+            <li>
+                <button type="button" class="login-button" onclick="window.location.href='/login'">Login</button>
+            </li>
+            <li>
+                <button type="button" class="signup-button" onclick="window.location.href='/register'">Sign Up</button>
+            </li>
         </ul>
         {% else %}
         <ul class="dropdown-wrapper">
             <li class="dropdown" role="button">
-                <a href="javascript:void(0)" class="dropbtn">{{ user.first_name }}   <i class='bx bx-user-circle'></i></a>
+                <a href="javascript:void(0)" class="dropbtn">{{ user.first_name }} <i class='bx bx-user-circle'></i></a>
                 <div class="dropdown-content">
                     {% if user.is_barber %}
                     <a href="{{ url_for('views.barber_page_get') }}">Cabinet</a>
@@ -45,7 +55,6 @@
                     <a href="{{ url_for('views.my_orders') }}">My Orders <i class='bx bx-cart'></i></a>
                     {% endif %}
                     <a href="{{ url_for('views.profile') }}">Profile</a>
-                    <a href="{{ url_for('views.settings') }}">Settings</a>
                     <a href="{{ url_for('auth.logout') }}">Logout</a>
                 </div>
             </li>
@@ -54,11 +63,64 @@
     </nav>
 </header>
 
+
 {% block content %}
 
 {% endblock %}
 
 {% block scripts %}
 {% endblock %}
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section links">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">FAQ</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section contact">
+            <h2>Contact Us</h2>
+            <p><i class="fas fa-map-marker-alt"></i> 36 Bo'zbozor 7, Mirzo Ulugbek, Tashkent, Uzbekistan</p>
+            <p><i class="fas fa-phone-alt"></i> +998 93 388 98 97</p>
+            <p><i class="fas fa-envelope"></i> apex.barbershop@gmail.com</p>
+        </div>
+
+        <div class="footer-section social">
+            <h2>Follow Us</h2>
+            <div class="social-icons-footer">
+                <a href="https://www.facebook.com" class="social-icon-footer">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com" class="social-icon-footer">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.twitter.com" class="social-icon-footer">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.t.me" class="social-icon-footer">
+                    <i class="fab fa-telegram"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- New Section: Would you like to become a barber? -->
+        <div class="footer-section become-barber">
+            <h2>Would You Like to Become a Barber?</h2>
+            <p>Join our team of skilled barbers and make your mark in the industry!</p>
+            <a href="/become-barber" class="button-become-barber">Apply Now</a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 Apex BarberShop. All Rights Reserved.</p>
+    </div>
+</footer>
+
 </body>
 </html>

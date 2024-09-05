@@ -72,7 +72,7 @@ def find_barbershop():
                 with connection.cursor() as cur:
                     cur.execute("SELECT * FROM barbers WHERE barbershop_id = %s", (barbershop_id,))
                     barbers = cur.fetchall()
-                    print(f"barber results: {barbers}")
+                    #print(f"barber results: {barbers}")
                     barber_info_html = ""
                     barber_delete_html = ""
                     barber_names_html = '<option value="" disabled selected>Select a barber</option>'
@@ -85,10 +85,10 @@ def find_barbershop():
                                 JOIN  barber_haircuts bh ON b.barber_id = bh.barber_id 
                                 JOIN haircuts h ON h.haircut_id = bh.haircut_id
                                 JOIN barbershops bs ON b.barbershop_id = bs.barbershop_id
-                                WHERE bs.barbershop_id = %s AND b.barber_id = %s;
+                                WHERE bs.barbershop_id = %s AND b.barber_id = %s  AND TRIM(h.haircut_name) <> '';
                             """, (barbershop_id, barber[0]))
                             haircuts = cur.fetchall()
-                            print(f"haircuts: {haircuts}")
+                            #print(f"haircuts: {haircuts}")
                             haircut_list_html = ""
                             for haircut in haircuts:
                                 haircut_list_html += f'''
@@ -536,8 +536,11 @@ def edit_barbershop():
             #print(f"editing barber break end time: {settings_edit_barber_break_end_time}")
             settings_edit_barber_working_days = request.form.getlist('edit-working-days')
             settings_edit_haircut_name = request.form.getlist('edit-barber-haircut_name[]')
+            print(settings_edit_haircut_name)
             settings_edit_haircut_price = request.form.getlist('edit-barber-haircut_price[]')
+            print(settings_edit_haircut_price)
             settings_edit_haircut_description = request.form.getlist('edit-barber-haircut_description[]')
+            print(settings_edit_haircut_description)
             settings_edit_barber_picture = request.files.get('settings-edit-barber-picture')
             edit_skills = []
             for edit_name, edit_price, edit_description in zip(settings_edit_haircut_name, settings_edit_haircut_price, settings_edit_haircut_description):
@@ -557,7 +560,7 @@ def edit_barbershop():
                 barber_id = request.form.get('barber_id_hidden')
                 cur.execute("SELECT * FROM barbers WHERE barber_id = %s", (barber_id,))
                 result = cur.fetchone()
-                print(f"results barber id: {barber_id}, results: {result}")
+               # print(f"results barber id: {barber_id}, results: {result}")
                 if settings_edit_barber_first_name and settings_edit_barber_first_name != result[2]:
                     fields_to_edit['barber_first_name'] = settings_edit_barber_first_name
                 if settings_edit_barber_last_name and settings_edit_barber_last_name != result[3]:
@@ -612,39 +615,30 @@ def edit_barbershop():
                             "SELECT h.haircut_id FROM haircuts h JOIN barber_haircuts bh ON h.haircut_id = bh.haircut_id WHERE bh.barber_id = %s",
                             (barber_id,))
                         existing_haircuts = set(row[0] for row in cur.fetchall())
-
-                        # Update or insert haircuts
+                        print(f"values: {edit_skills}")
                         for values in edit_skills:
-                            cur.execute(
-                                "SELECT haircut_id FROM haircuts WHERE barbershop_id = %s AND haircut_name = %s",
-                                (barbershop_id, values['haircut_name']))
-                            result = cur.fetchone()
+                            # Insert haircuts for the barber
+                            barber_query = """
+                                INSERT INTO haircuts (haircut_name, price, description, barbershop_id)
+                                VALUES (%s, %s, %s, %s)
+                                RETURNING haircut_id
+                            """
+                            cur.execute(barber_query,
+                                        (values['haircut_name'], values['price'], values['description'], barbershop_id))
+                            haircut_id = cur.fetchone()[0]
+                            connection.commit()
+                            # Associate the inserted haircut with the barber
+                            insert_query = """
+                                INSERT INTO barber_haircuts (barber_id, haircut_id)
+                                VALUES (%s, %s)
+                            """
+                            cur.execute(insert_query, (barber_id, haircut_id))
 
-                            if result:
-                                # Update existing haircut
-                                haircut_id = result[0]
-                                cur.execute("UPDATE haircuts SET price = %s, description = %s WHERE haircut_id = %s",
-                                            (values['price'], values['description'], haircut_id))
-                            else:
-                                # Insert new haircut
-                                cur.execute(
-                                    "INSERT INTO haircuts (barbershop_id, haircut_name, price, description) VALUES (%s, %s, %s, %s) RETURNING haircut_id",
-                                    (barbershop_id, values['haircut_name'], values['price'], values['description']))
-                                haircut_id = cur.fetchone()[0]
+                            connection.commit()
 
-                            # Ensure the haircut is linked to this barber
-                            if haircut_id not in existing_haircuts:
-                                cur.execute(
-                                    "INSERT INTO barber_haircuts (barber_id, haircut_id) VALUES (%s, %s) ON CONFLICT DO NOTHING",
-                                    (barber_id, haircut_id))
-                            existing_haircuts.discard(haircut_id)
 
-                        # Remove any haircuts that were unlinked from this barber
-                        for haircut_id in existing_haircuts:
-                            cur.execute("DELETE FROM barber_haircuts WHERE barber_id = %s AND haircut_id = %s",
-                                        (barber_id, haircut_id))
 
-                        connection.commit()
+
                         print("Barber and haircuts updated successfully")
                     except Exception as e:
                         print(f'An error occurred while updating barber information: {e}')

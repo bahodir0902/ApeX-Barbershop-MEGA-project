@@ -15,12 +15,14 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+
 header {
     background-color: rgba(0,0,0, 0.5);
     backdrop-filter: blur(4px);
     padding: 15px 6%;
     position: relative;
     z-index: 1090; /* High z-index to ensure it's above other content */
+    width: 100%;
 }
 
 nav {
@@ -235,5 +237,230 @@ nav {
     .signup-button{
         margin-right: -25px;
 
+    }
+}
+.footer {
+    background-color: #1a1818;
+    color: #f1f1f1;
+    padding: 40px 0;
+    text-align: left;
+    margin-top: 295px;
+    width: 100%;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 0 20px 30px;
+    min-width: 200px;
+}
+
+.footer-section h2 {
+    color: #ffffff;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #b3b3b3;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #b3b3b3;
+    transition: color 0.3s;
+    font-size: 0.9rem;
+}
+
+.footer-section ul li a:hover {
+    color: #ffffff;
+}
+
+.footer-section.contact p i {
+    margin-right: 10px;
+}
+
+.footer-section.contact{
+    margin-right: 80px;
+    min-width: 22%;
+}
+
+.social-icons-footer {
+    display: flex;
+    margin-top: 20px;
+}
+
+.social-icon-footer {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #3b3b3b;
+    color: #ffffff;
+    border-radius: 50%;
+    margin-right: 15px;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+}
+
+.social-icon-footer:hover {
+    background-color: #f1f1f1;
+    color: #2c2c2c;
+}
+
+.become-barber {
+    text-align: center;
+
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: -30px;
+    width: 100%;
+}
+
+.become-barber h2 {
+    margin-bottom: 20px;
+    color: #f1f1f1;
+    font-size: 1.4rem;
+}
+
+.become-barber p {
+    margin-bottom: 25px;
+    color: #ccc;
+    font-size: 1rem;
+}
+
+.button-become-barber {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #e67e22;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+
+.button-become-barber:hover {
+    background-color: #cf6d1d;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: -30px;
+    font-size: 0.9rem;
+    color: #b3b3b3;
+}
+
+@media screen and (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        padding: 0 20px;
+    }
+
+    .footer-section {
+        margin: 0 0 40px;
+        min-width: unset;
+    }
+
+    .footer-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+
+    .footer-section p,
+    .footer-section ul li a {
+        font-size: 0.9rem;
+    }
+
+    .social-icon-footer {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+        margin-right: 12px;
+    }
+
+    .become-barber {
+        margin-top: 20px;
+        padding: 25px;
+    }
+
+    .become-barber h2 {
+        font-size: 1.3rem;
+    }
+
+    .become-barber p {
+        font-size: 0.9rem;
+    }
+
+    .button-become-barber {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 0.9rem;
+        color: #b3b3b3;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1080px) {
+    .footer{
+        margin-top: 500px;
+    }
+    .footer-section {
+        flex-basis: calc(50% - 40px);
+    }
+    .footer-section.links{
+        margin-right: -60px;
+    }
+    .footer-section.contact{
+        font-size: 10px;
+        margin-right: 20px;
+        min-width: 30%;
+    }
+
+    .footer-section.contact p i{
+        margin-left: 8px;
+    }
+
+    .footer-section.contact p, footer-section.links ul a{
+        font-size: 10px;
+    }
+
+    .footer-section.links ul li{
+        margin-top: -10px;
+    }
+    .footer-section.links ul li a {
+        font-size: 10px;
+    }
+
+    .become-barber {
+        flex-basis: 100%;
+    }
+
+    .footer-bottom {
+        margin-top: 40px;
     }
 }

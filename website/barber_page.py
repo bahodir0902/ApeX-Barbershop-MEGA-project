@@ -22,10 +22,10 @@ def get_haircuts():
         barber_id = current_user.barber_id
         print(f"barber id: {barber_id}")
         with connection.cursor() as cur:
-            cur.execute("""SELECT h.haircut_id, h.haircut_name, h.description, h.price 
+            cur.execute("""SELECT DISTINCT h.haircut_id, h.haircut_name, h.description, h.price 
                            FROM haircuts h 
                            JOIN barber_haircuts bh ON bh.haircut_id = h.haircut_id 
-                           WHERE bh.barber_id = %s""", (barber_id,))
+                           WHERE bh.barber_id = %s AND TRIM(h.haircut_name) <> ''""", (barber_id,))
             haircuts = cur.fetchall()
             cur.execute("""SELECT a.appointment_id, a.appointment_time, a.appointment_date,
                 u.first_name, u.last_name, u.phone_number, u.email,
