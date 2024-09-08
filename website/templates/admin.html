@@ -2,11 +2,12 @@
 {% block title %}Manage Barbershops{% endblock %}
 {% block head_links %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin-new.js') }}"></script>
 {% endblock %}
 
 {% block content %}
 <div class="container-wrapper">
+
     <div class="container mt-5" id="manage-barbershops-container">
         <h1>Manage Barbershops</h1>
 
@@ -56,8 +57,7 @@
                 </button>
             </div>
             <div class="card-body" id="edit-card-content">
-                <form id="edit-barbershop-info-form" method="POST"
-                      action="{{ url_for('permissions.find_barbershop') }}">
+                <form id="edit-barbershop-info-form" method="POST" action="/find_barbershop">
                     <div class="form-group">
                         <label for="barbershop-name-search">Barbershop name</label>
                         <input type="text" class="form-control" id="barbershop-name-search" name="barbershop-name"
@@ -66,13 +66,49 @@
                     <button type="submit" class="btn btn-primary">Find Barbershop</button>
                 </form>
                 <div id="search-results" class="mt-3" style="display: none;">
-                    <button class="btn btn-link p-0" id="toggle-search-results-btn1">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <!-- Search results will be populated here -->
+                    <template id="search-result-template">
+                        <div class="search-result-item" data-id="">
+                            <div class="results-header" style="display: flex; justify-content: space-between;">
+                                <span class="barbershop-info"></span>
+                                <button class="btn btn-link p-0 toggle-search-result-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="search-result-content" style="display: none;">
+                                <form id="edit-barbershop-form" enctype="multipart/form-data" method="POST"
+                                      action="/edit-barbershop">
+                                    <div class="form-group">
+                                        <label for="edit-barbershop-name">Barbershop name</label>
+                                        <input type="text" class="form-control" id="edit-barbershop-name"
+                                               name="edit-barbershop-name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit-barbershop-location">Barbershop location</label>
+                                        <input type="text" class="form-control" id="edit-barbershop-location"
+                                               name="edit-barbershop-location">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit-barbershop-phone-number">Barbershop owner's phone
+                                            number</label>
+                                        <input type="tel" class="form-control" id="edit-barbershop-phone-number"
+                                               name="edit-barbershop-phone-number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit-barbershop-picture">Barbershop picture</label>
+                                        <input type="file" class="form-control" id="edit-barbershop-picture"
+                                               name="edit-barbershop-picture">
+                                    </div>
+                                    <input type="hidden" name="barbershop_id" value="">
+
+
+                                    <button type="submit" class="btn btn-primary">Confirm Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </template>
                 </div>
-            </div> <!-- Close card-body -->
-        </div> <!-- Close card -->
+            </div>
+        </div>
 
         <!-- Delete Barbershops Section -->
         <div class="card mb-3">
@@ -116,27 +152,36 @@
             </div>
             <div class="card-body" id="add-appointment-content" style="display: none;">
                 <form id="add-appointment-form" method="POST" action="{{ url_for('permissions.add_appointment') }}">
-                    <div class="form-group">
-                        <label for="add-appointment-barbershop-name">Barbershop name</label>
-                        <input type="text" class="form-control" id="add-appointment-barbershop-name" name="add-appointment-barbershop-name" required>
 
-                        <div id="barbershop-suggestions" class="suggestions"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="barber-name">Barber Name</label>
-                        <input type="text" class="form-control" id="barber-name" name="barber-name" required>
+                    <label for="select-barbershop-to-add-appointment">Choose barbershop</label>
+                    <select class="form-control" id="select-barbershop-to-add-appointment" name="select-barbershop-to-add-appointment"
+                            style="margin-bottom: 15px;">
+                        <option value="" disabled selected>Select a barbershop</option>
+                        {% for barbershop in barbershops %}
+                        <option value="{{ barbershop[0] }}">{{ barbershop[2] }}</option>
+                        {% endfor %}
+                    </select>
 
-                        <div id="barber-suggestions" class="suggestions"></div>
-                    </div>
+                    <label for="select-barber-to-add-appointment">Choose barber</label>
+                    <select class="form-control" id="select-barber-to-add-appointment" name="select-barber-to-add-appointment">
+                        <option value="" disabled selected>Select a barber</option>
+                    </select>
+
+                    <!-- Hidden fields for storing IDs and names -->
+                    <input type="hidden" id="barbershop-id-add-appointment" name="barbershop_id">
+                    <input type="hidden" id="barber-id-add-appointment" name="barber_id">
+                    <input type="hidden" id="haircut-id-add-appointment" name="haircut_id">
+
                     <div class="form-group">
                         <label for="customer-first-name">Customer First Name</label>
-                        <input type="text" class="form-control" id="customer-first-name" name="customer-first-name" required>
+                        <input type="text" class="form-control" id="customer-first-name" name="customer-first-name"
+                               required>
                     </div>
                     <div class="form-group">
                         <label for="customer-last-name">Customer Last Name</label>
                         <input type="text" class="form-control" id="customer-last-name" name="customer-last-name">
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="customer-phone-number">Customer Phone Number</label>
                         <input type="tel" class="form-control" id="customer-phone-number" name="customer-phone-number">
                     </div>
@@ -163,39 +208,390 @@
                         <input type="number" class="form-control" id="duration-minutes" name="duration_minutes"
                                value="45" required>
                     </div>
-                    <!-- Hidden fields for storing IDs and names -->
-                        <input type="hidden" id="barbershop-id-hidden" name="barbershop_id">
-                        <input type="hidden" id="barber-id-hidden" name="barber_id">
+
                     <button type="submit" class="btn btn-primary">Add Appointment</button>
                 </form>
             </div>
         </div>
 
-        <!-- List Appointments Section -->
+        <!--Upcoming appointments section-->
         <div class="card mb-3">
             <div class="card-header d-flex justify-content-between align-items-center">
-                Appointments List
-                <button class="btn btn-link p-0" id="toggle-appointments-list-btn">
+                Upcoming Appointments
+                <button class="btn btn-link p-0" id="toggle-upcoming-appointments-list-btn">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
-            <div class="card-body" id="appointments-list-content" style="display: none;">
+            <div class="card-body" id="upcoming-appointments-list-content" style="display: none;">
                 <!-- Appointments will be loaded here via AJAX -->
                 <div id="appointments-list"></div>
 
             </div>
         </div>
+
+
+        <!--Finished appointments section -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Finished Appointments
+                <button class="btn btn-link p-0" id="toggle-finished-appointments-list-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="finished-appointments-list-content" style="display: none;">
+                <!-- Appointments will be loaded here via AJAX -->
+                <div id="finished-appointments-list"></div>
+
+            </div>
+        </div>
+
+        <!--Canceled appointments section -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Canceled Appointments
+                <button class="btn btn-link p-0" id="toggle-canceled-appointments-list-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="canceled-appointments-list-content" style="display: none;">
+                <!-- Appointments will be loaded here via AJAX -->
+                <div id="canceled-appointments-list"></div>
+
+            </div>
+        </div>
+
+
     </div>
+
+    <div class="container" id="manage-barbers-container">
+        <h1>Manage barbers</h1>
+
+        <!--Add barber section-->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Add barbers
+                <button class="btn btn-link p-0" id="toggle-add-barbers-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="add-barbers-content" style="display: none;">
+                <form action="/add-barber" method="post" enctype="multipart/form-data" onsubmit="return validateWeekdays()">
+                    <select class="form-control" id="select-barbershop-to-add-barber" name="select-barbershop"
+                            onchange="setBarbershopId()" required>
+                        <option value="" disabled selected>Select a barbershop</option>
+                        {% for barbershop in barbershops %}
+                        <option value="{{ barbershop[0] }}">{{ barbershop[2] }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" id="barbershop-id" name="barbershop_id_hidden" value="">
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-first-name">Barber first name</label>
+                        <input type="text" class="form-control-settings" id="add-barber-first-name"
+                               name="add-barber-first-name" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-last-name">Barber last name</label>
+                        <input type="text" class="form-control-settings" id="add-barber-last-name"
+                               name="add-barber-last-name" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-phone-number">Barber phone number</label>
+                        <input type="tel" class="form-control-settings" id="add-barber-phone-number"
+                               name="add-barber-phone-number" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-email">Barber email</label>
+                        <input type="email" class="form-control-settings" id="add-barber-email"
+                               name="add-barber-email" value="">
+
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-experienced-years">Experienced years</label>
+                        <input type="number" class="form-control-settings" id="add-barber-experienced-years"
+                               name="add-barber-experienced-years" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-working-start-time">Working start time</label>
+                        <input type="time" class="form-control-settings" id="add-barber-working-start-time"
+                               name="add-barber-working-start-time" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-working-end-time">Working end time</label>
+                        <input type="time" class="form-control-settings" id="add-barber-working-end-time"
+                               name="add-barber-working-end-time" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-break-start-time">Break start time</label>
+                        <input type="time" class="form-control-settings" id="add-barber-break-start-time"
+                               name="add-barber-break-start-time" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-break-end-time">Break end time</label>
+                        <input type="time" class="form-control-settings" id="add-barber-break-end-time"
+                               name="add-barber-break-end-time" value="" required>
+                    </div>
+
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-working-days">Working days</label>
+                        <div class="add-barber-working-days" id="add-barber-working-days" style="margin-top: 20px;">
+                            <div>
+                                <input type="checkbox" id="monday" name="add-working-days" value="Monday">
+                                <label class="custom-checkbox" for="monday">Monday</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="tuesday" name="add-working-days" value="Tuesday">
+                                <label class="custom-checkbox" for="tuesday">Tuesday</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="wednesday" name="add-working-days" value="Wednesday">
+                                <label class="custom-checkbox" for="wednesday">Wednesday</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="thursday" name="add-working-days" value="Thursday">
+                                <label class="custom-checkbox" for="thursday">Thursday</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="friday" name="add-working-days" value="Friday">
+                                <label class="custom-checkbox" for="friday">Friday</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="saturday" name="add-working-days" value="Saturday">
+                                <label class="custom-checkbox" for="saturday">Saturday</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="sunday" name="add-working-days" value="Sunday">
+                                <label class="custom-checkbox" for="sunday">Sunday</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-picture">Barber picture</label>
+                        <input type="file" class="form-control-settings" id="add-barber-picture"
+                               name="add-barber-picture">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add barber</button>
+                </form>
+            </div>
+        </div>
+
+        <!--Edit barber section-->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Edit barbers
+                <button class="btn btn-link p-0" id="toggle-edit-barbers-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="edit-barbers-content" style="display: none;">
+                <form action="/edit-barber" method="post" enctype="multipart/form-data" onsubmit="return validateEditWeekdays()">
+                    <label for="select-barbershop-to-edit-barber">Choose barbershop</label>
+                    <select class="form-control" id="select-barbershop-to-edit-barber" name="select-barbershop"
+                            style="margin-bottom: 15px;" required>
+                        <option value="" disabled selected>Select a barbershop</option>
+                        {% for barbershop in barbershops %}
+                        <option value="{{ barbershop[0] }}">{{ barbershop[2] }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="select-barber-to-edit">Choose barber</label>
+                    <select class="form-control" id="select-barber-to-edit" name="select-barber" required>
+                        <option value="" disabled selected>Select a barber</option>
+                    </select>
+
+                    <input type="hidden" id="barbershop-id-edit" name="barbershop_id_hidden" value="">
+                    <input type="hidden" id="barber-id" name="barber_id_hidden" value="">
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-first-name">Barber first name</label>
+                        <input type="text" class="form-control-settings" id="edit-barber-first-name"
+                               name="edit-barber-first-name" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-last-name">Barber last name</label>
+                        <input type="text" class="form-control-settings" id="edit-barber-last-name"
+                               name="edit-barber-last-name" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-phone-number">Barber phone number</label>
+                        <input type="tel" class="form-control-settings" id="edit-barber-phone-number"
+                               name="edit-barber-phone-number" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-email">Barber email</label>
+                        <input type="email" class="form-control-settings" id="edit-barber-email"
+                               name="edit-barber-email" value="">
+
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-experienced-years">Experienced years</label>
+                        <input type="number" class="form-control-settings" id="edit-barber-experienced-years"
+                               name="edit-barber-experienced-years" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-working-start-time">Working start time</label>
+                        <input type="time" class="form-control-settings" id="edit-barber-working-start-time"
+                               name="edit-barber-working-start-time" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-working-end-time">Working end time</label>
+                        <input type="time" class="form-control-settings" id="edit-barber-working-end-time"
+                               name="edit-barber-working-end-time" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-break-start-time">Break start time</label>
+                        <input type="time" class="form-control-settings" id="edit-barber-break-start-time"
+                               name="edit-barber-break-start-time" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="add-barber-break-end-time">Break end time</label>
+                        <input type="time" class="form-control-settings" id="edit-barber-break-end-time"
+                               name="edit-barber-break-end-time" value="" required>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-working-days">Working days</label>
+                        <div class="edit-barber-working-days" id="edit-barber-working-days">
+                            {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                            %}
+                            <div>
+                                <input type="checkbox" id="{{ day.lower() }}_edit" name="edit-working-days"
+                                       value="{{ day }}">
+                                <label class="custom-checkbox" for="{{ day.lower() }}_edit">{{ day }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-group-settings">
+                        <label for="edit-barber-picture">Barber picture</label>
+                        <input type="file" class="form-control-settings" id="edit-barber-picture"
+                               name="edit-barber-picture">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!--Delete barber section-->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Delete barbers
+                <button class="btn btn-link p-0" id="toggle-delete-barbers-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body" id="delete-barbers-content" style="display: none;">
+                <label for="select-barbershop-to-delete-barber">Choose barbershop</label>
+                <select class="form-control" id="select-barbershop-to-delete-barber" name="select-barbershop-delete"
+                        style="margin-bottom: 15px;">
+                    <option value="" disabled selected>Select a barbershop</option>
+                    {% for barbershop in barbershops %}
+                    <option value="{{ barbershop[0] }}">{{ barbershop[2] }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="select-barber-to-delete">Choose barber</label>
+                <select class="form-control" id="select-barber-to-delete" name="select-barber">
+                    <option value="" disabled selected>Select a barber</option>
+                </select>
+
+
+                <div class="delete-barber-container">
+                    <form action="/delete-barber" method="post">
+                        <p style="margin-top: 50px;">Note that after deleting this barber all its data, including its
+                            statistics in the system
+                            will be <strong>deleted permanently.</strong></p>
+                        <input type="hidden" id="barbershop-id-delete" name="barbershop_id_hidden" value="">
+                        <input type="hidden" id="barber-id-delete" name="barber_id_hidden" value="">
+                        <button type="submit" id="delete-barber-btn" class="delete-barber-btn"
+                                style="margin-top: 25px; margin-left: 10px; background-color: grey; cursor: not-allowed;"
+                                disabled>Delete barber
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 {% endblock %}
 {% block scripts %}
 <script>
     var findBarbershop = "{{ url_for('permissions.find_barbershop') }}";
     var findDeleteBarbershop = "{{ url_for('permissions.find_barbershop_to_delete') }}";
-    var listAppointments = "{{ url_for('permissions.list_appointments') }}";
+    var listUpcomingAppointments = "{{ url_for('permissions.list_upcoming_appointments') }}";
+    var listFinishedAppointments = "{{ url_for('permissions.list_finished_appointments') }}";
+    var listCanceledAppointments = "{{ url_for('permissions.list_canceled_appointments') }}";
     var deleteAppointments = "url_for('permissions.delete_appointment')";
     var getAllHaircuts = '/get-all-haircuts';
     var deleteBarber = '/delete_barber';
 
+
+    function setBarbershopId() {
+    var barbershopSelect = document.getElementById('select-barbershop-to-add-barber');
+    var selectedBarbershopId = barbershopSelect.value;
+
+    document.getElementById('barbershop-id').value = selectedBarbershopId;
+}
+    function validateWeekdays() {
+    // Get all checkboxes with name 'add-working-days'
+    const checkboxes = document.querySelectorAll('input[name="add-working-days"]');
+
+    // Check if any of the checkboxes are checked
+    let atLeastOneChecked = false;
+    for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            atLeastOneChecked = true;
+            break;
+        }
+    }
+
+    // If no checkbox is checked, show an alert and return false to prevent form submission
+    if (!atLeastOneChecked) {
+        alert("Please select at least one working day.");
+        return false;
+    }
+
+    // If at least one checkbox is checked, allow form submission
+    return true;
+    }
+
+    function validateEditWeekdays() {
+    const checkboxes = document.querySelectorAll('input[name="edit-working-days"]');
+    let atLeastOneChecked = false;
+
+    checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked) {
+            atLeastOneChecked = true;
+        }
+    });
+
+    if (!atLeastOneChecked) {
+        alert("Please select at least one working day.");
+        return false;  // Prevent form submission
+    }
+
+    return true;  // Allow form submission
+}
 </script>
 {% endblock %}

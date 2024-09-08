@@ -49,8 +49,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Here you would typically send the data to your server
-            console.log('Rating:', rating);
-            console.log('Feedback:', feedback);
+           // Send data using AJAX
+            fetch('/leave-feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'rating': rating,
+                    'feedback': feedback,
+                    'barber_id': document.getElementById('barber-id').value,
+                    'appointment_id': document.getElementById('appointment-id').value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/my-orders-get';
+                } else {
+                    alert('There was an error submitting your feedback. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your feedback. Please try again.');
+            });
 
             // Simulating form submission
             alert('Thank you for your feedback!');
@@ -68,24 +91,38 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.feedback-form').forEach(initializeForm);
 
     // Handle feedback deletion
-    document.querySelectorAll('.delete-button').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const form = this.closest('.feedback-form');
+document.querySelectorAll('.delete-button').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const form = this.closest('.feedback-form');
+        const appointmentId = form.querySelector('input[name="appointment_id"]').value;
+        const barberId = form.querySelector('input[name="barber_id"]').value;
 
-            // Here you would typically send a delete request to your server
-            // For demonstration, we'll just reset the form
-            resetForm(form);
-
-            // Replace delete button with submit button
-            const submitButton = document.createElement('button');
-            submitButton.type = 'submit';
-            submitButton.className = 'feedback-button';
-            submitButton.textContent = 'Submit';
-            this.parentNode.replaceChild(submitButton, this);
-
-            // Re-enable form inputs
-            form.querySelectorAll('input, textarea').forEach(input => input.disabled = false);
-        });
+        if (confirm('Are you sure you want to delete this feedback?')) {
+            fetch('/delete-feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'appointment_id': appointmentId,
+                    'barber_id': barberId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to '/my-orders-get' after successful deletion
+                    window.location.href = '/my-orders-get';
+                } else {
+                    alert('There was an error deleting your feedback. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error deleting your feedback. Please try again.');
+            });
+        }
     });
+});
 });

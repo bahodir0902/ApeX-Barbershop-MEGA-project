@@ -42,9 +42,10 @@
                                         <input type="radio" id="star1-{{ loop.index }}" name="rating" value="1"/>
                                         <label for="star1-{{ loop.index }}"></label>
                                     </div>
-                                    <input type="hidden" id="selected_rating-{{ loop.index }}" name="rating" value="">
+                                    <input type="hidden" id="selected_rating" name="rating" value="">
+                                    <input type="hidden" name="barber_id" id="barber-id" value="{{ appointment[10] }}">
                                     <input type="hidden" name="barber_id" value="{{ appointment[10] }}">
-                                    <input type="hidden" name="appointment_id" value="{{ appointment[13] }}">
+                                    <input type="hidden" name="appointment_id" id="appointment-id" value="{{ appointment[13] }}">
                                     <textarea name="feedback" placeholder="Leave feedback about your appointment"></textarea>
                                     <button type="submit" class="feedback-button">Submit</button>
                                 </form>

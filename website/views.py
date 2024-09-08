@@ -472,36 +472,27 @@ def my_orders():
             print(f"appointments: {appointments}")
         return render_template("my-orders.html", appointments=appointments)
 
+
 @views.route('/leave-feedback', methods=['POST'])
+@login_required
 def leave_feedback():
     if request.method == 'POST':
-        with connection.cursor() as cur:
-            star = request.form.get('rating')
-            text = request.form.get('feedback')
-            barber_id = request.form.get('barber_id')
-            appointment_id = request.form.get('appointment_id')
-            print(f"stars: {star}, text: {text}")
+        star = request.form.get('rating')
+        text = request.form.get('feedback')
+        barber_id = request.form.get('barber_id')
+        appointment_id = request.form.get('appointment_id')
+        try:
+            with connection.cursor() as cur:
+                cur.execute("""INSERT INTO feedbacks(appointment_id, barber_id, customer_id, feedback_star, feedback_comment)
+                            VALUES(%s, %s, %s, %s, %s)""", (appointment_id, barber_id, current_user.id, star, text))
+                connection.commit()
 
-            cur.execute("""INSERT INTO feedbacks(appointment_id, barber_id, customer_id, feedback_star, feedback_comment)
-                        VALUES(%s, %s, %s, %s, %s)""", (appointment_id, barber_id, current_user.id, star, text))
-            cur.execute("""SELECT bs.barbershop_name, b.barber_first_name, b.barber_last_name,
-                    h.haircut_name, a.appointment_date, 
-                    a.appointment_time, a.duration_minutes, a.is_active, 
-                    a.is_finished, a.user_comment, a.barber_id, 
-                    f.feedback_star, f.feedback_comment, a.appointment_id
-                    FROM appointments a
-                    JOIN barbershops bs ON a.barbershop_id = bs.barbershop_id
-                    JOIN barbers b ON a.barber_id = b.barber_id
-                    JOIN haircuts h ON a.haircut_id = h.haircut_id
-                    LEFT JOIN feedbacks f ON a.barber_id = f.barber_id 
-                    AND a.customer_id = f.customer_id AND a.appointment_id = f.appointment_id
-                    WHERE a.customer_id = %s
-                    ORDER BY a.is_finished ASC, a.is_active DESC, a.appointment_date, a.appointment_time
-               """, (current_user.id,))
-            connection.commit()
-            appointments = cur.fetchall()
-            print(f"appointments POST: {appointments}")
-        return redirect(url_for('views.my_orders_get', appointments=appointments))
+            return flask_jsonify({"success": True, "message": "Feedback submitted successfully"})
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            return flask_jsonify({"success": False, "message": "Error submitting feedback"}), 500
+
+    return flask_jsonify({"success": False, "message": "Invalid request method"}), 405
 
 
 @views.route('/delete-feedback', methods=['POST'])
@@ -510,12 +501,16 @@ def delete_feedback():
     if request.method == 'POST':
         appointment_id = request.form.get('appointment_id')
         barber_id = request.form.get('barber_id')
-        with connection.cursor() as cur:
-            cur.execute("""DELETE FROM feedbacks WHERE appointment_id = %s AND barber_id = %s AND customer_id = %s""",
-                        (appointment_id, barber_id, current_user.id))
-            connection.commit()
-        return redirect(url_for('views.my_orders_get'))
-
+        try:
+            with connection.cursor() as cur:
+                cur.execute("""DELETE FROM feedbacks WHERE appointment_id = %s AND barber_id = %s AND customer_id = %s""",
+                            (appointment_id, barber_id, current_user.id))
+                connection.commit()
+            return flask_jsonify({"success": True, "message": "Feedback deleted successfully"})
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            return flask_jsonify({"success": False, "message": "Error deleting feedback"}), 500
+    return flask_jsonify({"success": False, "message": "Invalid request method"}), 405
 
 @views.route('/administration')
 @login_required
@@ -523,11 +518,18 @@ def admin():
     with connection.cursor() as cur:
         cur.execute("""SELECT is_owner FROM users WHERE id = %s""", (current_user.id,))
         result = cur.fetchone()
+        cur.execute("""SELECT * FROM barbershops ORDER BY barbershop_name, address""")
+        barbershops_raw = cur.fetchall()
+        barbershops = [barbershop for barbershop in barbershops_raw]
+
+        cur.execute("""SELECT * FROM barbers ORDER BY barber_first_name, barber_last_name""")
+        barbers_raw = cur.fetchall()
+        barber = [barber for barber in barbers_raw]
+
     if result[0]:
-        return render_template("admin.html")
+        return render_template("admin.html", barbershops=barbershops, barbers=barber)
     else:
         return redirect(url_for('views.home'))
-
 
 
 @views.route('/barber', methods=['POST'])
