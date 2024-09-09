@@ -80,7 +80,6 @@ def barbers():
         cur.execute("SELECT feedback_star, feedback_comment FROM feedbacks WHERE barber_id = %s", (barber[0],))
         feedback_raw = cur.fetchall()
         feedbacks = [comment for comment in feedback_raw]
-        print(feedbacks)
     return render_template("barbers.html", barbers=barbers_list, feedback_comments=feedbacks)
 
 
@@ -131,7 +130,6 @@ def hours():
     cur.execute("""SELECT appointment_time FROM appointments WHERE barber_id = %s AND appointment_date = %s 
     AND is_finished = false AND is_active = true""", (barber_id, day))
     booked_slots = [row[0] for row in cur.fetchall()]
-    print(f"booked slots: {booked_slots}")
 
     available_hours = []
     current_time = working_start_time
@@ -194,7 +192,6 @@ def book_now():
         time = session.get('time')
         comment = request.form.get('comment')
         duration = 45
-        print(f"barbershop: {selected_barbershop[0]}, barber: {selected_barber[0]}, haircut: {selected_haircut[0]}, day: {day}, time: {time}")
         cur.execute("SELECT COUNT(*) FROM appointments WHERE customer_id = %s AND appointment_date = %s AND appointment_time = %s AND is_finished = false AND is_active = true", (current_user.id, day, time))
         result = cur.fetchone()[0]
         if result == 0:
@@ -219,9 +216,7 @@ def profile():
             privacy = request.form.get('privacy')
 
             current_password = session.get('current_password')
-            print(current_password)
             new_password = session.get('new_password')
-            print(new_password)
 
             fields_to_update = {}
             if first_name != current_user.first_name:
@@ -258,7 +253,6 @@ def profile():
                     except Exception as e:
                         print(f"File saving or reading error: {e}")
                         return flask_jsonify(success=False, errors=["Error saving or reading the file."])
-            print(fields_to_update)
             if fields_to_update:
                 try:
                     with connection.cursor() as cur:
@@ -279,15 +273,12 @@ def profile():
             phone_number = request.form.get('phone_number')
             privacy = request.form.get('privacy')
             current_password = session.get('current_password')
-            print(current_password)
             new_password = session.get('new_password')
-            print(new_password)
             with connection.cursor() as cur:
                 cur.execute("SELECT barber_id FROM users WHERE id = %s", (current_user.id,))
                 barber_id = cur.fetchone()
                 cur.execute("SELECT * FROM barbers WHERE barber_id = %s", (barber_id,))
                 result = cur.fetchone()
-                print(f"result: {result}")
             fields_for_user = {}
             fields_for_barber = {}
             if first_name != result[2]:
@@ -412,32 +403,18 @@ def settings():
 @views.route('/change_password', methods=['POST'])
 @login_required
 def change_password():
-    print('Hello World')
     current_password = request.form.get('current_password')
     new_password = request.form.get('new_password')
     confirm_new_password = request.form.get('confirm_new_password')
-
-    print("Current Password:", current_password)
-    print("New Password:", new_password)
-    print("Confirm New Password:", confirm_new_password)
-
     errors = []
 
-    # Verify the current password
     if not check_password_hash(current_user.password, current_password):
         errors.append('Current password is incorrect.')
-        print("Current password is incorrect.")
     elif new_password != confirm_new_password:
         errors.append('New passwords do not match.')
-        print("New passwords do not match.")
     else:
         session['current_password'] = current_password
         session['new_password'] = new_password
-
-        # Update the password in the database
-        """new_password_hash = generate_password_hash(new_password)
-        cur.execute("UPDATE users SET password = %s WHERE id = %s", (new_password_hash, current_user.id))
-        connection.commit()"""
 
         return flask_jsonify(success=True, message='Password updated successfully.')
 
@@ -469,7 +446,6 @@ def my_orders():
                                 ORDER BY a.is_finished ASC, a.is_active DESC, a.appointment_date, a.appointment_time
                            """, (current_user.id,))
             appointments = cur.fetchall()
-            print(f"appointments: {appointments}")
         return render_template("my-orders.html", appointments=appointments)
 
 
