@@ -26,7 +26,7 @@
                 <div class="about-info">
                     {% if feedback_comments %}
                     {% for comment in feedback_comments %}
-                    <p>{{ loop.index }}. {{ comment }}</p><br>
+                    <p>{{ loop.index }}. {{ comment[0] }}/5.0 ⭐. {{ comment[1] }}</p><br>
                     {% endfor %}
                     {% else %}
                     <p>No feedback available.</p>

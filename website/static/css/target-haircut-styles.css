@@ -82,23 +82,120 @@ body {
     opacity: 1;
 }
 
+/* Updated about-info styles for larger size */
 .about-info {
-    display: none;
+    display: none; /* Hidden by default */
     position: absolute;
-    top: 100%; /* Position below the button */
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
+    top: 50%; /* Start at 50% from the top */
+    left: 50%; /* Start at 50% from the left */
+    transform: translate(-50%, -50%); /* Center the container */
+    background-color: rgba(0, 0, 0, 0.8); /* Dark background with transparency */
+    color: white; /* White text for contrast */
     padding: 10px;
-    width: 200px; /* Adjust size as needed */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 100; /* Ensure it appears above other elements */
+    height: auto; /* Larger height for more content */
+    min-width: 150%; /* Prevent from going outside the card */
+    max-height: auto; /* Prevent overflow beyond the card */
+    overflow-y: auto; /* Add scroll if content is too long */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* Heavier shadow for emphasis */
+    z-index: 10; /* Ensure it appears on top of other elements */
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    transition: all 0.3s ease;
 }
+
+/* Show about-info on hover */
+.image-wrapper:hover .about-info {
+    display: block; /* Display the about-info when hovering on the image-wrapper */
+}
+
+/* Optional hover effect for smooth appearance */
+.about-info {
+    opacity: 0;
+    transform: translate(-50%, -55%); /* Start a bit higher for animation effect */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.image-wrapper:hover .about-info {
+    opacity: 1;
+    transform: translate(-50%, -50%); /* Move into the centered position */
+}
+
+/* Adjust the 'About' button positioning */
+.about {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #c8a47e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px; /* Slightly larger button */
+    cursor: pointer;
+    z-index: 5; /* Above image, but below about-info */
+}
+
+.about:hover {
+    background-color: #d9b18c;
+}
+
+
+
+
+/* Adjust the 'About' button positioning */
+.about {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #c8a47e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    z-index: 5; /* Above image, but below about-info */
+}
+
+.about:hover {
+    background-color: #d9b18c;
+}
+
+.about {
+    position: absolute;
+    top: -13px;
+    right: -13px;
+    padding: 4px 8px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.about:hover {
+    background-color: #d9b18c;
+}
+
+.about:active {
+    transform: translateY(0);
+}
+
+.about:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(200, 164, 126, 0.5);
+}
+
+/* Show the about-info when hovering over the about-container */
 
 .about:hover + .about-info {
     display: block;
 }
 
+
+.info {
+    width: 100%;
+    text-align: center;
+    color: white;
+    margin-bottom: 10px;
+}
 
 
 .image-wrapper {
@@ -133,27 +230,6 @@ body {
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
-}
-.about {
-    position: absolute;
-    top: -13px;
-    right: -13px;
-    padding: 4px 8px;
-    font-size: 14px;
-    border-radius: 5px;
-}
-
-.about:hover {
-    background-color: #d9b18c;
-}
-
-.about:active {
-    transform: translateY(0);
-}
-
-.about:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(200, 164, 126, 0.5);
 }
 
 .info {

@@ -63,7 +63,7 @@ def barbers():
         WHERE h.haircut_name = %s AND bs.barbershop_id = %s; """, (haircut, barbershop))
     barbers = cur.fetchall()
     barbers_list = []
-    feedback_comments = []
+    feedbacks = []
     for barber in barbers:
         cur.execute("""SELECT AVG(feedback_star) 
                    FROM feedbacks
@@ -77,11 +77,11 @@ def barbers():
         barber_with_rating = barber + (average_rating,)
         barbers_list.append(barber_with_rating)
 
-        cur.execute("SELECT feedback_comment FROM feedbacks WHERE barber_id = %s", (barber[0],))
-        feedback_comments_raw = cur.fetchall()
-        feedback_comments = [comment[0] for comment in feedback_comments_raw]
-        print(feedback_comments)
-    return render_template("barbers.html", barbers=barbers_list, feedback_comments=feedback_comments)
+        cur.execute("SELECT feedback_star, feedback_comment FROM feedbacks WHERE barber_id = %s", (barber[0],))
+        feedback_raw = cur.fetchall()
+        feedbacks = [comment for comment in feedback_raw]
+        print(feedbacks)
+    return render_template("barbers.html", barbers=barbers_list, feedback_comments=feedbacks)
 
 
 @views.route('/locations/target-haircut/barbers/available-days/', methods=['GET', 'POST'])
