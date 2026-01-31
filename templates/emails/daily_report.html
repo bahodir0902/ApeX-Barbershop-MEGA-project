@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Report</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px; background: linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%); border-radius: 12px 12px 0 0;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600; text-align: center;">
+                                📊 Daily Report
+                            </h1>
+                            <p style="margin: 10px 0 0; color: rgba(255,255,255,0.9); font-size: 16px; text-align: center;">
+                                {{ barbershop.name }} - {{ date }}
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Stats Cards -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="width: 50%; padding: 10px;">
+                                        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #e8f5e9; border-radius: 8px; text-align: center;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <span style="color: #2e7d32; font-size: 32px; font-weight: 700;">{{ total_appointments }}</span><br>
+                                                    <span style="color: #4caf50; font-size: 14px;">Total Appointments</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 50%; padding: 10px;">
+                                        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #e3f2fd; border-radius: 8px; text-align: center;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <span style="color: #1565c0; font-size: 32px; font-weight: 700;">{{ completed_appointments }}</span><br>
+                                                    <span style="color: #2196f3; font-size: 14px;">Completed</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; padding: 10px;">
+                                        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #ffebee; border-radius: 8px; text-align: center;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <span style="color: #c62828; font-size: 32px; font-weight: 700;">{{ cancelled_appointments }}</span><br>
+                                                    <span style="color: #f44336; font-size: 14px;">Cancelled</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 50%; padding: 10px;">
+                                        <table role="presentation" style="width: 100%; border-collapse: collapse; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; text-align: center;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <span style="color: #ffffff; font-size: 32px; font-weight: 700;">${{ revenue }}</span><br>
+                                                    <span style="color: rgba(255,255,255,0.9); font-size: 14px;">Revenue</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 40px; background-color: #f8f9fa; border-radius: 0 0 12px 12px; border-top: 1px solid #e9ecef;">
+                            <p style="margin: 0 0 10px; color: #666666; font-size: 14px; text-align: center;">
+                                View full analytics in your <a href="#" style="color: #764ba2; text-decoration: none;">admin dashboard</a>
+                            </p>
+                            <p style="margin: 0; color: #999999; font-size: 12px; text-align: center;">
+                                © {{ year }} ApeX Barbershop. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
