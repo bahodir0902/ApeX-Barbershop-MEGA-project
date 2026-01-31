@@ -1,0 +1,168 @@
+# Kubernetes Deployment for ApeX Barbershop API
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apex-api
+  namespace: apex-barbershop
+  labels:
+    app: apex-barbershop
+    component: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apex-barbershop
+      component: api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: apex-barbershop
+        component: api
+    spec:
+      containers:
+        - name: api
+          image: apex-barbershop-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: apex-config
+            - secretRef:
+                name: apex-secrets
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health/live/
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready/
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: static-volume
+              mountPath: /app/staticfiles
+            - name: media-volume
+              mountPath: /app/media
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: apex-static-pvc
+        - name: media-volume
+          persistentVolumeClaim:
+            claimName: apex-media-pvc
+---
+# API Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: apex-api-service
+  namespace: apex-barbershop
+  labels:
+    app: apex-barbershop
+    component: api
+spec:
+  selector:
+    app: apex-barbershop
+    component: api
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+  type: ClusterIP
+---
+# Celery Worker Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apex-celery-worker
+  namespace: apex-barbershop
+  labels:
+    app: apex-barbershop
+    component: celery-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apex-barbershop
+      component: celery-worker
+  template:
+    metadata:
+      labels:
+        app: apex-barbershop
+        component: celery-worker
+    spec:
+      containers:
+        - name: celery-worker
+          image: apex-barbershop-api:latest
+          command: ["celery", "-A", "config", "worker", "-l", "info", "--concurrency=4"]
+          envFrom:
+            - configMapRef:
+                name: apex-config
+            - secretRef:
+                name: apex-secrets
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+# Celery Beat Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apex-celery-beat
+  namespace: apex-barbershop
+  labels:
+    app: apex-barbershop
+    component: celery-beat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apex-barbershop
+      component: celery-beat
+  template:
+    metadata:
+      labels:
+        app: apex-barbershop
+        component: celery-beat
+    spec:
+      containers:
+        - name: celery-beat
+          image: apex-barbershop-api:latest
+          command: ["celery", "-A", "config", "beat", "-l", "info", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
+          envFrom:
+            - configMapRef:
+                name: apex-config
+            - secretRef:
+                name: apex-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"

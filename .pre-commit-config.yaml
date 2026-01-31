@@ -1,0 +1,71 @@
+# Pre-commit hooks configuration for ApeX Barbershop API
+# Install: pip install pre-commit && pre-commit install
+
+repos:
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: check-case-conflict
+      - id: mixed-line-ending
+
+  # Python code formatting with Black
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        language_version: python3.12
+        args: ['--line-length=100']
+
+  # Import sorting with isort
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.0
+    hooks:
+      - id: isort
+        args: ['--profile=black', '--line-length=100']
+
+  # Python linting with Ruff
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.0
+    hooks:
+      - id: ruff
+        args: ['--fix']
+
+  # Security checks with Bandit
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.3
+    hooks:
+      - id: bandit
+        args: ['-ll', '--skip', 'B101,B104,B311']
+        exclude: tests/
+
+  # Django-specific checks
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: 1.23.0
+    hooks:
+      - id: django-upgrade
+        args: ['--target-version', '5.1']
+
+  # Check for debug statements
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-no-eval
+      - id: python-no-log-warn
+
+# Configuration
+default_language_version:
+  python: python3.12
+
+ci:
+  autofix_prs: true
+  autoupdate_schedule: weekly

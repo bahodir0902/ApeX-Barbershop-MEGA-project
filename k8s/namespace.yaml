@@ -1,0 +1,8 @@
+# Kubernetes Namespace for ApeX Barbershop
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apex-barbershop
+  labels:
+    app: apex-barbershop
+    environment: production

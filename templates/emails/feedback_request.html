@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Was Your Experience?</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 12px 12px 0 0;">
+                            <h1 style="margin: 0; color: #333333; font-size: 28px; font-weight: 600; text-align: center;">
+                                ⭐ How Was Your Experience?
+                            </h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px; color: #333333; font-size: 18px; line-height: 1.6;">
+                                Hi <strong>{{ customer.first_name }}</strong>,
+                            </p>
+                            <p style="margin: 0 0 20px; color: #555555; font-size: 16px; line-height: 1.6;">
+                                Thank you for visiting <strong>{{ barbershop.name }}</strong>! We hope you had a great experience with <strong>{{ barber.first_name }}</strong>.
+                            </p>
+                            <p style="margin: 0 0 30px; color: #555555; font-size: 16px; line-height: 1.6;">
+                                Your feedback helps us improve our services and helps other customers find great barbers!
+                            </p>
+                            
+                            <!-- Star Rating Preview -->
+                            <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 30px;">
+                                <tr>
+                                    <td style="padding: 25px; text-align: center;">
+                                        <p style="margin: 0 0 15px; color: #333333; font-size: 16px;">Rate your experience:</p>
+                                        <span style="font-size: 40px;">⭐⭐⭐⭐⭐</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- CTA Button -->
+                            <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td align="center" style="padding: 20px 0;">
+                                        <a href="#" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                                            Leave Feedback
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 40px; background-color: #f8f9fa; border-radius: 0 0 12px 12px; border-top: 1px solid #e9ecef;">
+                            <p style="margin: 0 0 10px; color: #666666; font-size: 14px; text-align: center;">
+                                Thank you for being a valued customer!
+                            </p>
+                            <p style="margin: 0; color: #999999; font-size: 12px; text-align: center;">
+                                © {{ year }} ApeX Barbershop. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
