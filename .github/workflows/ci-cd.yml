@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: [main, develop]
 
+# Restrict permissions to the minimum required
+permissions:
+  contents: read
+
 env:
   PYTHON_VERSION: '3.12'
   POSTGRES_DB: apex_barbershop_test
@@ -20,6 +24,8 @@ jobs:
   lint:
     name: Lint & Format Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,6 +54,8 @@ jobs:
   security:
     name: Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -74,6 +82,8 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     needs: [lint]
+    permissions:
+      contents: read
     
     services:
       postgres:
@@ -144,6 +154,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, security]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
     
     steps:
       - name: Checkout code
@@ -185,6 +198,8 @@ jobs:
     needs: [build]
     if: github.ref == 'refs/heads/develop'
     environment: staging
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -203,6 +218,8 @@ jobs:
     needs: [build]
     if: github.ref == 'refs/heads/main'
     environment: production
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
